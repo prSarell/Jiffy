@@ -5,25 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jiffy - Home</title>
   <link rel="stylesheet" href="/jiffy/shared/styles.css">
-  <link rel="stylesheet" href="/jiffy/pages/home/home.css">
 </head>
 <body>
   <h1>Jiffy</h1>
-  <button id="promptBtn">Prompts</button>
-  <button id="rewardsBtn">Rewards</button>
-  <button onclick="document.getElementById('add-category-dialog').showModal()">Add Category</button>
-  <div id="category-list"></div>
-  <dialog id="add-category-dialog">
-    <form>
-      <label for="category-name">Category Name:</label>
-      <input type="text" id="category-name" name="category-name" required>
-      <label for="category-color">Color:</label>
-      <input type="color" id="category-color" name="category-color" value="#C8E6C9">
-      <button type="submit">Save</button>
-      <button type="button" onclick="document.getElementById('add-category-dialog').close()">Cancel</button>
-    </form>
-  </dialog>
-  <script src="/jiffy/shared/data.js"></script>
   <script src="/jiffy/pages/home/home.js"></script>
 </body>
 </html>
