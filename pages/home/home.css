@@ -1,8 +1,65 @@
-#categories button {
-  font-size: 1.25rem;
-  transition: background-color 0.2s;
+h1 {
+  color: #34C759;
+  text-align: center;
+  margin-bottom: 20px;
 }
-#addCategoryDialog {
+.category-item {
+  background-color: #1C1C1E;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.category-item span {
+  flex-grow: 1;
+}
+.edit-btn, .delete-btn, .add-task-btn {
+  background-color: #8E8E93;
+  color: #FFFFFF;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+.edit-btn:hover, .delete-btn:hover, .add-task-btn:hover {
+  background-color: #AEAEB2;
+}
+.category-item ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0 0 20px;
+}
+.category-item li {
+  background-color: #2C2C2E;
+  padding: 8px;
+  margin: 5px 0;
+  border-radius: 5px;
+  color: #E5E5E5;
+}
+dialog {
+  background-color: #1C1C1E;
   border: none;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  border-radius: 10px;
+  padding: 20px;
+}
+dialog label {
+  color: #8E8E93;
+  margin-right: 10px;
+}
+dialog input {
+  background-color: #2C2C2E;
+  border: 1px solid #8E8E93;
+  color: #FFFFFF;
+  padding: 5px;
+  border-radius: 5px;
+}
+.sidebar {
+  background-color: #1C1C1E;
+  border-right: 1px solid #8E8E93;
+}
+.sidebar a {
+  color: #E5E5E5;
+}
+.sidebar a:hover {
+  background-color: #2C2C2E;
 }
