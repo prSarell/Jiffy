@@ -1,1 +1,8 @@
-
+body {
+  font-family: Arial, sans-serif;
+  background-color: #E8F5E9; /* Light green */
+  color: #333;
+}
+button {
+  transition: background-color 0.2s;
+}
