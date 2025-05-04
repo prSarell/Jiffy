@@ -9,11 +9,15 @@ button {
   background-color: #34C759;  /* Green buttons */
   color: #FFFFFF;
   border: none;
-  padding: 10px 15px;
-  margin: 5px;
-  border-radius: 10px;
-  cursor: pointer;
+  width: 50px;  /* Circular button size */
+  height: 50px;
+  border-radius: 50%;  /* Makes buttons circular */
+  cursor: prompt;
   transition: background-color 0.2s;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 button:hover {
   background-color: #2DA14A;  /* Darker green on hover */
