@@ -1,8 +1,84 @@
+/* Global Styles for Sleek Black Theme */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #E8F5E9;
-  color: #333;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #000000;  /* Solid black background */
+  color: #FFFFFF;  /* White text for high contrast */
+  margin: 0;
+  padding: 20px;
+  line-height: 1.5;  /* Improved readability */
 }
+
+/* Button Styles */
 button {
-  transition: background-color 0.2s;
+  background-color: #34C759;  /* Green buttons for contrast (Apple-style) */
+  color: #FFFFFF;
+  border: none;
+  padding: 10px 15px;
+  margin: 5px;
+  border-radius: 10px;  /* Rounded edges for a sleek look */
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;  /* Smooth hover and click effects */
+  font-size: 16px;
+}
+
+/* Button Hover Effect */
+button:hover {
+  background-color: #2DA14A;  /* Darker green on hover */
+  transform: scale(1.05);  /* Slight zoom on hover */
+}
+
+/* Button Active Effect (when clicked) */
+button:active {
+  transform: scale(0.95);  /* Slight shrink on click */
+}
+
+/* Headings */
+h1, h2, h3 {
+  color: #34C759;  /* Green headings to match the button accents */
+  margin-bottom: 15px;
+}
+
+/* Links */
+a {
+  color: #34C759;  /* Green links for visibility */
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;  /* Underline on hover for clarity */
+}
+
+/* Lists */
+ul, ol {
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+/* Dialogs and Modals */
+dialog {
+  background-color: #1C1C1E;  /* Dark gray for dialogs */
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+/* Inputs */
+input, textarea {
+  background-color: #2C2C2E;  /* Dark input fields */
+  color: #FFFFFF;
+  border: 1px solid #8E8E93;  /* Subtle gray border */
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Focus Styles for Accessibility */
+input:focus, textarea:focus, button:focus {
+  outline: 2px solid #34C759;  /* Green outline for focus */
+  outline-offset: 2px;
 }
