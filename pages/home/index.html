@@ -2,8 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=pages/home/">
-  <title>Jiffy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jiffy - Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/jiffy/shared/styles.css">
+  <link rel="stylesheet" href="/jiffy/pages/home/home.css">
+  <link rel="manifest" href="/jiffy/manifest.json">
 </head>
-<body></body>
+<body class="bg-green-50 text-gray-800">
+  <header class="flex justify-between items-center p-4 bg-green-200">
+    <h1 class="text-2xl font-bold">Jiffy</h1>
+    <button id="menuBtn" class="p-2">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+      </svg>
+    </button>
+  </header>
+  <main class="p-4">
+    <section id="categories" class="grid grid-cols-2 gap-4">
+      <!-- Categories added dynamically -->
+    </section>
+    <div class="flex justify-center gap-4 mt-8">
+      <button id="promptsBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Prompts</button>
+      <button id="rewardsBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Rewards</button>
+      <button id="addCategoryBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add Category</button>
+    </div>
+  </main>
+  <dialog id="addCategoryDialog" class="p-4 rounded bg-white">
+    <form id="addCategoryForm">
+      <h2 class="text-lg font-bold mb-4">Add Category</h2>
+      <label class="block mb-2">
+        Name:
+        <input type="text" id="categoryName" class="border p-2 w-full" required>
+      </label>
+      <label class="block mb-4">
+        Color:
+        <input type="color" id="categoryColor" value="#4CAF50">
+      </label>
+      <div class="flex gap-4">
+        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Save</button>
+        <button type="button" id="cancelAddCategory" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+  <script src="/jiffy/shared/data.js"></script>
+  <script src="/jiffy/pages/home/home.js"></script>
+</body>
 </html>
