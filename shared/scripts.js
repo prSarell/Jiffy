@@ -38,12 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (categoryName) {
       const categoryRow = document.querySelector('.category-row');
       const newButton = document.createElement('div');
-      newButton.style = 'display: flex; flex-direction: column; align-items: center; width: 40px;';
+      newButton.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
       const buttonIndex = categoryRow.children.length;
       const colors = ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'];
       const color = colors[buttonIndex % colors.length];
       newButton.innerHTML = `
         <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${color}; cursor: pointer; border: none;" onclick="toggleSelect(this);"></button>
+        <span class="check-circle" style="display: none; position: absolute; top: 0; right: 0; width: 12px; height: 12px; border-radius: 50%; background-color: #FF4444;"></span>
         <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">${categoryName}</span>
       `;
       categoryRow.appendChild(newButton);
@@ -65,30 +66,31 @@ document.addEventListener('DOMContentLoaded', () => {
         <span id="cancel-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Cancel</span>
       `;
     }
-    const categoryDiv = button.parentElement.parentElement;
-    const categoryName = categoryDiv.querySelector('span').textContent;
+    const categoryDiv = button.parentElement;
+    const categoryName = categoryDiv.querySelector('span:last-child').textContent;
+    const checkCircle = categoryDiv.querySelector('.check-circle');
     if (selectedCategories.has(categoryDiv)) {
       selectedCategories.delete(categoryDiv);
-      button.style.border = 'none';
+      checkCircle.style.display = 'none';
       console.log('Unselected:', categoryName);
     } else {
       selectedCategories.add(categoryDiv);
-      button.style.border = '2px solid #FF0000';
+      checkCircle.style.display = 'block';
       console.log('Selected:', categoryName);
     }
   }
 
-  // Add click event listener for Cancel
+  // Add click event listener for Cancel and Delete
   selectContainer.addEventListener('click', (event) => {
     if (event.target.id === 'cancel-button') {
       selectMode = false;
       selectedCategories.clear();
       selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
-      document.querySelectorAll('.category-row button').forEach(btn => btn.style.border = 'none');
+      document.querySelectorAll('.check-circle').forEach(circle => circle.style.display = 'none');
       console.log('Canceled, returned to default screen');
     } else if (event.target.id === 'delete-button') {
       if (selectedCategories.size > 0) {
-        const firstCategory = selectedCategories.values().next().value.querySelector('span').textContent;
+        const firstCategory = selectedCategories.values().next().value.querySelector('span:last-child').textContent;
         const deletePopup = document.getElementById('delete-popup');
         const deletePopupMessage = document.getElementById('delete-popup-message');
         deletePopupMessage.textContent = `Delete ${firstCategory}?`;
@@ -111,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     deletePopup.style.display = 'none';
     selectMode = false;
     selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
-    document.querySelectorAll('.category-row button').forEach(btn => btn.style.border = 'none');
+    document.querySelectorAll('.check-circle').forEach(circle => circle.style.display = 'none');
     console.log('Categories deleted, returned to default screen');
   });
 
