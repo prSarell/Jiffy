@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     title.textContent = 'Add Category';
     input.value = '';
     popup.style.display = 'flex';
+    console.log('Show add popup called');
   }
 
   function closePopup() {
@@ -31,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('category-input');
     input.value = '';
     popup.style.display = 'none';
+    console.log('Close popup called');
   }
 
   function confirmAddCategory() {
@@ -57,18 +59,30 @@ document.addEventListener('DOMContentLoaded', () => {
       if (selectMode) {
         newButton.querySelector('.category-specific-button').style.display = 'block';
       }
+      console.log('New category added:', categoryName, 'Select mode:', selectMode);
     } else {
       alert('Please enter a category name!');
     }
-    console.log('confirmAddCategory called with:', categoryName);
   }
 
   function toggleSelect(button) {
-    if (!selectMode) return; // Only allow selection if in select mode
+    if (!selectMode) {
+      console.log('toggleSelect called but not in select mode');
+      return;
+    }
     const categoryDiv = button.parentElement;
-    const categoryName = categoryDiv.querySelector('span:last-child')?.textContent || 'Unknown';
+    if (!categoryDiv) {
+      console.error('No parent categoryDiv found for button:', button);
+      return;
+    }
+    const categoryNameElement = categoryDiv.querySelector('span:last-child');
+    const categoryName = categoryNameElement ? categoryNameElement.textContent : 'Unknown';
     const categorySpecificButton = button.querySelector('.category-specific-button');
-    const innerCircle = categorySpecificButton.querySelector('.inner-circle');
+    const innerCircle = categorySpecificButton ? categorySpecificButton.querySelector('.inner-circle') : null;
+    if (!categorySpecificButton || !innerCircle) {
+      console.error('Missing category-specific-button or inner-circle in button:', button);
+      return;
+    }
     if (selectedCategories.has(categoryDiv)) {
       selectedCategories.delete(categoryDiv);
       innerCircle.style.display = 'none';
@@ -78,21 +92,24 @@ document.addEventListener('DOMContentLoaded', () => {
       innerCircle.style.display = 'block';
       console.log('Selected:', categoryName, 'Selected categories now:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child')?.textContent || 'Invalid'));
     }
-    console.log('toggleSelect called, categoryDiv:', categoryDiv, 'categoryName:', categoryName, 'selectedCategories size:', selectedCategories.size);
+    console.log('toggleSelect completed, categoryDiv:', categoryDiv, 'categoryName:', categoryName, 'selectedCategories size:', selectedCategories.size);
   }
 
   // Use event delegation to handle clicks on category buttons
   categoryRow.addEventListener('click', (event) => {
+    console.log('Category row clicked, target:', event.target);
     const button = event.target.closest('button');
     if (button && button.querySelector('.category-specific-button')) {
+      console.log('Valid button found, calling toggleSelect');
       toggleSelect(button);
     } else {
-      console.log('Click event on non-button or non-category element, target:', event.target);
+      console.log('No valid button found, target:', event.target);
     }
   });
 
   // Add click event listener for Select, Cancel, and Delete
   selectContainer.addEventListener('click', (event) => {
+    console.log('Select container clicked, target:', event.target);
     if (event.target.id === 'select-button') {
       selectMode = true;
       event.target.style.display = 'none';
@@ -115,31 +132,26 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       console.log('Canceled, returned to default screen');
     } else if (event.target.id === 'delete-button') {
-      console.log('Delete button clicked, selectedCategories:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child')?.textContent || 'Invalid'));
-      const selectedButtons = Array.from(categoryRow.querySelectorAll('.category-specific-button')).filter(btn => {
-        const innerCircle = btn.querySelector('.inner-circle');
-        return innerCircle && window.getComputedStyle(innerCircle).display !== 'none';
-      });
-      console.log('Selected buttons from DOM:', selectedButtons.length, 'with names:', selectedButtons.map(btn => btn.closest('div').querySelector('span:last-child')?.textContent || 'Unknown'));
-      if (selectedButtons.length > 0) {
+      console.log('Delete button clicked, selectedCategories:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child')?.textContent || 'Invalid'), 'size:', selectedCategories.size);
+      if (selectedCategories.size > 0) {
         const deletePopup = document.getElementById('delete-popup');
         const deletePopupMessage = document.getElementById('delete-popup-message');
         let message = '';
-        if (selectedButtons.length === 1) {
-          // If only one category is selected, show its name
-          const categoryDiv = selectedButtons[0].closest('div');
-          const categoryName = categoryDiv.querySelector('span:last-child')?.textContent || 'Unknown';
+        if (selectedCategories.size === 1) {
+          const categoryDiv = Array.from(selectedCategories)[0];
+          const categoryNameElement = categoryDiv.querySelector('span:last-child');
+          const categoryName = categoryNameElement ? categoryNameElement.textContent : 'Unknown';
           message = `Delete ${categoryName}?`;
-          console.log('Setting delete message to:', message, 'for category:', categoryName);
+          console.log('Single category selected, setting message to:', message, 'categoryDiv:', categoryDiv);
         } else {
-          // If multiple categories are selected, use a generic message
           message = 'Delete Categories?';
-          console.log('Setting delete message to:', message);
+          console.log('Multiple categories selected, setting message to:', message);
         }
         deletePopupMessage.textContent = message;
         deletePopup.style.display = 'flex';
       } else {
         alert('Please select at least one category to delete.');
+        console.log('No categories selected for deletion');
       }
     }
   });
@@ -147,6 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('delete-popup-cancel').addEventListener('click', () => {
     const deletePopup = document.getElementById('delete-popup');
     deletePopup.style.display = 'none';
+    console.log('Delete popup canceled');
   });
 
   document.getElementById('delete-popup-delete').addEventListener('click', () => {
