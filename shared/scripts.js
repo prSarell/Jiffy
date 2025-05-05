@@ -72,12 +72,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (selectedCategories.has(categoryDiv)) {
       selectedCategories.delete(categoryDiv);
       innerCircle.style.display = 'none';
-      console.log('Unselected:', categoryName, 'Selected categories now:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child').textContent));
+      console.log('Unselected:', categoryName, 'Selected categories now:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child')?.textContent || 'Invalid'));
     } else {
       selectedCategories.add(categoryDiv);
       innerCircle.style.display = 'block';
-      console.log('Selected:', categoryName, 'Selected categories now:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child').textContent));
+      console.log('Selected:', categoryName, 'Selected categories now:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child')?.textContent || 'Invalid'));
     }
+    console.log('Current selectedCategories size:', selectedCategories.size, 'Contents:', Array.from(selectedCategories));
   }
 
   // Use event delegation to handle clicks on category buttons
@@ -112,21 +113,24 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       console.log('Canceled, returned to default screen');
     } else if (event.target.id === 'delete-button') {
+      console.log('Delete button clicked, selectedCategories:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child')?.textContent || 'Invalid'));
       if (selectedCategories.size > 0) {
         const deletePopup = document.getElementById('delete-popup');
         const deletePopupMessage = document.getElementById('delete-popup-message');
-        console.log('Selected categories before delete:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child').textContent));
+        let message = '';
         if (selectedCategories.size === 1) {
           // If only one category is selected, show its name
-          const categoryDiv = selectedCategories.values().next().value;
-          const categoryName = categoryDiv.querySelector('span:last-child').textContent;
-          deletePopupMessage.textContent = `Delete ${categoryName}?`;
-          console.log('Setting delete message to:', `Delete ${categoryName}?`);
+          const categoryDivs = Array.from(selectedCategories);
+          const categoryDiv = categoryDivs[0]; // Get the first (and only) element
+          const categoryName = categoryDiv.querySelector('span:last-child')?.textContent || 'Unknown';
+          message = `Delete ${categoryName}?`;
+          console.log('Setting delete message to:', message, 'for category:', categoryName);
         } else {
           // If multiple categories are selected, use a generic message
-          deletePopupMessage.textContent = 'Delete Categories?';
-          console.log('Setting delete message to: Delete Categories?');
+          message = 'Delete Categories?';
+          console.log('Setting delete message to:', message);
         }
+        deletePopupMessage.textContent = message;
         deletePopup.style.display = 'flex';
       } else {
         alert('Please select at least one category to delete.');
