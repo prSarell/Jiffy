@@ -113,10 +113,16 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('Canceled, returned to default screen');
     } else if (event.target.id === 'delete-button') {
       if (selectedCategories.size > 0) {
-        const firstCategory = selectedCategories.values().next().value.querySelector('span:last-child').textContent;
         const deletePopup = document.getElementById('delete-popup');
         const deletePopupMessage = document.getElementById('delete-popup-message');
-        deletePopupMessage.textContent = `Delete ${firstCategory}?`;
+        if (selectedCategories.size === 1) {
+          // If only one category is selected, show its name
+          const categoryName = selectedCategories.values().next().value.querySelector('span:last-child').textContent;
+          deletePopupMessage.textContent = `Delete ${categoryName}?`;
+        } else {
+          // If multiple categories are selected, use a generic message
+          deletePopupMessage.textContent = 'Delete Categories?';
+        }
         deletePopup.style.display = 'flex';
       } else {
         alert('Please select at least one category to delete.');
