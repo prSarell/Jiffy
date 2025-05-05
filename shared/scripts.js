@@ -44,7 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const color = colors[buttonIndex % colors.length];
       newButton.innerHTML = `
         <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${color}; cursor: pointer; border: none; position: relative;" onclick="toggleSelect(this);">
-          <span class="category-specific-button" style="display: none; position: absolute; top: 2px; right: 2px; width: 10px; height: 10px; border: 2px solid #FFFFFF; border-radius: 50%; background-color: #000000;"></span>
+          <span class="category-specific-button" style="display: none; position: absolute; top: 2px; right: 2px; width: 10px; height: 10px; border: 2px solid #FFFFFF; border-radius: 50%; background-color: #000000;">
+            <span class="inner-circle" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 6px; height: 6px; border-radius: 50%; background-color: #FFFFFF;"></span>
+          </span>
         </button>
         <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">${categoryName}</span>
       `;
@@ -66,13 +68,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoryDiv = button.parentElement;
     const categoryName = categoryDiv.querySelector('span:last-child').textContent;
     const categorySpecificButton = button.querySelector('.category-specific-button');
+    const innerCircle = categorySpecificButton.querySelector('.inner-circle');
     if (selectedCategories.has(categoryDiv)) {
       selectedCategories.delete(categoryDiv);
-      categorySpecificButton.style.backgroundColor = '#000000';
+      innerCircle.style.display = 'none';
       console.log('Unselected:', categoryName);
     } else {
       selectedCategories.add(categoryDiv);
-      categorySpecificButton.style.backgroundColor = '#FFFFFF';
+      innerCircle.style.display = 'block';
       console.log('Selected:', categoryName);
     }
   }
@@ -97,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
       selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
       document.querySelectorAll('.category-specific-button').forEach(button => {
         button.style.display = 'none';
-        button.style.backgroundColor = '#000000';
+        button.querySelector('.inner-circle').style.display = 'none';
       });
       console.log('Canceled, returned to default screen');
     } else if (event.target.id === 'delete-button') {
@@ -127,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
     document.querySelectorAll('.category-specific-button').forEach(button => {
       button.style.display = 'none';
-      button.style.backgroundColor = '#000000';
+      button.querySelector('.inner-circle').style.display = 'none';
     });
     console.log('Categories deleted, returned to default screen');
   });
