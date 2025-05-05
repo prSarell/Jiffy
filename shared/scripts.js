@@ -57,15 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function toggleSelect(button) {
-    if (!selectMode) {
-      selectMode = true;
-      selectButton.style.display = 'none';
-      actionButtons.innerHTML = `
-        <span id="delete-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; cursor: pointer;">Delete</span>
-        <span id="cancel-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Cancel</span>
-      `;
-      actionButtons.style.display = 'inline';
-    }
+    if (!selectMode) return; // Only allow selection if in selectMode
     const categoryDiv = button.parentElement.parentElement;
     const categoryName = categoryDiv.querySelector('span').textContent;
     if (selectedCategories.has(categoryDiv)) {
@@ -79,23 +71,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  document.getElementById('cancel-button')?.addEventListener('click', () => {
-    selectMode = false;
-    selectedCategories.clear();
-    selectButton.style.display = 'inline';
-    actionButtons.style.display = 'none';
-    actionButtons.innerHTML = '';
-    document.querySelectorAll('.category-row button').forEach(btn => btn.style.border = 'none');
-    console.log('Canceled, returned to default screen');
+  // Add click event listener to the Select span
+  selectButton.addEventListener('click', () => {
+    selectMode = true;
+    selectButton.style.display = 'none';
+    actionButtons.innerHTML = `
+      <span id="delete-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; cursor: pointer;">Delete</span>
+      <span id="cancel-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Cancel</span>
+    `;
+    actionButtons.style.display = 'inline';
+    console.log('Entered select mode');
   });
 
-  document.getElementById('delete-button')?.addEventListener('click', () => {
-    if (selectedCategories.size > 0) {
-      const firstCategory = selectedCategories.values().next().value.querySelector('span').textContent;
-      const deletePopup = document.getElementById('delete-popup');
-      const deletePopupMessage = document.getElementById('delete-popup-message');
-      deletePopupMessage.textContent = `Delete ${firstCategory}?`;
-      deletePopup.style.display = 'flex';
+  // Dynamically add event listeners for Delete and Cancel since they are created on demand
+  actionButtons.addEventListener('click', (event) => {
+    if (event.target.id === 'cancel-button') {
+      selectMode = false;
+      selectedCategories.clear();
+      selectButton.style.display = 'inline';
+      actionButtons.style.display = 'none';
+      actionButtons.innerHTML = '';
+      document.querySelectorAll('.category-row button').forEach(btn => btn.style.border = 'none');
+      console.log('Canceled, returned to default screen');
+    } else if (event.target.id === 'delete-button') {
+      if (selectedCategories.size > 0) {
+        const firstCategory = selectedCategories.values().next().value.querySelector('span').textContent;
+        const deletePopup = document.getElementById('delete-popup');
+        const deletePopupMessage = document.getElementById('delete-popup-message');
+        deletePopupMessage.textContent = `Delete ${firstCategory}?`;
+        deletePopup.style.display = 'flex';
+      } else {
+        alert('Please select at least one category to delete.');
+      }
     }
   });
 
