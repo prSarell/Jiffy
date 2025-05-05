@@ -72,11 +72,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (selectedCategories.has(categoryDiv)) {
       selectedCategories.delete(categoryDiv);
       innerCircle.style.display = 'none';
-      console.log('Unselected:', categoryName);
+      console.log('Unselected:', categoryName, 'Selected categories now:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child').textContent));
     } else {
       selectedCategories.add(categoryDiv);
       innerCircle.style.display = 'block';
-      console.log('Selected:', categoryName);
+      console.log('Selected:', categoryName, 'Selected categories now:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child').textContent));
     }
   }
 
@@ -115,13 +115,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (selectedCategories.size > 0) {
         const deletePopup = document.getElementById('delete-popup');
         const deletePopupMessage = document.getElementById('delete-popup-message');
+        console.log('Selected categories before delete:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child').textContent));
         if (selectedCategories.size === 1) {
           // If only one category is selected, show its name
-          const categoryName = selectedCategories.values().next().value.querySelector('span:last-child').textContent;
+          const categoryDiv = selectedCategories.values().next().value;
+          const categoryName = categoryDiv.querySelector('span:last-child').textContent;
           deletePopupMessage.textContent = `Delete ${categoryName}?`;
+          console.log('Setting delete message to:', `Delete ${categoryName}?`);
         } else {
           // If multiple categories are selected, use a generic message
           deletePopupMessage.textContent = 'Delete Categories?';
+          console.log('Setting delete message to: Delete Categories?');
         }
         deletePopup.style.display = 'flex';
       } else {
