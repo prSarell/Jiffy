@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let selectMode = false;
   const selectContainer = document.getElementById('select-container');
+  const categoryRow = document.querySelector('.category-row');
   const selectedCategories = new Set();
 
   function showAddPopup() {
@@ -36,14 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('category-input');
     const categoryName = input.value.trim();
     if (categoryName) {
-      const categoryRow = document.querySelector('.category-row');
       const newButton = document.createElement('div');
       newButton.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
       const buttonIndex = categoryRow.children.length;
       const colors = ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'];
       const color = colors[buttonIndex % colors.length];
       newButton.innerHTML = `
-        <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${color}; cursor: pointer; border: none; position: relative;" onclick="toggleSelect(this);">
+        <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${color}; cursor: pointer; border: none; position: relative;">
           <span class="category-specific-button" style="display: none; position: absolute; top: 2px; right: 2px; width: 10px; height: 10px; border: 2px solid #FFFFFF; border-radius: 50%; background-color: #000000;">
             <span class="inner-circle" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 6px; height: 6px; border-radius: 50%; background-color: #FFFFFF;"></span>
           </span>
@@ -79,6 +79,14 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('Selected:', categoryName);
     }
   }
+
+  // Use event delegation to handle clicks on category buttons
+  categoryRow.addEventListener('click', (event) => {
+    const button = event.target.closest('button');
+    if (button && button.querySelector('.category-specific-button')) {
+      toggleSelect(button);
+    }
+  });
 
   // Add click event listener for Select, Cancel, and Delete
   selectContainer.addEventListener('click', (event) => {
@@ -135,12 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Categories deleted, returned to default screen');
   });
 
-  // Ensure existing category buttons use toggleSelect
-  document.querySelectorAll('.category-row button').forEach(btn => {
-    btn.onclick = function() { toggleSelect(this); };
-  });
-
-  // Add event listeners
+  // Add event listeners for static buttons
   document.querySelector('button[onclick="showAddPopup();"]').onclick = showAddPopup;
   document.querySelector('button[onclick="closePopup();"]').onclick = closePopup;
   document.querySelector('button[onclick="confirmAddCategory();"]').onclick = confirmAddCategory;
