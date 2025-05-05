@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Ensure popup is hidden on page load
+  const popup = document.getElementById('popup');
+  console.log('Initial popup display state:', popup.style.display); // Debug log
+  if (popup.style.display !== 'none') {
+    popup.style.display = 'none';
+    console.log('Popup was not hidden, forced to display: none');
+  }
+
   function showAddPopup() {
     const popup = document.getElementById('popup');
     const title = document.getElementById('popup-title');
