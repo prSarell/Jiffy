@@ -13,8 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   let selectMode = false;
-  const selectButton = document.getElementById('select-button');
-  const actionButtons = document.getElementById('action-buttons');
+  const selectContainer = document.getElementById('select-container');
   const selectedCategories = new Set();
 
   function showAddPopup() {
@@ -57,7 +56,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function toggleSelect(button) {
-    if (!selectMode) return; // Only allow selection if in selectMode
+    if (!selectMode) {
+      selectMode = true;
+      const selectButton = document.getElementById('select-button');
+      selectButton.style.display = 'none';
+      selectContainer.innerHTML = `
+        <span id="delete-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; cursor: pointer;">Delete</span>
+        <span id="cancel-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Cancel</span>
+      `;
+    }
     const categoryDiv = button.parentElement.parentElement;
     const categoryName = categoryDiv.querySelector('span').textContent;
     if (selectedCategories.has(categoryDiv)) {
@@ -71,26 +78,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Add click event listener to the Select span
-  selectButton.addEventListener('click', () => {
-    selectMode = true;
-    selectButton.style.display = 'none';
-    actionButtons.innerHTML = `
-      <span id="delete-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; cursor: pointer;">Delete</span>
-      <span id="cancel-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Cancel</span>
-    `;
-    actionButtons.style.display = 'inline';
-    console.log('Entered select mode');
-  });
-
-  // Dynamically add event listeners for Delete and Cancel since they are created on demand
-  actionButtons.addEventListener('click', (event) => {
+  // Add click event listener for Cancel
+  selectContainer.addEventListener('click', (event) => {
     if (event.target.id === 'cancel-button') {
       selectMode = false;
       selectedCategories.clear();
-      selectButton.style.display = 'inline';
-      actionButtons.style.display = 'none';
-      actionButtons.innerHTML = '';
+      selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
       document.querySelectorAll('.category-row button').forEach(btn => btn.style.border = 'none');
       console.log('Canceled, returned to default screen');
     } else if (event.target.id === 'delete-button') {
@@ -117,9 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const deletePopup = document.getElementById('delete-popup');
     deletePopup.style.display = 'none';
     selectMode = false;
-    selectButton.style.display = 'inline';
-    actionButtons.style.display = 'none';
-    actionButtons.innerHTML = '';
+    selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
     document.querySelectorAll('.category-row button').forEach(btn => btn.style.border = 'none');
     console.log('Categories deleted, returned to default screen');
   });
