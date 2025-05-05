@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function toggleSelect(button) {
     if (!selectMode) return; // Only allow selection if in select mode
     const categoryDiv = button.parentElement;
-    const categoryName = categoryDiv.querySelector('span:last-child').textContent;
+    const categoryName = categoryDiv.querySelector('span:last-child')?.textContent || 'Unknown';
     const categorySpecificButton = button.querySelector('.category-specific-button');
     const innerCircle = categorySpecificButton.querySelector('.inner-circle');
     if (selectedCategories.has(categoryDiv)) {
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
       innerCircle.style.display = 'block';
       console.log('Selected:', categoryName, 'Selected categories now:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child')?.textContent || 'Invalid'));
     }
-    console.log('Current selectedCategories size:', selectedCategories.size, 'Contents:', Array.from(selectedCategories));
+    console.log('toggleSelect called, categoryDiv:', categoryDiv, 'categoryName:', categoryName, 'selectedCategories size:', selectedCategories.size);
   }
 
   // Use event delegation to handle clicks on category buttons
@@ -86,6 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const button = event.target.closest('button');
     if (button && button.querySelector('.category-specific-button')) {
       toggleSelect(button);
+    } else {
+      console.log('Click event on non-button or non-category element, target:', event.target);
     }
   });
 
@@ -114,14 +116,18 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('Canceled, returned to default screen');
     } else if (event.target.id === 'delete-button') {
       console.log('Delete button clicked, selectedCategories:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child')?.textContent || 'Invalid'));
-      if (selectedCategories.size > 0) {
+      const selectedButtons = Array.from(categoryRow.querySelectorAll('.category-specific-button')).filter(btn => {
+        const innerCircle = btn.querySelector('.inner-circle');
+        return innerCircle && window.getComputedStyle(innerCircle).display !== 'none';
+      });
+      console.log('Selected buttons from DOM:', selectedButtons.length, 'with names:', selectedButtons.map(btn => btn.closest('div').querySelector('span:last-child')?.textContent || 'Unknown'));
+      if (selectedButtons.length > 0) {
         const deletePopup = document.getElementById('delete-popup');
         const deletePopupMessage = document.getElementById('delete-popup-message');
         let message = '';
-        if (selectedCategories.size === 1) {
+        if (selectedButtons.length === 1) {
           // If only one category is selected, show its name
-          const categoryDivs = Array.from(selectedCategories);
-          const categoryDiv = categoryDivs[0]; // Get the first (and only) element
+          const categoryDiv = selectedButtons[0].closest('div');
           const categoryName = categoryDiv.querySelector('span:last-child')?.textContent || 'Unknown';
           message = `Delete ${categoryName}?`;
           console.log('Setting delete message to:', message, 'for category:', categoryName);
