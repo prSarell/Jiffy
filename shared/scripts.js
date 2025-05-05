@@ -3,13 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const popup = document.getElementById('popup');
     const title = document.getElementById('popup-title');
     const input = document.getElementById('category-input');
-    if (document.querySelectorAll('.category-row > div').length < 4) {
-      title.textContent = 'Add Category';
-      input.value = ''; // Reset input when opening popup
-      popup.style.display = 'flex';
-    } else {
-      alert('Maximum of 4 categories allowed!');
-    }
+    title.textContent = 'Add Category';
+    input.value = ''; // Reset input when opening popup
+    popup.style.display = 'flex';
   }
 
   function closePopup() {
@@ -22,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function confirmAddCategory() {
     const input = document.getElementById('category-input');
     const categoryName = input.value.trim();
-    if (categoryName && document.querySelectorAll('.category-row > div').length < 4) {
+    if (categoryName) {
       const categoryRow = document.querySelector('.category-row');
       const newButton = document.createElement('div');
       newButton.style = 'display: flex; flex-direction: column; align-items: center;';
@@ -36,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
       categoryRow.appendChild(newButton);
       input.value = '';
       closePopup();
-    } else if (!categoryName) {
+    } else {
       alert('Please enter a category name!');
     }
     console.log('confirmAddCategory called with:', categoryName); // Debug log
