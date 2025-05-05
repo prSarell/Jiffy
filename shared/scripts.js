@@ -44,13 +44,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const color = colors[buttonIndex % colors.length];
       newButton.innerHTML = `
         <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${color}; cursor: pointer; border: none; position: relative;" onclick="toggleSelect(this);">
-          <span class="checkbox" style="display: none; position: absolute; top: 2px; right: 2px; width: 10px; height: 10px; border: 2px solid #FFFFFF; border-radius: 50%; background-color: transparent;"></span>
+          <span class="category-specific-button" style="display: none; position: absolute; top: 2px; right: 2px; width: 10px; height: 10px; border: 2px solid #FFFFFF; border-radius: 50%; background-color: #000000;"></span>
         </button>
         <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">${categoryName}</span>
       `;
       categoryRow.appendChild(newButton);
       input.value = '';
       closePopup();
+      // Show category-specific button for the new category if select mode is active
+      if (selectMode) {
+        newButton.querySelector('.category-specific-button').style.display = 'block';
+      }
     } else {
       alert('Please enter a category name!');
     }
@@ -58,42 +62,42 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function toggleSelect(button) {
-    if (!selectMode) {
-      selectMode = true;
-      const selectButton = document.getElementById('select-button');
-      selectButton.style.display = 'none';
-      selectContainer.innerHTML = `
-        <span id="delete-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; cursor: pointer;">Delete</span>
-        <span id="cancel-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Cancel</span>
-      `;
-      // Show checkboxes on all category buttons when select mode starts
-      document.querySelectorAll('.checkbox').forEach(checkbox => {
-        checkbox.style.display = 'block';
-      });
-    }
+    if (!selectMode) return; // Only allow selection if in select mode
     const categoryDiv = button.parentElement;
     const categoryName = categoryDiv.querySelector('span:last-child').textContent;
-    const checkbox = button.querySelector('.checkbox');
+    const categorySpecificButton = button.querySelector('.category-specific-button');
     if (selectedCategories.has(categoryDiv)) {
       selectedCategories.delete(categoryDiv);
-      checkbox.style.backgroundColor = 'transparent';
+      categorySpecificButton.style.backgroundColor = '#000000';
       console.log('Unselected:', categoryName);
     } else {
       selectedCategories.add(categoryDiv);
-      checkbox.style.backgroundColor = '#FF4444';
+      categorySpecificButton.style.backgroundColor = '#FFFFFF';
       console.log('Selected:', categoryName);
     }
   }
 
-  // Add click event listener for Cancel and Delete
+  // Add click event listener for Select, Cancel, and Delete
   selectContainer.addEventListener('click', (event) => {
-    if (event.target.id === 'cancel-button') {
+    if (event.target.id === 'select-button') {
+      selectMode = true;
+      event.target.style.display = 'none';
+      selectContainer.innerHTML = `
+        <span id="delete-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; cursor: pointer;">Delete</span>
+        <span id="cancel-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Cancel</span>
+      `;
+      // Show category-specific buttons on all category buttons immediately when Select is clicked
+      document.querySelectorAll('.category-specific-button').forEach(button => {
+        button.style.display = 'block';
+      });
+      console.log('Entered select mode, category-specific buttons shown');
+    } else if (event.target.id === 'cancel-button') {
       selectMode = false;
       selectedCategories.clear();
       selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
-      document.querySelectorAll('.checkbox').forEach(checkbox => {
-        checkbox.style.display = 'none';
-        checkbox.style.backgroundColor = 'transparent';
+      document.querySelectorAll('.category-specific-button').forEach(button => {
+        button.style.display = 'none';
+        button.style.backgroundColor = '#000000';
       });
       console.log('Canceled, returned to default screen');
     } else if (event.target.id === 'delete-button') {
@@ -121,9 +125,9 @@ document.addEventListener('DOMContentLoaded', () => {
     deletePopup.style.display = 'none';
     selectMode = false;
     selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
-    document.querySelectorAll('.checkbox').forEach(checkbox => {
-      checkbox.style.display = 'none';
-      checkbox.style.backgroundColor = 'transparent';
+    document.querySelectorAll('.category-specific-button').forEach(button => {
+      button.style.display = 'none';
+      button.style.backgroundColor = '#000000';
     });
     console.log('Categories deleted, returned to default screen');
   });
