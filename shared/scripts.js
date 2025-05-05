@@ -57,37 +57,27 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function toggleSelect(button) {
-    if (selectMode) {
-      const categoryDiv = button.parentElement.parentElement;
-      const categoryName = categoryDiv.querySelector('span').textContent;
-      if (selectedCategories.has(categoryDiv)) {
-        selectedCategories.delete(categoryDiv);
-        button.style.border = 'none';
-        console.log('Unselected:', categoryName);
-        if (selectedCategories.size === 0) {
-          selectButton.style.display = 'inline';
-          actionButtons.innerHTML = '';
-        }
-      } else {
-        selectedCategories.add(categoryDiv);
-        button.style.border = '2px solid #FF0000';
-        console.log('Selected:', categoryName);
-        if (selectedCategories.size === 1) {
-          selectButton.style.display = 'none';
-          actionButtons.innerHTML = `
-            <button id="delete-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; background: #FF4444; color: #FFFFFF; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-right: 5px;">Delete</button>
-            <button id="cancel-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; background: #FFFFFF; color: #0057B7; border: 1px solid #0057B7; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Cancel</button>
-          `;
-          actionButtons.style.display = 'inline';
-        }
-      }
+    if (!selectMode) {
+      selectMode = true;
+      selectButton.style.display = 'none';
+      actionButtons.innerHTML = `
+        <span id="delete-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; cursor: pointer;">Delete</span>
+        <span id="cancel-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Cancel</span>
+      `;
+      actionButtons.style.display = 'inline';
+    }
+    const categoryDiv = button.parentElement.parentElement;
+    const categoryName = categoryDiv.querySelector('span').textContent;
+    if (selectedCategories.has(categoryDiv)) {
+      selectedCategories.delete(categoryDiv);
+      button.style.border = 'none';
+      console.log('Unselected:', categoryName);
+    } else {
+      selectedCategories.add(categoryDiv);
+      button.style.border = '2px solid #FF0000';
+      console.log('Selected:', categoryName);
     }
   }
-
-  selectButton.onclick = () => {
-    selectMode = true;
-    console.log('Entered select mode');
-  };
 
   document.getElementById('cancel-button')?.addEventListener('click', () => {
     selectMode = false;
