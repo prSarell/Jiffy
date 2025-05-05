@@ -43,8 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const colors = ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'];
       const color = colors[buttonIndex % colors.length];
       newButton.innerHTML = `
-        <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${color}; cursor: pointer; border: none;" onclick="toggleSelect(this);"></button>
-        <span class="check-circle" style="display: none; position: absolute; top: 0; right: 0; width: 12px; height: 12px; border-radius: 50%; background-color: #FF4444;"></span>
+        <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${color}; cursor: pointer; border: none; position: relative;" onclick="toggleSelect(this);">
+          <span class="checkbox" style="display: none; position: absolute; top: 2px; right: 2px; width: 10px; height: 10px; border: 2px solid #FFFFFF; border-radius: 50%; background-color: transparent;"></span>
+        </button>
         <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">${categoryName}</span>
       `;
       categoryRow.appendChild(newButton);
@@ -65,17 +66,21 @@ document.addEventListener('DOMContentLoaded', () => {
         <span id="delete-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; cursor: pointer;">Delete</span>
         <span id="cancel-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Cancel</span>
       `;
+      // Show checkboxes on all category buttons when select mode starts
+      document.querySelectorAll('.checkbox').forEach(checkbox => {
+        checkbox.style.display = 'block';
+      });
     }
     const categoryDiv = button.parentElement;
     const categoryName = categoryDiv.querySelector('span:last-child').textContent;
-    const checkCircle = categoryDiv.querySelector('.check-circle');
+    const checkbox = button.querySelector('.checkbox');
     if (selectedCategories.has(categoryDiv)) {
       selectedCategories.delete(categoryDiv);
-      checkCircle.style.display = 'none';
+      checkbox.style.backgroundColor = 'transparent';
       console.log('Unselected:', categoryName);
     } else {
       selectedCategories.add(categoryDiv);
-      checkCircle.style.display = 'block';
+      checkbox.style.backgroundColor = '#FF4444';
       console.log('Selected:', categoryName);
     }
   }
@@ -86,7 +91,10 @@ document.addEventListener('DOMContentLoaded', () => {
       selectMode = false;
       selectedCategories.clear();
       selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
-      document.querySelectorAll('.check-circle').forEach(circle => circle.style.display = 'none');
+      document.querySelectorAll('.checkbox').forEach(checkbox => {
+        checkbox.style.display = 'none';
+        checkbox.style.backgroundColor = 'transparent';
+      });
       console.log('Canceled, returned to default screen');
     } else if (event.target.id === 'delete-button') {
       if (selectedCategories.size > 0) {
@@ -113,7 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
     deletePopup.style.display = 'none';
     selectMode = false;
     selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
-    document.querySelectorAll('.check-circle').forEach(circle => circle.style.display = 'none');
+    document.querySelectorAll('.checkbox').forEach(checkbox => {
+      checkbox.style.display = 'none';
+      checkbox.style.backgroundColor = 'transparent';
+    });
     console.log('Categories deleted, returned to default screen');
   });
 
