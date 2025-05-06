@@ -11,6 +11,29 @@
     .category-row div[draggable="true"] {
       transition: opacity 0.3s ease;
     }
+    .category-specific-button {
+      display: none;
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 14px; /* Increased to account for border */
+      height: 14px;
+      border: 2px solid #FFFFFF;
+      border-radius: 50%;
+      background-color: #000000;
+      box-sizing: border-box; /* Include border in dimensions */
+    }
+    .category-specific-button .inner-circle {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px; /* Slightly larger for better visibility */
+      height: 8px;
+      border-radius: 50%;
+      background-color: #FFFFFF;
+    }
     .popup-button[data-action="confirm"] {
       background-color: #333333;
       color: #FFFFFF;
@@ -63,35 +86,19 @@
     </div>
     <div style="display: flex; flex-wrap: wrap; justify-content: flex-start; align-items: center; gap: 20px; width: 240px;" class="category-row">
       <div style="display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;" draggable="true">
-        <button style="width: 40px; height: 40px; border-radius: 50%; background-color: #1E3A8A; cursor: pointer; border: none; position: relative;">
-          <span class="category-specific-button" style="display: none; position: absolute; top: 2px; right: 2px; width: 10px; height:  Méthodologie de travail10px; border: 2px solid #FFFFFF; border-radius: 50%; background-color: #000000;">
-            <span class="inner-circle" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 6px; height: 6px; border-radius: 50%; background-color: #FFFFFF;"></span>
-          </span>
-        </button>
+        <button style="width: 40px; height: 40px; border-radius: 50%; background-color: #1E3A8A; cursor: pointer; border: none; position: relative;"></button>
         <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">Home</span>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;" draggable="true">
-        <button style="width: 40px; height: 40px; border-radius: 50%; background-color: #3B82F6; cursor: pointer; border: none; position: relative;">
-          <span class="category-specific-button" style="display: none; position: absolute; top: 2px; right: 2px; width: 10px; height: 10px; border: 2px solid #FFFFFF; border-radius: 50%; background-color: #000000;">
-            <span class="inner-circle" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 6px; height: 6px; border-radius: 50%; background-color: #FFFFFF;"></span>
-          </span>
-        </button>
+        <button style="width: 40px; height: 40px; border-radius: 50%; background-color: #3B82F6; cursor: pointer; border: none; position: relative;"></button>
         <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">Life</span>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;" draggable="true">
-        <button style="width: 40px; height: 40px; border-radius: 50%; background-color: #60A5FA; cursor: pointer; border: none; position: relative;">
-          <span class="category-specific-button" style="display: none; position: absolute; top: 2px; right: 2px; width: 10px; height: 10px; border: 2px solid #FFFFFF; border-radius: 50%; background-color: #000000;">
-            <span class="inner-circle" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 6px; height: 6px; border-radius: 50%; background-color: #FFFFFF;"></span>
-          </span>
-        </button>
+        <button style="width: 40px; height: 40px; border-radius: 50%; background-color: #60A5FA; cursor: pointer; border: none; position: relative;"></button>
         <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">Work</span>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;" draggable="true">
-        <button style="width: 40px; height: 40px; border-radius: 50%; background-color: #93C5FD; cursor: pointer; border: none; position: relative;">
-          <span class="category-specific-button" style="display: none; position: absolute; top: 2px; right: 2px; width: 10px; height: 10px; border: 2px solid #FFFFFF; border-radius: 50%; background-color: #000000;">
-            <span class="inner-circle" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 6px; height: 6px; border-radius: 50%; background-color: #FFFFFF;"></span>
-          </span>
-        </button>
+        <button style="width: 40px; height: 40px; border-radius: 50%; background-color: #93C5FD; cursor: pointer; border: none; position: relative;"></button>
         <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">School</span>
       </div>
     </div>
