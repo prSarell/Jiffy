@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     button.style.backgroundColor = getColor(categoryName, index);
   });
 
+  // Popup Functions
   function showAddPopup() {
     const popup = document.getElementById('popup');
     const title = document.getElementById('popup-title');
@@ -39,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const colorPicker = document.getElementById('color-picker');
     title.textContent = 'Add Category';
     input.value = '';
-    colorPicker.value = '#1E3A8A'; // Default color for new category
+    colorPicker.value = '#1E3A8A';
     popup.style.display = 'flex';
     console.log('Show add popup called');
   }
@@ -112,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('toggleSelect completed, categoryDiv:', categoryDiv, 'categoryName:', categoryName, 'selectedCategories size:', selectedCategories.size);
   }
 
+  // Dynamically attach event listeners
   categoryRow.addEventListener('click', (event) => {
     console.log('Category row clicked, target:', event.target);
     const button = event.target.closest('button');
@@ -195,8 +197,12 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Categories deleted, returned to default screen');
   });
 
-  // Add event listeners for static buttons
-  document.querySelector('button[onclick="showAddPopup();"]').onclick = showAddPopup;
-  document.querySelector('button[onclick="closePopup();"]').onclick = closePopup;
-  document.querySelector('button[onclick="confirmAddCategory();"]').onclick = confirmAddCategory;
+  // Dynamically attach event listeners to buttons with inline onclick attributes
+  const addButton = document.querySelector('button[onclick="showAddPopup();"]');
+  const closeButton = document.querySelector('button[onclick="closePopup();"]');
+  const confirmButton = document.querySelector('button[onclick="confirmAddCategory();"]');
+
+  if (addButton) addButton.onclick = showAddPopup;
+  if (closeButton) closeButton.onclick = closePopup;
+  if (confirmButton) confirmButton.onclick = confirmAddCategory;
 });
