@@ -10,49 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const categoryRow = document.querySelector('.category-row');
   const selectedCategories = new Set();
 
-  // Color management
-  const defaultColors = {
-    'Home': '#1E3A8A',
-    'Life': '#3B82F6',
-    'Work': '#60A5FA',
-    'School': '#93C5FD'
-  };
-  const colorCycle = ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'];
-
-  // Clear all localStorage colors for debugging
-  localStorage.removeItem('categoryColors');
-  console.log('Cleared all localStorage colors');
-
-  function getColor(categoryName) {
-    // Normalize category name to ensure case matches
-    const normalizedName = categoryName.charAt(0).toUpperCase() + categoryName.slice(1).toLowerCase();
-    console.log(`getColor called for ${categoryName} (normalized: ${normalizedName})`);
-    
-    // Always use default colors for example categories
-    if (defaultColors[normalizedName]) {
-      console.log(`Assigned default color for ${normalizedName}: ${defaultColors[normalizedName]}`);
-      return defaultColors[normalizedName];
-    }
-    // For new categories, use a default color
-    const color = '#1E3A8A'; // Default fallback color
-    console.log(`Assigned fallback color for ${normalizedName}: ${color}`);
-    return color;
-  }
-
-  function setColor(categoryName, color) {
-    const storedColors = JSON.parse(localStorage.getItem('categoryColors') || '{}');
-    storedColors[categoryName] = color;
-    localStorage.setItem('categoryColors', JSON.stringify(storedColors));
-    console.log(`Set color for ${categoryName}: ${color}`);
-  }
-
-  function removeColor(categoryName) {
-    const storedColors = JSON.parse(localStorage.getItem('categoryColors') || '{}');
-    delete storedColors[categoryName];
-    localStorage.setItem('categoryColors', JSON.stringify(storedColors));
-    console.log(`Removed color for ${categoryName}`);
-  }
-
   // Simplified drag-and-drop (temporary)
   function initializeDragAndDrop(categoryRow) {
     let draggedItem = null;
@@ -100,21 +57,27 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     const categoryName = span.textContent.trim();
+    console.log(`Processing category: ${categoryName}`);
+
     const button = div.querySelector('button');
     if (!button) {
       console.error(`No button found for category ${categoryName}`);
       return;
     }
-    const color = getColor(categoryName);
-    button.style.backgroundColor = color;
-    console.log(`Set backgroundColor for ${categoryName} to ${color}, actual style: ${button.style.backgroundColor}`);
 
-    // Force colors for debugging
-    if (categoryName === 'Home') button.style.backgroundColor = '#1E3A8A';
-    if (categoryName === 'Life') button.style.backgroundColor = '#3B82F6';
-    if (categoryName === 'Work') button.style.backgroundColor = '#60A5FA';
-    if (categoryName === 'School') button.style.backgroundColor = '#93C5FD';
-    console.log(`Forced color for ${categoryName}: ${button.style.backgroundColor}`);
+    // Directly apply colors based on category name
+    if (categoryName === 'Home') {
+      button.style.backgroundColor = '#1E3A8A';
+    } else if (categoryName === 'Life') {
+      button.style.backgroundColor = '#3B82F6';
+    } else if (categoryName === 'Work') {
+      button.style.backgroundColor = '#60A5FA';
+    } else if (categoryName === 'School') {
+      button.style.backgroundColor = '#93C5FD';
+    } else {
+      button.style.backgroundColor = '#1E3A8A'; // Default for new categories
+    }
+    console.log(`Set color for ${categoryName}: ${button.style.backgroundColor}`);
   });
 
   function showAddPopup() {
@@ -162,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
         <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">${categoryName}</span>
       `;
       categoryRow.appendChild(newButton);
-      setColor(categoryName, defaultColor);
       input.value = '';
       closePopup();
       console.log('Added category:', categoryName);
@@ -269,7 +231,6 @@ document.addEventListener('DOMContentLoaded', () => {
       categoryDiv.style.opacity = '0';
       setTimeout(() => {
         const categoryName = categoryDiv.querySelector('span:last-child').textContent;
-        removeColor(categoryName);
         categoryDiv.remove();
       }, 300);
     });
