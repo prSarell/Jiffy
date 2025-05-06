@@ -116,5 +116,12 @@
     </div>
   </div>
   <script type="module" src="/jiffy/shared/scripts/main.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/jiffy/service-workers/sw.js')
+        .then(reg => console.log('Service worker registered:', reg))
+        .catch(err => console.error('Service worker registration failed:', err));
+    }
+  </script>
 </body>
 </html>
