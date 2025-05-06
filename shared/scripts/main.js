@@ -120,6 +120,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function showAddPopup() {
     const title = document.getElementById('popup-title');
     const input = document.getElementById('category-input');
+    if (!title || !input) {
+      console.error('Popup elements not found:', { title, input });
+      return;
+    }
     title.textContent = 'Add Category';
     input.value = '';
     popup.style.display = 'flex';
@@ -128,6 +132,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function closePopup() {
     const input = document.getElementById('category-input');
+    if (!input) {
+      console.error('Category input not found');
+      return;
+    }
     input.value = '';
     popup.style.display = 'none';
     console.log('Close popup');
@@ -135,6 +143,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function confirmAddCategory() {
     const input = document.getElementById('category-input');
+    if (!input) {
+      console.error('Category input not found');
+      return;
+    }
     const categoryName = input.value.trim();
     if (categoryName) {
       const defaultColor = '#1E3A8A'; // Default color for new categories
@@ -163,6 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const actionButton = event.target.closest('.action-button');
     if (actionButton) {
       const action = actionButton.getAttribute('data-action');
+      console.log(`Action button clicked with action: ${action}`);
       if (action === 'add') {
         showAddPopup();
       } else if (action === 'show-rewards') {
@@ -173,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const popupButton = event.target.closest('.popup-button');
     if (popupButton) {
       const action = popupButton.getAttribute('data-action');
+      console.log(`Popup button clicked with action: ${action}`);
       if (action === 'confirm') {
         confirmAddCategory();
       } else if (action === 'cancel') {
@@ -183,6 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectAction = event.target.closest('#select-container span');
     if (selectAction) {
       const action = selectAction.id;
+      console.log(`Select container clicked with action: ${action}`);
       if (action === 'select-button') {
         selectMode = true;
         selectAction.style.display = 'none';
