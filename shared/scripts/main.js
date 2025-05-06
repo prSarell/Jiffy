@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const categoryRow = document.querySelector('.category-row');
   const selectedCategories = new Set();
 
-  // Simplified color management (temporary)
+  // Color management
   const defaultColors = {
     'Home': '#1E3A8A',
     'Life': '#3B82F6',
@@ -20,8 +20,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const colorCycle = ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'];
 
   function getColor(categoryName, index) {
+    // Always use default colors for example categories
+    if (defaultColors[categoryName]) {
+      return defaultColors[categoryName];
+    }
+    // For new categories, check stored colors or use the color cycle
     const storedColors = JSON.parse(localStorage.getItem('categoryColors') || '{}');
-    if (storedColors[categoryName]) return storedColors[categoryName];
+    if (storedColors[categoryName]) {
+      return storedColors[categoryName];
+    }
     const color = colorCycle[index % colorCycle.length];
     storedColors[categoryName] = color;
     localStorage.setItem('categoryColors', JSON.stringify(storedColors));
