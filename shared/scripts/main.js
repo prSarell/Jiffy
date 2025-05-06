@@ -19,28 +19,33 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   const colorCycle = ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'];
 
-  function getColor(categoryName, index) {
+  // Clear localStorage colors for example categories on page load
+  const storedColors = JSON.parse(localStorage.getItem('categoryColors') || '{}');
+  Object.keys(defaultColors).forEach(category => {
+    if (storedColors[category]) {
+      delete storedColors[category];
+      console.log(`Cleared stored color for ${category}`);
+    }
+  });
+  localStorage.setItem('categoryColors', JSON.stringify(storedColors));
+
+  function getColor(categoryName) {
     // Always use default colors for example categories
     if (defaultColors[categoryName]) {
-      // Clear any conflicting localStorage color for example categories
-      const storedColors = JSON.parse(localStorage.getItem('categoryColors') || '{}');
-      if (storedColors[categoryName] && storedColors[categoryName] !== defaultColors[categoryName]) {
-        delete storedColors[categoryName];
-        localStorage.setItem('categoryColors', JSON.stringify(storedColors));
-      }
       console.log(`Assigned default color for ${categoryName}: ${defaultColors[categoryName]}`);
       return defaultColors[categoryName];
     }
-    // For new categories, check stored colors or use the color cycle
+    // For new categories, check stored colors or use a default color
     const storedColors = JSON.parse(localStorage.getItem('categoryColors') || '{}');
     if (storedColors[categoryName]) {
       console.log(`Using stored color for ${categoryName}: ${storedColors[categoryName]}`);
       return storedColors[categoryName];
     }
-    const color = colorCycle[index % colorCycle.length];
+    // Fallback to a default color for new categories
+    const color = '#1E3A8A'; // Default fallback color
     storedColors[categoryName] = color;
     localStorage.setItem('categoryColors', JSON.stringify(storedColors));
-    console.log(`Assigned cycled color for ${categoryName}: ${color}`);
+    console.log(`Assigned fallback color for ${categoryName}: ${color}`);
     return color;
   }
 
@@ -96,10 +101,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initializeDragAndDrop(categoryRow);
 
   const categoryDivs = categoryRow.querySelectorAll('div[draggable="true"]');
-  categoryDivs.forEach((div, index) => {
+  categoryDivs.forEach((div) => {
     const categoryName = div.querySelector('span:last-child').textContent;
     const button = div.querySelector('button');
-    const color = getColor(categoryName, index);
+    const color = getColor(categoryName);
     button.style.backgroundColor = color;
   });
 
