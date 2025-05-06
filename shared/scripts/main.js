@@ -1,3 +1,6 @@
+// shared/scripts/main.js
+import { getColor, setColor, removeColor } from './colorManagement.js';
+import { initializeDragAndDrop } from './dragAndDrop.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Ensure popups are hidden on page load
@@ -18,12 +21,25 @@ document.addEventListener('DOMContentLoaded', () => {
   const categoryRow = document.querySelector('.category-row');
   const selectedCategories = new Set();
 
+  // Initialize drag-and-drop
+  initializeDragAndDrop(categoryRow);
+
+  // Apply stored colors to existing categories on page load
+  const categoryDivs = categoryRow.querySelectorAll('div[draggable="true"]');
+  categoryDivs.forEach((div, index) => {
+    const categoryName = div.querySelector('span:last-child').textContent;
+    const button = div.querySelector('button');
+    button.style.backgroundColor = getColor(categoryName, index);
+  });
+
   function showAddPopup() {
     const popup = document.getElementById('popup');
     const title = document.getElementById('popup-title');
     const input = document.getElementById('category-input');
+    const colorPicker = document.getElementById('color-picker');
     title.textContent = 'Add Category';
     input.value = '';
+    colorPicker.value = '#1E3A8A'; // Default color for new category
     popup.style.display = 'flex';
     console.log('Show add popup called');
   }
@@ -38,15 +54,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function confirmAddCategory() {
     const input = document.getElementById('category-input');
+    const colorPicker = document.getElementById('color-picker');
     const categoryName = input.value.trim();
+    const selectedColor = colorPicker.value;
     if (categoryName) {
       const newButton = document.createElement('div');
       newButton.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
-      const buttonIndex = categoryRow.children.length;
-      const colors = ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'];
-      const color = colors[buttonIndex % colors.length];
+      newButton.draggable = true;
       newButton.innerHTML = `
-        <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${color}; cursor: pointer; border: none; position: relative;">
+        <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${selectedColor}; cursor: pointer; border: none; position: relative;">
           <span class="category-specific-button" style="display: none; position: absolute; top: 2px; right: 2px; width: 10px; height: 10px; border: 2px solid #FFFFFF; border-radius: 50%; background-color: #000000;">
             <span class="inner-circle" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 6px; height: 6px; border-radius: 50%; background-color: #FFFFFF;"></span>
           </span>
@@ -54,13 +70,13 @@ document.addEventListener('DOMContentLoaded', () => {
         <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">${categoryName}</span>
       `;
       categoryRow.appendChild(newButton);
+      setColor(categoryName, selectedColor);
       input.value = '';
       closePopup();
-      // Show category-specific button for the new category if select mode is active
       if (selectMode) {
         newButton.querySelector('.category-specific-button').style.display = 'block';
       }
-      console.log('New category added:', categoryName, 'Select mode:', selectMode);
+      console.log('New category added:', categoryName, 'with color:', selectedColor, 'Select mode:', selectMode);
     } else {
       alert('Please enter a category name!');
     }
@@ -96,7 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('toggleSelect completed, categoryDiv:', categoryDiv, 'categoryName:', categoryName, 'selectedCategories size:', selectedCategories.size);
   }
 
-  // Use event delegation to handle clicks on category buttons
   categoryRow.addEventListener('click', (event) => {
     console.log('Category row clicked, target:', event.target);
     const button = event.target.closest('button');
@@ -108,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Add click event listener for Select, Cancel, and Delete
   selectContainer.addEventListener('click', (event) => {
     console.log('Select container clicked, target:', event.target);
     if (event.target.id === 'select-button') {
@@ -118,7 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
         <span id="delete-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; cursor: pointer;">Delete</span>
         <span id="cancel-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Cancel</span>
       `;
-      // Show category-specific buttons on all category buttons immediately when Select is clicked
       document.querySelectorAll('.category-specific-button').forEach(button => {
         button.style.display = 'block';
       });
@@ -137,18 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (selectedCategories.size > 0) {
         const deletePopup = document.getElementById('delete-popup');
         const deletePopupMessage = document.getElementById('delete-popup-message');
-        let message = '';
-        if (selectedCategories.size === 1) {
-          const categoryDiv = Array.from(selectedCategories)[0];
-          const categoryNameElement = categoryDiv.querySelector('span:last-child');
-          const categoryName = categoryNameElement ? categoryNameElement.textContent : 'Unknown';
-          message = `Delete ${categoryName}?`;
-          console.log('Single category selected, setting message to:', message, 'categoryDiv:', categoryDiv);
-        } else {
-          message = 'Delete Categories?';
-          console.log('Multiple categories selected, setting message to:', message);
-        }
-        deletePopupMessage.textContent = message;
+        const categoryNames = Array.from(selectedCategories).map(cat => cat.querySelector('span:last-child').textContent);
+        deletePopupMessage.textContent = selectedCategories.size === 1 ? `Delete ${categoryNames[0]}?` : `Delete ${selectedCategories.size} items?`;
         deletePopup.style.display = 'flex';
       } else {
         alert('Please select at least one category to delete.');
@@ -160,11 +163,26 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('delete-popup-cancel').addEventListener('click', () => {
     const deletePopup = document.getElementById('delete-popup');
     deletePopup.style.display = 'none';
-    console.log('Delete popup canceled');
+    selectMode = false;
+    selectedCategories.clear();
+    selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
+    document.querySelectorAll('.category-specific-button').forEach(button => {
+      button.style.display = 'none';
+      button.querySelector('.inner-circle').style.display = 'none';
+    });
+    console.log('Cancel clicked on delete popup, returned to default screen');
   });
 
   document.getElementById('delete-popup-delete').addEventListener('click', () => {
-    selectedCategories.forEach(categoryDiv => categoryDiv.remove());
+    selectedCategories.forEach(categoryDiv => {
+      categoryDiv.style.transition = 'opacity 0.3s';
+      categoryDiv.style.opacity = '0';
+      setTimeout(() => {
+        const categoryName = categoryDiv.querySelector('span:last-child').textContent;
+        removeColor(categoryName);
+        categoryDiv.remove();
+      }, 300);
+    });
     selectedCategories.clear();
     const deletePopup = document.getElementById('delete-popup');
     deletePopup.style.display = 'none';
