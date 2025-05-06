@@ -64,7 +64,7 @@
     <div style="display: flex; flex-wrap: wrap; justify-content: flex-start; align-items: center; gap: 20px; width: 240px;" class="category-row">
       <div style="display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;" draggable="true">
         <button style="width: 40px; height: 40px; border-radius: 50%; background-color: #1E3A8A; cursor: pointer; border: none; position: relative;">
-          <span class="category-specific-button" style="display: none; position: absolute; top: 2px; right: 2px; width: 10px; height: 10px; border: 2px solid #FFFFFF; border-radius: 50%; background-color: #000000;">
+          <span class="category-specific-button" style="display: none; position: absolute; top: 2px; right: 2px; width: 10px; height:  Méthodologie de travail10px; border: 2px solid #FFFFFF; border-radius: 50%; background-color: #000000;">
             <span class="inner-circle" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 6px; height: 6px; border-radius: 50%; background-color: #FFFFFF;"></span>
           </span>
         </button>
@@ -115,13 +115,6 @@
       <button id="delete-popup-delete" style="background-color: #FF4444; color: #FFFFFF; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#FF6666';" onmouseout="this.style.backgroundColor='#FF4444';">Delete</button>
     </div>
   </div>
-  <script type="module" src="/jiffy/shared/scripts/main.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/jiffy/service-workers/sw.js')
-        .then(reg => console.log('Service worker registered:', reg))
-        .catch(err => console.error('Service worker registration failed:', err));
-    }
-  </script>
+  <script src="/jiffy/shared/scripts/main.js"></script>
 </body>
 </html>
