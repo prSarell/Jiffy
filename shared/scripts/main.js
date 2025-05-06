@@ -19,10 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   const colorCycle = ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'];
 
-  // Clear all localStorage colors for debugging
-  localStorage.removeItem('categoryColors');
-  console.log('Cleared all localStorage colors');
-
   function getColor(categoryName) {
     // Normalize category name to ensure case matches
     const normalizedName = categoryName.charAt(0).toUpperCase() + categoryName.slice(1).toLowerCase();
@@ -108,6 +104,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const color = getColor(categoryName);
     button.style.backgroundColor = color;
     console.log(`Set backgroundColor for ${categoryName} to ${color}, actual style: ${button.style.backgroundColor}`);
+
+    // Force colors for debugging
+    if (categoryName === 'Home') button.style.backgroundColor = '#1E3A8A';
+    if (categoryName === 'Life') button.style.backgroundColor = '#3B82F6';
+    if (categoryName === 'Work') button.style.backgroundColor = '#60A5FA';
+    if (categoryName === 'School') button.style.backgroundColor = '#93C5FD';
+    console.log(`Forced color for ${categoryName}: ${button.style.backgroundColor}`);
   });
 
   function showAddPopup() {
