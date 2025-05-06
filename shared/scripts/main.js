@@ -10,16 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const categoryRow = document.querySelector('.category-row');
   const selectedCategories = new Set();
 
-  // Color management
+  // Color management (commented out to use hardcoded colors in index.html)
+  /*
   const defaultColors = {
-    'Home': '#0D1B2A',   // Very dark blue
-    'Life': '#1B98E0',   // Vibrant medium blue
-    'Work': '#40C4FF',   // Bright light blue
-    'School': '#B3E5FC'  // Very pale blue
+    'Home': '#1C2526',
+    'Life': '#2A6CDB',
+    'Work': '#4DA8DA',
+    'School': '#C6E8F5'
   };
 
   function getColor(categoryName) {
-    // Normalize category name to ensure case matches
     const normalizedName = categoryName.trim().toLowerCase();
     const matchedName = Object.keys(defaultColors).find(
       key => key.toLowerCase() === normalizedName
@@ -30,11 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log(`Assigned default color for ${matchedName}: ${defaultColors[matchedName]}`);
       return defaultColors[matchedName];
     }
-    // Default color for new categories
-    const color = '#0D1B2A';
+    const color = '#1C2526';
     console.log(`Assigned default color for ${categoryName}: ${color}`);
     return color;
   }
+  */
 
   // Simplified drag-and-drop (temporary)
   function initializeDragAndDrop(categoryRow) {
@@ -73,7 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initializeDragAndDrop(categoryRow);
 
-  // Apply colors to category buttons
+  // Apply colors to category buttons (commented out to use hardcoded colors in index.html)
+  /*
   const categoryDivs = categoryRow.querySelectorAll('div[draggable="true"]');
   console.log(`Found ${categoryDivs.length} category divs`);
   categoryDivs.forEach((div, index) => {
@@ -95,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     button.style.backgroundColor = color;
     console.log(`Set color for ${categoryName}: ${button.style.backgroundColor}`);
   });
+  */
 
   function showAddPopup() {
     const title = document.getElementById('popup-title');
@@ -128,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const categoryName = input.value.trim();
     if (categoryName) {
-      const defaultColor = '#0D1B2A'; // Default color for new categories
+      const defaultColor = '#1C2526'; // Default color for new categories
       const newButton = document.createElement('div');
       newButton.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
       newButton.draggable = true;
