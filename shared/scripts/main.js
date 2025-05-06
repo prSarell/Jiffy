@@ -3,7 +3,6 @@ import { getColor, setColor, removeColor } from './colorManagement.js';
 import { initializeDragAndDrop } from './dragAndDrop.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Ensure popups are hidden on page load
   const popup = document.getElementById('popup');
   const deletePopup = document.getElementById('delete-popup');
   console.log('Initial popup display state:', popup.style.display, 'Delete popup:', deletePopup.style.display);
@@ -21,10 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const categoryRow = document.querySelector('.category-row');
   const selectedCategories = new Set();
 
-  // Initialize drag-and-drop
   initializeDragAndDrop(categoryRow);
 
-  // Apply stored colors to existing categories on page load
   const categoryDivs = categoryRow.querySelectorAll('div[draggable="true"]');
   categoryDivs.forEach((div, index) => {
     const categoryName = div.querySelector('span:last-child').textContent;
@@ -32,9 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     button.style.backgroundColor = getColor(categoryName, index);
   });
 
-  // Popup Functions
   function showAddPopup() {
-    const popup = document.getElementById('popup');
     const title = document.getElementById('popup-title');
     const input = document.getElementById('category-input');
     const colorPicker = document.getElementById('color-picker');
@@ -46,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function closePopup() {
-    const popup = document.getElementById('popup');
     const input = document.getElementById('category-input');
     input.value = '';
     popup.style.display = 'none';
@@ -113,7 +107,40 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('toggleSelect completed, categoryDiv:', categoryDiv, 'categoryName:', categoryName, 'selectedCategories size:', selectedCategories.size);
   }
 
-  // Dynamically attach event listeners
+  // Event delegation for all button actions
+  document.addEventListener('click', (event) => {
+    const actionButton = event.target.closest('.action-button');
+    if (actionButton) {
+      const action = actionButton.getAttribute('data-action');
+      console.log('Action button clicked:', action);
+      switch (action) {
+        case 'add':
+          showAddPopup();
+          break;
+        case 'show-rewards':
+          console.log('Rewards action not implemented yet');
+          break;
+        case 'show-add':
+          showAddPopup();
+          break;
+      }
+    }
+
+    const popupButton = event.target.closest('.popup-button');
+    if (popupButton) {
+      const action = popupButton.getAttribute('data-action');
+      console.log('Popup button clicked:', action);
+      switch (action) {
+        case 'confirm':
+          confirmAddCategory();
+          break;
+        case 'cancel':
+          closePopup();
+          break;
+      }
+    }
+  });
+
   categoryRow.addEventListener('click', (event) => {
     console.log('Category row clicked, target:', event.target);
     const button = event.target.closest('button');
@@ -196,13 +223,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     console.log('Categories deleted, returned to default screen');
   });
-
-  // Dynamically attach event listeners to buttons with inline onclick attributes
-  const addButton = document.querySelector('button[onclick="showAddPopup();"]');
-  const closeButton = document.querySelector('button[onclick="closePopup();"]');
-  const confirmButton = document.querySelector('button[onclick="confirmAddCategory();"]');
-
-  if (addButton) addButton.onclick = showAddPopup;
-  if (closeButton) closeButton.onclick = closePopup;
-  if (confirmButton) confirmButton.onclick = confirmAddCategory;
 });
