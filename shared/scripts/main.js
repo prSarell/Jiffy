@@ -10,6 +10,32 @@ document.addEventListener('DOMContentLoaded', () => {
   const categoryRow = document.querySelector('.category-row');
   const selectedCategories = new Set();
 
+  // Color management
+  const defaultColors = {
+    'Home': '#0D1B2A',   // Very dark blue
+    'Life': '#1B98E0',   // Vibrant medium blue
+    'Work': '#40C4FF',   // Bright light blue
+    'School': '#B3E5FC'  // Very pale blue
+  };
+
+  function getColor(categoryName) {
+    // Normalize category name to ensure case matches
+    const normalizedName = categoryName.trim().toLowerCase();
+    const matchedName = Object.keys(defaultColors).find(
+      key => key.toLowerCase() === normalizedName
+    );
+    console.log(`getColor called for "${categoryName}" (normalized: "${normalizedName}", matched: "${matchedName}")`);
+
+    if (matchedName) {
+      console.log(`Assigned default color for ${matchedName}: ${defaultColors[matchedName]}`);
+      return defaultColors[matchedName];
+    }
+    // Default color for new categories
+    const color = '#0D1B2A';
+    console.log(`Assigned default color for ${categoryName}: ${color}`);
+    return color;
+  }
+
   // Simplified drag-and-drop (temporary)
   function initializeDragAndDrop(categoryRow) {
     let draggedItem = null;
@@ -47,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initializeDragAndDrop(categoryRow);
 
-  // Apply random colors to category buttons
+  // Apply colors to category buttons
   const categoryDivs = categoryRow.querySelectorAll('div[draggable="true"]');
   console.log(`Found ${categoryDivs.length} category divs`);
   categoryDivs.forEach((div, index) => {
@@ -57,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     const categoryName = span.textContent.trim();
-    console.log(`Processing category: "${categoryName}" (length: ${categoryName.length}, raw: ${span.textContent})`);
+    console.log(`Processing category: "${categoryName}"`);
 
     const button = div.querySelector('button');
     if (!button) {
@@ -65,28 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Directly apply random colors based on category name
-    if (categoryName === 'Home') {
-      button.style.backgroundColor = '#FF6347'; // Tomato Red
-      console.log(`Matched ${categoryName} to Home, set color: #FF6347`);
-    } else if (categoryName === 'Life') {
-      button.style.backgroundColor = '#32CD32'; // Lime Green
-      console.log(`Matched ${categoryName} to Life, set color: #32CD32`);
-    } else if (categoryName === 'Work') {
-      button.style.backgroundColor = '#FFD700'; // Gold Yellow
-      console.log(`Matched ${categoryName} to Work, set color: #FFD700`);
-    } else if (categoryName === 'School') {
-      button.style.backgroundColor = '#FF00FF'; // Magenta
-      console.log(`Matched ${categoryName} to School, set color: #FF00FF`);
-    } else {
-      button.style.backgroundColor = '#FF6347'; // Default for new categories
-      console.log(`No match for ${categoryName}, used default color: #FF6347`);
-    }
-
-    // Fallback: Force colors based on index to ensure variation
-    const colors = ['#FF6347', '#32CD32', '#FFD700', '#FF00FF'];
-    button.style.backgroundColor = colors[index % colors.length];
-    console.log(`Forced color for ${categoryName} at index ${index}: ${button.style.backgroundColor}`);
+    const color = getColor(categoryName);
+    button.style.backgroundColor = color;
+    console.log(`Set color for ${categoryName}: ${button.style.backgroundColor}`);
   });
 
   function showAddPopup() {
@@ -121,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const categoryName = input.value.trim();
     if (categoryName) {
-      const defaultColor = '#FF6347'; // Default color for new categories
+      const defaultColor = '#0D1B2A'; // Default color for new categories
       const newButton = document.createElement('div');
       newButton.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
       newButton.draggable = true;
