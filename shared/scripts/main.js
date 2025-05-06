@@ -57,27 +57,36 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     const categoryName = span.textContent.trim();
-    console.log(`Processing category: ${categoryName}`);
+    console.log(`Processing category: "${categoryName}" (length: ${categoryName.length}, raw: ${span.textContent})`);
 
     const button = div.querySelector('button');
     if (!button) {
-      console.error(`No button found for category ${categoryName}`);
+      console.error(`No button found for category "${categoryName}"`);
       return;
     }
 
     // Directly apply random colors based on category name
     if (categoryName === 'Home') {
       button.style.backgroundColor = '#FF6347'; // Tomato Red
+      console.log(`Matched ${categoryName} to Home, set color: #FF6347`);
     } else if (categoryName === 'Life') {
       button.style.backgroundColor = '#32CD32'; // Lime Green
+      console.log(`Matched ${categoryName} to Life, set color: #32CD32`);
     } else if (categoryName === 'Work') {
       button.style.backgroundColor = '#FFD700'; // Gold Yellow
+      console.log(`Matched ${categoryName} to Work, set color: #FFD700`);
     } else if (categoryName === 'School') {
       button.style.backgroundColor = '#FF00FF'; // Magenta
+      console.log(`Matched ${categoryName} to School, set color: #FF00FF`);
     } else {
       button.style.backgroundColor = '#FF6347'; // Default for new categories
+      console.log(`No match for ${categoryName}, used default color: #FF6347`);
     }
-    console.log(`Set color for ${categoryName}: ${button.style.backgroundColor}`);
+
+    // Fallback: Force colors based on index to ensure variation
+    const colors = ['#FF6347', '#32CD32', '#FFD700', '#FF00FF'];
+    button.style.backgroundColor = colors[index % colors.length];
+    console.log(`Forced color for ${categoryName} at index ${index}: ${button.style.backgroundColor}`);
   });
 
   function showAddPopup() {
