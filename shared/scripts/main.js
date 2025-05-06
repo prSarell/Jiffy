@@ -19,33 +19,23 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   const colorCycle = ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'];
 
-  // Clear localStorage colors for example categories on page load
-  const storedColors = JSON.parse(localStorage.getItem('categoryColors') || '{}');
-  Object.keys(defaultColors).forEach(category => {
-    if (storedColors[category]) {
-      delete storedColors[category];
-      console.log(`Cleared stored color for ${category}`);
-    }
-  });
-  localStorage.setItem('categoryColors', JSON.stringify(storedColors));
+  // Clear all localStorage colors for debugging
+  localStorage.removeItem('categoryColors');
+  console.log('Cleared all localStorage colors');
 
   function getColor(categoryName) {
+    // Normalize category name to ensure case matches
+    const normalizedName = categoryName.charAt(0).toUpperCase() + categoryName.slice(1).toLowerCase();
+    console.log(`getColor called for ${categoryName} (normalized: ${normalizedName})`);
+    
     // Always use default colors for example categories
-    if (defaultColors[categoryName]) {
-      console.log(`Assigned default color for ${categoryName}: ${defaultColors[categoryName]}`);
-      return defaultColors[categoryName];
+    if (defaultColors[normalizedName]) {
+      console.log(`Assigned default color for ${normalizedName}: ${defaultColors[normalizedName]}`);
+      return defaultColors[normalizedName];
     }
-    // For new categories, check stored colors or use a default color
-    const storedColors = JSON.parse(localStorage.getItem('categoryColors') || '{}');
-    if (storedColors[categoryName]) {
-      console.log(`Using stored color for ${categoryName}: ${storedColors[categoryName]}`);
-      return storedColors[categoryName];
-    }
-    // Fallback to a default color for new categories
+    // For new categories, use a default color
     const color = '#1E3A8A'; // Default fallback color
-    storedColors[categoryName] = color;
-    localStorage.setItem('categoryColors', JSON.stringify(storedColors));
-    console.log(`Assigned fallback color for ${categoryName}: ${color}`);
+    console.log(`Assigned fallback color for ${normalizedName}: ${color}`);
     return color;
   }
 
@@ -100,12 +90,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initializeDragAndDrop(categoryRow);
 
+  // Apply colors to category buttons
   const categoryDivs = categoryRow.querySelectorAll('div[draggable="true"]');
-  categoryDivs.forEach((div) => {
-    const categoryName = div.querySelector('span:last-child').textContent;
+  console.log(`Found ${categoryDivs.length} category divs`);
+  categoryDivs.forEach((div, index) => {
+    const span = div.querySelector('span:last-child');
+    if (!span) {
+      console.error(`No span found for category div at index ${index}`);
+      return;
+    }
+    const categoryName = span.textContent.trim();
     const button = div.querySelector('button');
+    if (!button) {
+      console.error(`No button found for category ${categoryName}`);
+      return;
+    }
     const color = getColor(categoryName);
     button.style.backgroundColor = color;
+    console.log(`Set backgroundColor for ${categoryName} to ${color}, actual style: ${button.style.backgroundColor}`);
   });
 
   function showAddPopup() {
