@@ -22,16 +22,25 @@ document.addEventListener('DOMContentLoaded', () => {
   function getColor(categoryName, index) {
     // Always use default colors for example categories
     if (defaultColors[categoryName]) {
+      // Clear any conflicting localStorage color for example categories
+      const storedColors = JSON.parse(localStorage.getItem('categoryColors') || '{}');
+      if (storedColors[categoryName] && storedColors[categoryName] !== defaultColors[categoryName]) {
+        delete storedColors[categoryName];
+        localStorage.setItem('categoryColors', JSON.stringify(storedColors));
+      }
+      console.log(`Assigned default color for ${categoryName}: ${defaultColors[categoryName]}`);
       return defaultColors[categoryName];
     }
     // For new categories, check stored colors or use the color cycle
     const storedColors = JSON.parse(localStorage.getItem('categoryColors') || '{}');
     if (storedColors[categoryName]) {
+      console.log(`Using stored color for ${categoryName}: ${storedColors[categoryName]}`);
       return storedColors[categoryName];
     }
     const color = colorCycle[index % colorCycle.length];
     storedColors[categoryName] = color;
     localStorage.setItem('categoryColors', JSON.stringify(storedColors));
+    console.log(`Assigned cycled color for ${categoryName}: ${color}`);
     return color;
   }
 
@@ -39,12 +48,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const storedColors = JSON.parse(localStorage.getItem('categoryColors') || '{}');
     storedColors[categoryName] = color;
     localStorage.setItem('categoryColors', JSON.stringify(storedColors));
+    console.log(`Set color for ${categoryName}: ${color}`);
   }
 
   function removeColor(categoryName) {
     const storedColors = JSON.parse(localStorage.getItem('categoryColors') || '{}');
     delete storedColors[categoryName];
     localStorage.setItem('categoryColors', JSON.stringify(storedColors));
+    console.log(`Removed color for ${categoryName}`);
   }
 
   // Simplified drag-and-drop (temporary)
@@ -88,7 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
   categoryDivs.forEach((div, index) => {
     const categoryName = div.querySelector('span:last-child').textContent;
     const button = div.querySelector('button');
-    button.style.backgroundColor = getColor(categoryName, index);
+    const color = getColor(categoryName, index);
+    button.style.backgroundColor = color;
   });
 
   function showAddPopup() {
@@ -119,8 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
       newButton.draggable = true;
       newButton.innerHTML = `
         <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${colorPicker.value}; cursor: pointer; border: none; position: relative;">
-          <span class="category-specific-button" style="display: ${selectMode ? 'block' : 'none'}; position: absolute; top: 2px; right: 2px; width: 10px; height: 10px; border: 2px solid #FFFFFF; border-radius: 50%; background-color: #000000;">
-            <span class="inner-circle" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 6px; height: 6px; border-radius: 50%; background-color: #FFFFFF;"></span>
+          <span class="category-specific-button" style="display: ${selectMode ? 'block' : 'none'};">
+            <span class="inner-circle"></span>
           </span>
         </button>
         <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">${categoryName}</span>
