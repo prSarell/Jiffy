@@ -10,31 +10,38 @@ document.addEventListener('DOMContentLoaded', () => {
   const categoryRow = document.querySelector('.category-row');
   const selectedCategories = new Set();
 
-  // Color management (commented out to use hardcoded colors in index.html)
-  /*
+  // Color management (use lowercase keys for consistency)
   const defaultColors = {
-    'Home': '#1C2526',
-    'Life': '#2A6CDB',
-    'Work': '#4DA8DA',
-    'School': '#C6E8F5'
+    'home': '#1A2A44',
+    'life': '#3B5998',
+    'work': '#6B7280',
+    'school': '#E0F2FE'
   };
 
   function getColor(categoryName) {
-    const normalizedName = categoryName.trim().toLowerCase();
+    // Log the raw categoryName with visible markers for whitespace
+    console.log(`getColor raw input: "|${categoryName}| (length: ${categoryName.length})`);
+
+    // Enhanced normalization: remove all types of whitespace and convert to lowercase
+    const normalizedName = categoryName
+      .replace(/[\n\r\s]+/g, '') // Remove all whitespace, including newlines
+      .toLowerCase();
+    console.log(`getColor normalized: "|${normalizedName}|`);
+
+    // Match case-insensitively
     const matchedName = Object.keys(defaultColors).find(
       key => key.toLowerCase() === normalizedName
     );
-    console.log(`getColor called for "${categoryName}" (normalized: "${normalizedName}", matched: "${matchedName}")`);
+    console.log(`getColor matched: "${matchedName || 'none'}")`);
 
     if (matchedName) {
       console.log(`Assigned default color for ${matchedName}: ${defaultColors[matchedName]}`);
       return defaultColors[matchedName];
     }
-    const color = '#1C2526';
+    const color = '#1A2A44';
     console.log(`Assigned default color for ${categoryName}: ${color}`);
     return color;
   }
-  */
 
   // Simplified drag-and-drop (temporary)
   function initializeDragAndDrop(categoryRow) {
@@ -73,8 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initializeDragAndDrop(categoryRow);
 
-  // Apply colors to category buttons (commented out to use hardcoded colors in index.html)
-  /*
+  // Apply colors to category buttons
   const categoryDivs = categoryRow.querySelectorAll('div[draggable="true"]');
   console.log(`Found ${categoryDivs.length} category divs`);
   categoryDivs.forEach((div, index) => {
@@ -83,12 +89,12 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error(`No span found for category div at index ${index}`);
       return;
     }
-    const categoryName = span.textContent.trim();
-    console.log(`Processing category: "${categoryName}"`);
+    const categoryName = span.textContent;
+    console.log(`Processing category: "|${categoryName}|`);
 
     const button = div.querySelector('button');
     if (!button) {
-      console.error(`No button found for category "${categoryName}"`);
+      console.error(`No button found for category "|${categoryName}|"`);
       return;
     }
 
@@ -96,7 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
     button.style.backgroundColor = color;
     console.log(`Set color for ${categoryName}: ${button.style.backgroundColor}`);
   });
-  */
 
   function showAddPopup() {
     const title = document.getElementById('popup-title');
@@ -130,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const categoryName = input.value.trim();
     if (categoryName) {
-      const defaultColor = '#1C2526'; // Default color for new categories
+      const defaultColor = '#1A2A44'; // Default color for new categories
       const newButton = document.createElement('div');
       newButton.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
       newButton.draggable = true;
