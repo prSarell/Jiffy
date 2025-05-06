@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initializeDragAndDrop(categoryRow);
 
-  // Apply colors to category buttons
+  // Apply random colors to category buttons
   const categoryDivs = categoryRow.querySelectorAll('div[draggable="true"]');
   console.log(`Found ${categoryDivs.length} category divs`);
   categoryDivs.forEach((div, index) => {
@@ -65,17 +65,17 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Directly apply colors based on category name
+    // Directly apply random colors based on category name
     if (categoryName === 'Home') {
-      button.style.backgroundColor = '#1E3A8A';
+      button.style.backgroundColor = '#FF6347'; // Tomato Red
     } else if (categoryName === 'Life') {
-      button.style.backgroundColor = '#3B82F6';
+      button.style.backgroundColor = '#32CD32'; // Lime Green
     } else if (categoryName === 'Work') {
-      button.style.backgroundColor = '#60A5FA';
+      button.style.backgroundColor = '#FFD700'; // Gold Yellow
     } else if (categoryName === 'School') {
-      button.style.backgroundColor = '#93C5FD';
+      button.style.backgroundColor = '#FF00FF'; // Magenta
     } else {
-      button.style.backgroundColor = '#1E3A8A'; // Default for new categories
+      button.style.backgroundColor = '#FF6347'; // Default for new categories
     }
     console.log(`Set color for ${categoryName}: ${button.style.backgroundColor}`);
   });
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const categoryName = input.value.trim();
     if (categoryName) {
-      const defaultColor = '#1E3A8A'; // Default color for new categories
+      const defaultColor = '#FF6347'; // Default color for new categories
       const newButton = document.createElement('div');
       newButton.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
       newButton.draggable = true;
