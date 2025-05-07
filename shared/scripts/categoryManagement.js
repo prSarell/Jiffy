@@ -9,28 +9,14 @@ const defaultCategories = [
 ];
 
 export function loadCategories(categoryRow, selectMode) {
-  let storedCategories = JSON.parse(localStorage.getItem('categories'));
+  // Temporarily hardcode categories, ignoring localStorage
+  const categories = defaultCategories;
 
-  // Validate stored categories and reset if invalid
-  if (storedCategories && storedCategories.length > 0) {
-    const invalidCategories = storedCategories.some(category => 
-      !category.name || typeof category.name !== 'string' || category.name.trim() === ''
-    );
-    if (invalidCategories) {
-      console.warn('Invalid categories found in localStorage, resetting to defaults');
-      storedCategories = null;
-    }
-  }
-
-  const categories = storedCategories && storedCategories.length > 0 ? storedCategories : defaultCategories;
-
-  // Log the categories being loaded
-  console.log('Categories loaded from localStorage or defaults:', categories);
+  console.log('Categories loaded:', categories);
 
   categoryRow.innerHTML = '';
 
   categories.forEach(category => {
-    // Validate category name
     if (!category.name || typeof category.name !== 'string' || category.name.trim() === '') {
       console.error(`Invalid category name: "${category.name}"`);
       return;
@@ -39,7 +25,6 @@ export function loadCategories(categoryRow, selectMode) {
     const categoryDiv = document.createElement('div');
     categoryDiv.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
     categoryDiv.draggable = true;
-    // Always apply color dynamically using getColor, ignore stored color
     const dynamicColor = getColor(category.name);
     categoryDiv.innerHTML = `
       <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${dynamicColor}; cursor: pointer; border: none; position: relative;">
@@ -56,28 +41,12 @@ export function loadCategories(categoryRow, selectMode) {
 }
 
 export function saveCategories(categoryRow) {
-  const categoryDivs = categoryRow.querySelectorAll('div[draggable="true"]');
-  const categories = Array.from(categoryDivs).map(div => {
-    const span = div.querySelector('span:last-child');
-    if (!span) {
-      console.error('No span found for category div:', div);
-      return null;
-    }
-    const name = span.textContent.trim();
-    if (!name || name === '') {
-      console.error('Invalid category name found:', name);
-      return null;
-    }
-    const color = div.querySelector('button').style.backgroundColor || getColor(name);
-    return { name, color };
-  }).filter(category => category !== null); // Filter out invalid categories
-
-  localStorage.setItem('categories', JSON.stringify(categories));
-  console.log(`Saved ${categories.length} categories:`, categories);
+  // Temporarily disable saving to localStorage
+  console.log('Saving categories skipped (localStorage disabled temporarily)');
 }
 
 export function addCategory(categoryRow, categoryName, selectMode) {
-  const defaultColor = getColor(categoryName); // Use getColor for new categories
+  const defaultColor = getColor(categoryName);
   const newButton = document.createElement('div');
   newButton.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
   newButton.draggable = true;
