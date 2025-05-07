@@ -9,7 +9,19 @@ const defaultCategories = [
 ];
 
 export function loadCategories(categoryRow, selectMode) {
-  const storedCategories = JSON.parse(localStorage.getItem('categories'));
+  let storedCategories = JSON.parse(localStorage.getItem('categories'));
+
+  // Validate stored categories and reset if invalid
+  if (storedCategories && storedCategories.length > 0) {
+    const invalidCategories = storedCategories.some(category => 
+      !category.name || typeof category.name !== 'string' || category.name.trim() === ''
+    );
+    if (invalidCategories) {
+      console.warn('Invalid categories found in localStorage, resetting to defaults');
+      storedCategories = null;
+    }
+  }
+
   const categories = storedCategories && storedCategories.length > 0 ? storedCategories : defaultCategories;
 
   // Log the categories being loaded
@@ -27,6 +39,7 @@ export function loadCategories(categoryRow, selectMode) {
     const categoryDiv = document.createElement('div');
     categoryDiv.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
     categoryDiv.draggable = true;
+    // Apply color dynamically using getColor
     const dynamicColor = getColor(category.name);
     categoryDiv.innerHTML = `
       <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${dynamicColor}; cursor: pointer; border: none; position: relative;">
@@ -55,7 +68,7 @@ export function saveCategories(categoryRow) {
       console.error('Invalid category name found:', name);
       return null;
     }
-    const color = div.querySelector('button').style.backgroundColor || defaultCategories.find(cat => cat.name === name)?.color || '#1A2A44';
+    const color = div.querySelector('button').style.backgroundColor || getColor(name);
     return { name, color };
   }).filter(category => category !== null); // Filter out invalid categories
 
@@ -64,7 +77,7 @@ export function saveCategories(categoryRow) {
 }
 
 export function addCategory(categoryRow, categoryName, selectMode) {
-  const defaultColor = '#1A2A44'; // Default color for new categories
+  const defaultColor = getColor(categoryName); // Use getColor for new categories
   const newButton = document.createElement('div');
   newButton.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
   newButton.draggable = true;
