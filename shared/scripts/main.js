@@ -125,7 +125,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const button = event.target.closest('button');
     if (button && button.querySelector('.category-specific-button') && selectMode) {
       const categoryDiv = button.parentElement;
-      const categoryName = categoryDiv.querySelector('span:last-child').textContent;
+      const span = categoryDiv.querySelector('span:last-child');
+      if (!span) {
+        console.error('No span found for category div in select mode:', categoryDiv);
+        return;
+      }
+      const categoryName = span.textContent.trim();
+      console.log(`Select mode - Processing category: "|${categoryName}|"`);
+
       const innerCircle = button.querySelector('.inner-circle');
       if (selectedCategories.has(categoryDiv)) {
         selectedCategories.delete(categoryDiv);
@@ -156,9 +163,15 @@ document.addEventListener('DOMContentLoaded', () => {
       categoryDiv.style.transition = 'opacity 0.3s';
       categoryDiv.style.opacity = '0';
       setTimeout(() => {
-        const categoryName = categoryDiv.querySelector('span:last-child').textContent;
+        const span = categoryDiv.querySelector('span:last-child');
+        if (!span) {
+          console.error('No span found for category div during delete:', categoryDiv);
+          return;
+        }
+        const categoryName = span.textContent.trim();
         categoryDiv.remove();
         saveCategories(categoryRow);
+        console.log('Deleted category:', categoryName);
       }, 300);
     });
     selectedCategories.clear();
