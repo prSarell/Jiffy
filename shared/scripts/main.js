@@ -5,6 +5,11 @@ import { loadCategories, saveCategories, addCategory } from './categoryManagemen
 document.addEventListener('DOMContentLoaded', () => {
   const popup = document.getElementById('popup');
   const deletePopup = document.getElementById('delete-popup');
+  if (!popup || !deletePopup) {
+    console.error('Popup elements not found:', { popup, deletePopup });
+    return;
+  }
+
   if (popup.style.display !== 'none') popup.style.display = 'none';
   if (deletePopup.style.display !== 'none') deletePopup.style.display = 'none';
 
@@ -12,6 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectContainer = document.getElementById('select-container');
   const categoryRow = document.querySelector('.category-row');
   const selectedCategories = new Set();
+
+  if (!selectContainer || !categoryRow) {
+    console.error('Required DOM elements not found:', { selectContainer, categoryRow });
+    return;
+  }
 
   // Load categories on page load
   loadCategories(categoryRow, selectMode);
@@ -56,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
       closePopup();
     } else {
       alert('Please enter a category name!');
+      console.log('No category name entered');
     }
   }
 
@@ -69,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (action === 'show-rewards') {
         console.log('Rewards action not implemented');
       }
+      return;
     }
 
     const popupButton = event.target.closest('.popup-button');
@@ -80,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (action === 'cancel') {
         closePopup();
       }
+      return;
     }
 
     const selectAction = event.target.closest('#select-container span');
@@ -90,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selectMode = true;
         selectAction.style.display = 'none';
         selectContainer.innerHTML = `
-          <span id="delete-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; cursor: pointer;">Delete</span>
+          <span id="delete-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Delete</span>
           <span id="cancel-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Cancel</span>
         `;
         document.querySelectorAll('.category-specific-button').forEach(button => {
@@ -103,13 +116,21 @@ document.addEventListener('DOMContentLoaded', () => {
         selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
         document.querySelectorAll('.category-specific-button').forEach(button => {
           button.style.display = 'none';
-          button.querySelector('.inner-circle').style.display = 'none';
+          const innerCircle = button.querySelector('.inner-circle');
+          if (innerCircle) innerCircle.style.display = 'none';
         });
         console.log('Exited select mode');
       } else if (action === 'delete-button') {
         if (selectedCategories.size > 0) {
           const deletePopupMessage = document.getElementById('delete-popup-message');
-          const categoryNames = Array.from(selectedCategories).map(cat => cat.querySelector('span:last-child').textContent);
+          if (!deletePopupMessage) {
+            console.error('Delete popup message element not found');
+            return;
+          }
+          const categoryNames = Array.from(selectedCategories).map(cat => {
+            const span = cat.querySelector('span:last-child');
+            return span ? span.textContent : 'Unknown';
+          });
           deletePopupMessage.textContent = selectedCategories.size === 1 ? `Delete ${categoryNames[0]}?` : `Delete ${selectedCategories.size} items?`;
           deletePopup.style.display = 'flex';
           console.log('Delete popup shown');
@@ -134,6 +155,10 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log(`Select mode - Processing category: "|${categoryName}|"`);
 
       const innerCircle = button.querySelector('.inner-circle');
+      if (!innerCircle) {
+        console.error('Inner circle not found for category button:', button);
+        return;
+      }
       if (selectedCategories.has(categoryDiv)) {
         selectedCategories.delete(categoryDiv);
         innerCircle.style.display = 'none';
@@ -153,7 +178,8 @@ document.addEventListener('DOMContentLoaded', () => {
     selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
     document.querySelectorAll('.category-specific-button').forEach(button => {
       button.style.display = 'none';
-      button.querySelector('.inner-circle').style.display = 'none';
+      const innerCircle = button.querySelector('.inner-circle');
+      if (innerCircle) innerCircle.style.display = 'none';
     });
     console.log('Delete canceled');
   });
@@ -180,7 +206,8 @@ document.addEventListener('DOMContentLoaded', () => {
     selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
     document.querySelectorAll('.category-specific-button').forEach(button => {
       button.style.display = 'none';
-      button.querySelector('.inner-circle').style.display = 'none';
+      const innerCircle = button.querySelector('.inner-circle');
+      if (innerCircle) innerCircle.style.display = 'none';
     });
     console.log('Categories deleted');
   });
