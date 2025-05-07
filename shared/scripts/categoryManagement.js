@@ -2,10 +2,10 @@
 import { getColor } from './colorManagement.js';
 
 const defaultCategories = [
-  { name: 'Home', color: '#1A2A44' },
-  { name: 'Life', color: '#3B5998' },
-  { name: 'Work', color: '#6B7280' },
-  { name: 'School', color: '#E0F2FE' }
+  { name: 'Home', color: '#1666BA' },
+  { name: 'Life', color: '#368CE7' },
+  { name: 'Work', color: '#7AB3EF' },
+  { name: 'School', color: '#BEDAF7' }
 ];
 
 export function loadCategories(categoryRow, selectMode) {
