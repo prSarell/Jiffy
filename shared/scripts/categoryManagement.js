@@ -39,7 +39,7 @@ export function loadCategories(categoryRow, selectMode) {
     const categoryDiv = document.createElement('div');
     categoryDiv.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
     categoryDiv.draggable = true;
-    // Apply color dynamically using getColor
+    // Always apply color dynamically using getColor, ignore stored color
     const dynamicColor = getColor(category.name);
     categoryDiv.innerHTML = `
       <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${dynamicColor}; cursor: pointer; border: none; position: relative;">
