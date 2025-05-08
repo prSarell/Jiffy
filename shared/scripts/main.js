@@ -1,7 +1,6 @@
 // shared/scripts/main.js
 import { getColor } from './colorManagement.js';
 import { loadCategories, saveCategories } from './categoryManagement.js';
-import { initializeDragAndDrop } from './dragAndDrop.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const popup = document.getElementById('popup');
@@ -20,11 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let selectMode = false;
   const selectedCategories = new Set();
   let categories = loadCategories(categoryRow, selectMode); // Load categories on startup
-
-  // Initialize drag-and-drop with save callback
-  initializeDragAndDrop(categoryRow, () => {
-    categories = saveCategories(categoryRow);
-  });
 
   function showAddPopup() {
     const title = document.getElementById('popup-title');
