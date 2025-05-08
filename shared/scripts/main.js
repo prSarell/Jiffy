@@ -1,6 +1,4 @@
-// shared/scripts/main.js
-import { loadCategories } from './categoryManagement.js';
-
+// Expected main.js
 document.addEventListener('DOMContentLoaded', () => {
   const categoryRow = document.querySelector('.category-row');
 
@@ -9,6 +7,23 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  const selectMode = false; // No select mode functionality yet
-  let categories = loadCategories(categoryRow, selectMode); // Load categories on startup
+  const exampleCategories = [
+    { name: 'Home', color: '#1666BA' },
+    { name: 'Life', color: '#368CE7' },
+    { name: 'Work', color: '#7AB3EF' },
+    { name: 'School', color: '#BEDAF7' }
+  ];
+
+  categoryRow.innerHTML = ''; // Clear the category row
+  exampleCategories.forEach(category => {
+    const categoryDiv = document.createElement('div');
+    categoryDiv.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
+    categoryDiv.innerHTML = `
+      <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${category.color}; cursor: pointer; border: none; position: relative;"></button>
+      <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">${category.name}</span>
+    `;
+    categoryRow.appendChild(categoryDiv);
+  });
+
+  console.log(`Loaded ${exampleCategories.length} categories into DOM`);
 });
