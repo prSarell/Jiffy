@@ -1,4 +1,4 @@
-// Expected main.js
+// shared/scripts/main.js
 document.addEventListener('DOMContentLoaded', () => {
   const categoryRow = document.querySelector('.category-row');
 
