@@ -1,4 +1,6 @@
 // shared/scripts/main.js
+import { getColor } from './colorManagement.js';
+
 document.addEventListener('DOMContentLoaded', () => {
   const popup = document.getElementById('popup');
   const deletePopup = document.getElementById('delete-popup');
@@ -17,10 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectedCategories = new Set();
 
   const exampleCategories = [
-    { name: 'Home', color: '#1666BA' },
-    { name: 'Life', color: '#368CE7' },
-    { name: 'Work', color: '#7AB3EF' },
-    { name: 'School', color: '#BEDAF7' }
+    { name: 'Home' },
+    { name: 'Life' },
+    { name: 'Work' },
+    { name: 'School' }
   ];
 
   function loadCategories() {
@@ -29,8 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const categoryDiv = document.createElement('div');
       categoryDiv.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
       categoryDiv.draggable = true;
+      const dynamicColor = getColor(category.name); // Use getColor to apply colors dynamically
       categoryDiv.innerHTML = `
-        <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${category.color}; cursor: pointer; border: none; position: relative;">
+        <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${dynamicColor}; cursor: pointer; border: none; position: relative;">
           <span class="category-specific-button" style="display: ${selectMode ? 'block' : 'none'};">
             <span class="inner-circle"></span>
           </span>
@@ -67,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function addCategory(categoryName) {
-    const defaultColor = '#1666BA'; // Default color for new categories
+    const defaultColor = getColor(categoryName); // Use getColor for new categories
     const newButton = document.createElement('div');
     newButton.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
     newButton.draggable = true;
@@ -80,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">${categoryName}</span>
     `;
     categoryRow.appendChild(newButton);
-    exampleCategories.push({ name: categoryName, color: defaultColor }); // Add to exampleCategories
+    exampleCategories.push({ name: categoryName }); // Add to exampleCategories
     console.log('Added category:', categoryName);
   }
 
