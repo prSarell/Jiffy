@@ -1,27 +1,29 @@
-// shared/scripts/colorManagement.js
-const defaultColors = {
-  'home': '#1666BA',
-  'life': '#368CE7',
-  'work': '#7AB3EF',
-  'school': '#BEDAF7'
-};
+// shared/scripts/main.js
+document.addEventListener('DOMContentLoaded', () => {
+  const categoryRow = document.querySelector('.category-row');
 
-export function getColor(categoryName) {
-  const userColors = JSON.parse(localStorage.getItem('userColors') || '{}');
-  const normalizedName = categoryName.toLowerCase();
-  if (userColors[normalizedName]) {
-    console.log(`Using user-edited color for ${normalizedName}: ${userColors[normalizedName]}`);
-    return userColors[normalizedName];
+  if (!categoryRow) {
+    console.error('Category row not found');
+    return;
   }
-  const color = defaultColors[normalizedName] || '#1666BA'; // Default for user-created categories
-  console.log(`Using default color for ${normalizedName}: ${color}`);
-  return color;
-}
 
-export function setColor(categoryName, color) {
-  const userColors = JSON.parse(localStorage.getItem('userColors') || '{}');
-  const normalizedName = categoryName.toLowerCase();
-  userColors[normalizedName] = color;
-  localStorage.setItem('userColors', JSON.stringify(userColors));
-  console.log(`Saved user-edited color for ${normalizedName}: ${color}`);
-}
+  const exampleCategories = [
+    { name: 'Home', color: '#1666BA' },
+    { name: 'Life', color: '#368CE7' },
+    { name: 'Work', color: '#7AB3EF' },
+    { name: 'School', color: '#BEDAF7' }
+  ];
+
+  categoryRow.innerHTML = ''; // Clear the category row
+  exampleCategories.forEach(category => {
+    const categoryDiv = document.createElement('div');
+    categoryDiv.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
+    categoryDiv.innerHTML = `
+      <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${category.color}; cursor: pointer; border: none; position: relative;"></button>
+      <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">${category.name}</span>
+    `;
+    categoryRow.appendChild(categoryDiv);
+  });
+
+  console.log(`Loaded ${exampleCategories.length} categories into DOM`);
+});
