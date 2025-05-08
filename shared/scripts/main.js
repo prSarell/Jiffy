@@ -1,5 +1,7 @@
 // shared/scripts/main.js
 import { getColor } from './colorManagement.js';
+import { loadCategories, saveCategories } from './categoryManagement.js';
+import { initializeDragAndDrop } from './dragAndDrop.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const popup = document.getElementById('popup');
@@ -17,33 +19,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let selectMode = false;
   const selectedCategories = new Set();
+  let categories = loadCategories(categoryRow, selectMode); // Load categories on startup
 
-  const exampleCategories = [
-    { name: 'Home' },
-    { name: 'Life' },
-    { name: 'Work' },
-    { name: 'School' }
-  ];
-
-  function loadCategories() {
-    categoryRow.innerHTML = ''; // Clear the category row
-    exampleCategories.forEach(category => {
-      const categoryDiv = document.createElement('div');
-      categoryDiv.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
-      categoryDiv.draggable = true;
-      const dynamicColor = getColor(category.name); // Use getColor to apply colors dynamically
-      categoryDiv.innerHTML = `
-        <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${dynamicColor}; cursor: pointer; border: none; position: relative;">
-          <span class="category-specific-button" style="display: ${selectMode ? 'block' : 'none'};">
-            <span class="inner-circle"></span>
-          </span>
-        </button>
-        <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">${category.name}</span>
-      `;
-      categoryRow.appendChild(categoryDiv);
-    });
-    console.log(`Loaded ${exampleCategories.length} categories`);
-  }
+  // Initialize drag-and-drop with save callback
+  initializeDragAndDrop(categoryRow, () => {
+    categories = saveCategories(categoryRow);
+  });
 
   function showAddPopup() {
     const title = document.getElementById('popup-title');
@@ -70,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function addCategory(categoryName) {
-    const defaultColor = getColor(categoryName); // Use getColor for new categories
+    const defaultColor = getColor(categoryName);
     const newButton = document.createElement('div');
     newButton.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
     newButton.draggable = true;
@@ -83,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">${categoryName}</span>
     `;
     categoryRow.appendChild(newButton);
-    exampleCategories.push({ name: categoryName }); // Add to exampleCategories
+    categories = saveCategories(categoryRow); // Save updated categories
     console.log('Added category:', categoryName);
   }
 
@@ -230,11 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const categoryName = span.textContent.trim();
         categoryDiv.remove();
-        // Remove from exampleCategories
-        const index = exampleCategories.findIndex(cat => cat.name === categoryName);
-        if (index !== -1) {
-          exampleCategories.splice(index, 1);
-        }
+        categories = saveCategories(categoryRow); // Save updated categories
         console.log('Deleted category:', categoryName);
       }, 300);
     });
@@ -249,6 +226,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     console.log('Categories deleted');
   });
-
-  loadCategories();
 });
