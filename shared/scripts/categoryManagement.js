@@ -25,7 +25,7 @@ export function loadCategories(categoryRow, selectMode) {
 
   console.log('Categories loaded from localStorage or defaults:', categories);
 
-  categoryRow.innerHTML = '';
+  categoryRow.innerHTML = ''; // Clear the category row
   categories.forEach(category => {
     if (!category.name || typeof category.name !== 'string' || category.name.trim() === '') {
       console.error(`Invalid category name: "${category.name}"`);
