@@ -2,15 +2,42 @@
 import { getColor, setColor, removeCategory } from './colorManagement.js';
 import { loadCategories, saveCategories } from './categoryManagement.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+// Function to wait for an element to be available
+function waitForElement(selector, callback, maxAttempts = 10, interval = 100) {
+  let attempts = 0;
+  const intervalId = setInterval(() => {
+    const element = document.querySelector(selector);
+    attempts++;
+    console.log(`waitForElement: Attempt ${attempts} to find ${selector}:`, element);
+    if (element) {
+      clearInterval(intervalId);
+      callback(element);
+    } else if (attempts >= maxAttempts) {
+      clearInterval(intervalId);
+      console.error(`waitForElement: Failed to find ${selector} after ${maxAttempts} attempts`);
+    }
+  }, interval);
+}
+
+function initializeApp() {
+  console.log('initializeApp: Starting app initialization');
+
   const popup = document.getElementById('popup');
   const deletePopup = document.getElementById('delete-popup');
   const editColorPopup = document.getElementById('edit-color-popup');
   const selectContainer = document.getElementById('select-container');
   const categoryRow = document.querySelector('.category-row');
 
+  console.log('initializeApp: DOM elements retrieved:', {
+    popup,
+    deletePopup,
+    editColorPopup,
+    selectContainer,
+    categoryRow
+  });
+
   if (!popup || !deletePopup || !editColorPopup || !selectContainer || !categoryRow) {
-    console.error('Required DOM elements not found:', { popup, deletePopup, editColorPopup, selectContainer, categoryRow });
+    console.error('initializeApp: Required DOM elements not found:', { popup, deletePopup, editColorPopup, selectContainer, categoryRow });
     return;
   }
 
@@ -21,13 +48,16 @@ document.addEventListener('DOMContentLoaded', () => {
   let selectMode = false;
   const selectedCategories = new Set();
   let categories = loadCategories(categoryRow); // Load categories on startup
+  console.log('initializeApp: Initial categories loaded:', categories);
+
   let editingCategoryDiv = null; // Track the category being edited
 
   function showAddPopup() {
+    console.log('showAddPopup: Opening add popup');
     const title = document.getElementById('popup-title');
     const input = document.getElementById('category-input');
     if (!title || !input) {
-      console.error('Popup elements not found:', { title, input });
+      console.error('showAddPopup: Popup elements not found:', { title, input });
       return;
     }
     title.textContent = 'Add Category';
@@ -36,9 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function closePopup() {
+    console.log('closePopup: Closing add popup');
     const input = document.getElementById('category-input');
     if (!input) {
-      console.error('Category input not found');
+      console.error('closePopup: Category input not found');
       return;
     }
     input.value = '';
@@ -46,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function addCategory(categoryName) {
+    console.log(`addCategory: Adding category "${categoryName}"`);
     const categoryDivs = categoryRow.querySelectorAll('div');
     const position = categoryDivs.length; // 0-based position of the new category
     const newColor = getColor(categoryName, position); // Pass the position
@@ -64,10 +96,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function showEditColorPopup(categoryDiv) {
+    console.log('showEditColorPopup: Opening edit color popup');
     const title = document.getElementById('edit-color-popup-title');
     const input = document.getElementById('color-input');
     if (!title || !input) {
-      console.error('Edit color popup elements not found:', { title, input });
+      console.error('showEditColorPopup: Edit color popup elements not found:', { title, input });
       return;
     }
     const span = categoryDiv.querySelector('span:last-child');
@@ -81,9 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function closeEditColorPopup() {
+    console.log('closeEditColorPopup: Closing edit color popup');
     const input = document.getElementById('color-input');
     if (!input) {
-      console.error('Color input not found');
+      console.error('closeEditColorPopup: Color input not found');
       return;
     }
     input.value = '';
@@ -92,13 +126,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.addEventListener('click', (event) => {
+    console.log('click: Handling click event');
     const actionButton = event.target.closest('.action-button');
     if (actionButton) {
       const action = actionButton.getAttribute('data-action');
+      console.log(`click: Action button clicked with action: ${action}`);
       if (action === 'add') {
         showAddPopup();
       } else if (action === 'show-rewards') {
-        console.log('Rewards action not implemented');
+        console.log('click: Rewards action not implemented');
       }
       return;
     }
@@ -106,11 +142,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const popupButton = event.target.closest('.popup-button');
     if (popupButton) {
       const action = popupButton.getAttribute('data-action');
+      console.log(`click: Popup button clicked with action: ${action}`);
       if (popupButton.closest('#popup')) { // Add popup buttons
         if (action === 'confirm') {
           const input = document.getElementById('category-input');
           if (!input) {
-            console.error('Category input not found');
+            console.error('click: Category input not found');
             return;
           }
           const categoryName = input.value.trim();
@@ -128,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (action === 'confirm') {
           const input = document.getElementById('color-input');
           if (!input || !editingCategoryDiv) {
-            console.error('Color input or editing category not found:', { input, editingCategoryDiv });
+            console.error('click: Color input or editing category not found:', { input, editingCategoryDiv });
             return;
           }
           const newColor = input.value;
@@ -150,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectAction = event.target.closest('#select-container span');
     if (selectAction) {
       const action = selectAction.id;
+      console.log(`click: Select container clicked with action: ${action}`);
       if (action === 'select-button') {
         selectMode = true;
         selectAction.style.display = 'none';
@@ -181,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedCategories.size > 0) {
           const deletePopupMessage = document.getElementById('delete-popup-message');
           if (!deletePopupMessage) {
-            console.error('Delete popup message element not found');
+            console.error('click: Delete popup message element not found');
             return;
           }
           const categoryNames = Array.from(selectedCategories).map(cat => {
@@ -198,18 +236,19 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   categoryRow.addEventListener('click', (event) => {
+    console.log('categoryRow click: Handling click event');
     const button = event.target.closest('button');
     if (button && button.querySelector('.category-specific-button') && selectMode) {
       const categoryDiv = button.parentElement;
       const span = categoryDiv.querySelector('span:last-child');
       if (!span) {
-        console.error('No span found for category div in select mode:', categoryDiv);
+        console.error('categoryRow click: No span found for category div in select mode:', categoryDiv);
         return;
       }
       const categoryName = span.textContent.trim();
       const innerCircle = button.querySelector('.inner-circle');
       if (!innerCircle) {
-        console.error('Inner circle not found for category button:', button);
+        console.error('categoryRow click: Inner circle not found for category button:', button);
         return;
       }
       if (selectedCategories.has(categoryDiv)) {
@@ -223,6 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('delete-popup-cancel').addEventListener('click', () => {
+    console.log('delete-popup-cancel: Cancel clicked');
     deletePopup.style.display = 'none';
     selectMode = false;
     selectedCategories.clear();
@@ -235,6 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('delete-popup-delete').addEventListener('click', () => {
+    console.log('delete-popup-delete: Delete clicked');
     const deletedPositions = [];
     selectedCategories.forEach(categoryDiv => {
       const position = Array.from(categoryRow.querySelectorAll('div')).indexOf(categoryDiv);
@@ -247,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         const span = categoryDiv.querySelector('span:last-child');
         if (!span) {
-          console.error('No span found for category div during delete:', categoryDiv);
+          console.error('delete-popup-delete: No span found for category div during delete:', categoryDiv);
           return;
         }
         const categoryName = span.textContent.trim();
@@ -292,4 +333,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (innerCircle) innerCircle.style.display = 'none';
     });
   });
+}
+
+// Wait for the category-row element to be available before initializing
+waitForElement('.category-row', () => {
+  console.log('waitForElement: Found .category-row, initializing app');
+  initializeApp();
 });
