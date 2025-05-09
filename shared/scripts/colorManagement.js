@@ -14,16 +14,12 @@ export function loadCategories(categoryRow) {
   let storedData = JSON.parse(localStorage.getItem('categoryData'));
   let categories = defaultCategories;
 
-  // Check if stored data exists and matches the current version
   if (storedData && storedData.version === STORAGE_VERSION) {
     categories = storedData.categories;
   } else {
-    // Reset to default categories if version mismatches or no data
     storedData = { version: STORAGE_VERSION, categories: defaultCategories };
     localStorage.setItem('categoryData', JSON.stringify(storedData));
   }
-
-  console.log('Categories loaded from localStorage or defaults:', categories);
 
   categoryRow.innerHTML = ''; // Clear the category row
   categories.forEach((category, index) => {
@@ -45,7 +41,6 @@ export function loadCategories(categoryRow) {
     categoryRow.appendChild(categoryDiv);
   });
 
-  console.log(`Loaded ${categories.length} categories into DOM`);
   return categories; // Return the loaded categories
 }
 
@@ -67,6 +62,5 @@ export function saveCategories(categoryRow) {
 
   const data = { version: STORAGE_VERSION, categories };
   localStorage.setItem('categoryData', JSON.stringify(data));
-  console.log(`Saved ${categories.length} categories:`, categories);
   return categories; // Return the updated categories
 }
