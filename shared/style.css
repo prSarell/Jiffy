@@ -1,18 +1,14 @@
 html, body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: #000000 !important;
-  color: #FFFFFF !important;
+  background-color: #000000;
+  color: #FFFFFF;
   margin: 0;
   padding: 0;
   height: 100vh;
 }
 h1 {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 36px;
-  color: #FFFFFF !important;
+  font-size: 20px; /* Match inline style in pages/home/index.html */
+  color: #FFFFFF;
   text-align: center;
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
 }
