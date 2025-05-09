@@ -10,7 +10,7 @@ const defaultCategories = [
 
 const STORAGE_VERSION = 1;
 
-export function loadCategories(categoryRow, selectMode) {
+export function loadCategories(categoryRow) {
   let storedData = JSON.parse(localStorage.getItem('categoryData'));
   let categories = defaultCategories;
 
@@ -33,11 +33,10 @@ export function loadCategories(categoryRow, selectMode) {
     }
     const categoryDiv = document.createElement('div');
     categoryDiv.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
-    categoryDiv.draggable = true;
     const dynamicColor = getColor(category.name);
     categoryDiv.innerHTML = `
       <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${dynamicColor}; cursor: pointer; border: none; position: relative;">
-        <span class="category-specific-button" style="display: ${selectMode ? 'block' : 'none'};">
+        <span class="category-specific-button" style="display: none;">
           <span class="inner-circle"></span>
         </span>
       </button>
@@ -51,7 +50,7 @@ export function loadCategories(categoryRow, selectMode) {
 }
 
 export function saveCategories(categoryRow) {
-  const categoryDivs = categoryRow.querySelectorAll('div[draggable="true"]');
+  const categoryDivs = categoryRow.querySelectorAll('div');
   const categories = Array.from(categoryDivs).map(div => {
     const span = div.querySelector('span:last-child');
     if (!span) {
