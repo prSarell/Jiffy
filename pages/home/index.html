@@ -66,6 +66,40 @@
     .popup-button[data-action="cancel"]:hover {
       background-color: #2A2A2A;
     }
+    #edit-color-popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    #edit-color-popup div {
+      background-color: #000000;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      width: 80%;
+      max-width: 300px;
+      border: 1px solid #333333;
+    }
+    #edit-color-popup h2 {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 16px;
+      margin: 0 0 10px;
+      color: #FFFFFF;
+    }
+    #edit-color-popup input[type="color"] {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 10px;
+      border: 1px solid #333333;
+      border-radius: 4px;
+      background-color: #1A1A1A;
+    }
   </style>
 </head>
 <body style="background-color: #000000; color: #FFFFFF; height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; margin: 0; padding: 0; position: relative; touch-action: manipulation;">
@@ -108,6 +142,14 @@
       <h2 id="delete-popup-message" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; margin: 0 0 10px; color: #FFFFFF;"></h2>
       <button id="delete-popup-cancel" style="background-color: #1A1A1A; color: #FFFFFF; border: 1px solid #333333; padding: 5px 10px; border-radius: 4px; margin-right: 5px; cursor: pointer; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#2A2A2A';" onmouseout="this.style.backgroundColor='#1A1A1A';">Cancel</button>
       <button id="delete-popup-delete" style="background-color: #FF4444; color: #FFFFFF; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#FF6666';" onmouseout="this.style.backgroundColor='#FF4444';">Delete</button>
+    </div>
+  </div>
+  <div id="edit-color-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
+    <div>
+      <h2 id="edit-color-popup-title" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; margin: 0 0 10px; color: #FFFFFF;">Edit Color</h2>
+      <input id="color-input" type="color" value="#1E3A8A">
+      <button class="popup-button" data-action="confirm">Confirm</button>
+      <button class="popup-button" data-action="cancel">Cancel</button>
     </div>
   </div>
   <script type="module" src="/jiffy/shared/scripts/main.js"></script>
