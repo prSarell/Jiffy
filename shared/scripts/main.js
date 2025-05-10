@@ -2,8 +2,25 @@
 import { getColor, setColor, removeCategory } from './colorManagement.js';
 import { loadCategories, saveCategories } from './categoryManagement.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('main.js: DOMContentLoaded event fired');
+// Function to wait for an element to be available
+function waitForElement(selector, callback, maxAttempts = 10, interval = 100) {
+  let attempts = 0;
+  const intervalId = setInterval(() => {
+    const element = document.querySelector(selector);
+    attempts++;
+    console.log(`waitForElement: Attempt ${attempts} to find ${selector}:`, element);
+    if (element) {
+      clearInterval(intervalId);
+      callback(element);
+    } else if (attempts >= maxAttempts) {
+      clearInterval(intervalId);
+      console.error(`waitForElement: Failed to find ${selector} after ${maxAttempts} attempts`);
+    }
+  }, interval);
+}
+
+function initializeApp() {
+  console.log('initializeApp: Starting app initialization');
 
   const popup = document.getElementById('popup');
   const deletePopup = document.getElementById('delete-popup');
@@ -11,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectContainer = document.getElementById('select-container');
   const categoryRow = document.querySelector('.category-row');
 
-  console.log('main.js: DOM elements retrieved:', {
+  console.log('initializeApp: DOM elements retrieved:', {
     popup,
     deletePopup,
     editColorPopup,
@@ -20,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   if (!popup || !deletePopup || !editColorPopup || !selectContainer || !categoryRow) {
-    console.error('main.js: Required DOM elements not found:', { popup, deletePopup, editColorPopup, selectContainer, categoryRow });
+    console.error('initializeApp: Required DOM elements not found:', { popup, deletePopup, editColorPopup, selectContainer, categoryRow });
     return;
   }
 
@@ -31,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let selectMode = false;
   const selectedCategories = new Set();
   let categories = loadCategories(categoryRow); // Load categories on startup
-  console.log('main.js: Initial categories loaded:', categories);
+  console.log('initializeApp: Initial categories loaded:', categories);
 
   let editingCategoryDiv = null; // Track the category being edited
 
@@ -316,4 +333,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (innerCircle) innerCircle.style.display = 'none';
     });
   });
+}
+
+// Wait for the category-row element to be available before initializing
+waitForElement('.category-row', () => {
+  console.log('waitForElement: Found .category-row, initializing app');
+  initializeApp();
 });
