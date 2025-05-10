@@ -52,9 +52,9 @@ function initializeApp() {
 
   let editingCategoryDiv = null; // Track the category being edited
 
-  // Variables for long hold detection
+  // Long hold variables
   let longHoldTimer = null;
-  const longHoldDuration = 500; // 500ms for a long hold
+  const LONG_HOLD_DURATION = 500; // 500ms for long hold
 
   function showAddPopup() {
     console.log('showAddPopup: Opening add popup');
@@ -129,15 +129,16 @@ function initializeApp() {
     editColorPopup.style.display = 'none';
   }
 
-  // Long hold detection for touch devices
+  // Long hold event handlers for color editing (touch and mouse)
   categoryRow.addEventListener('touchstart', (event) => {
-    const target = event.target.closest('.category-row > div > button');
-    if (target) {
-      const categoryDiv = target.parentElement;
+    const touch = event.touches[0];
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    const categoryDiv = target.closest('.category-row > div');
+    if (categoryDiv) {
       longHoldTimer = setTimeout(() => {
         console.log('touchstart: Long hold detected on category:', categoryDiv.querySelector('span:last-child').textContent.trim());
         showEditColorPopup(categoryDiv);
-      }, longHoldDuration);
+      }, LONG_HOLD_DURATION);
     }
   });
 
@@ -145,7 +146,6 @@ function initializeApp() {
     if (longHoldTimer) {
       clearTimeout(longHoldTimer);
       longHoldTimer = null;
-      console.log('touchend: Long hold timer cleared');
     }
   });
 
@@ -153,19 +153,16 @@ function initializeApp() {
     if (longHoldTimer) {
       clearTimeout(longHoldTimer);
       longHoldTimer = null;
-      console.log('touchmove: Long hold timer cleared due to movement');
     }
   });
 
-  // Long hold detection for mouse devices
   categoryRow.addEventListener('mousedown', (event) => {
-    const target = event.target.closest('.category-row > div > button');
+    const target = event.target.closest('.category-row > div');
     if (target) {
-      const categoryDiv = target.parentElement;
       longHoldTimer = setTimeout(() => {
-        console.log('mousedown: Long hold detected on category:', categoryDiv.querySelector('span:last-child').textContent.trim());
-        showEditColorPopup(categoryDiv);
-      }, longHoldDuration);
+        console.log('mousedown: Long hold detected on category:', target.querySelector('span:last-child').textContent.trim());
+        showEditColorPopup(target);
+      }, LONG_HOLD_DURATION);
     }
   });
 
@@ -173,7 +170,6 @@ function initializeApp() {
     if (longHoldTimer) {
       clearTimeout(longHoldTimer);
       longHoldTimer = null;
-      console.log('mouseup: Long hold timer cleared');
     }
   });
 
@@ -181,7 +177,6 @@ function initializeApp() {
     if (longHoldTimer) {
       clearTimeout(longHoldTimer);
       longHoldTimer = null;
-      console.log('mousemove: Long hold timer cleared due to movement');
     }
   });
 
@@ -256,4 +251,139 @@ function initializeApp() {
           <span id="cancel-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Cancel</span>
         `;
         document.querySelectorAll('.category-specific-button').forEach(button => {
-          button.style.display
+          button.style.display = 'block';
+        });
+      } else if (action === 'cancel-button') {
+        selectMode = false;
+        selectedCategories.clear();
+        selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
+        document.querySelectorAll('.category-specific-button').forEach(button => {
+          button.style.display = 'none';
+          const innerCircle = button.querySelector('.inner-circle');
+          if (innerCircle) innerCircle.style.display = 'none';
+        });
+      } else if (action === 'delete-button') {
+        if (selectedCategories.size > 0) {
+          const deletePopupMessage = document.getElementById('delete-popup-message');
+          if (!deletePopupMessage) {
+            console.error('click: Delete popup message element not found');
+            return;
+          }
+          const categoryNames = Array.from(selectedCategories).map(cat => {
+            const span = cat.querySelector('span:last-child');
+            return span ? span.textContent : 'Unknown';
+          });
+          deletePopupMessage.textContent = selectedCategories.size === 1 ? `Delete ${categoryNames[0]}?` : `Delete ${categoryNames.length} items?`;
+          deletePopup.style.display = 'flex';
+        } else {
+          alert('Please select at least one category to delete.');
+        }
+      }
+    }
+  });
+
+  categoryRow.addEventListener('click', (event) => {
+    console.log('categoryRow click: Handling click event');
+    const button = event.target.closest('button');
+    if (button && button.querySelector('.category-specific-button') && selectMode) {
+      const categoryDiv = button.parentElement;
+      const span = categoryDiv.querySelector('span:last-child');
+      if (!span) {
+        console.error('categoryRow click: No span found for category div in select mode:', categoryDiv);
+        return;
+      }
+      const categoryName = span.textContent.trim();
+      const innerCircle = button.querySelector('.inner-circle');
+      if (!innerCircle) {
+        console.error('categoryRow click: Inner circle not found for category button:', button);
+        return;
+      }
+      if (selectedCategories.has(categoryDiv)) {
+        selectedCategories.delete(categoryDiv);
+        innerCircle.style.display = 'none';
+      } else {
+        selectedCategories.add(categoryDiv);
+        innerCircle.style.display = 'block';
+      }
+    }
+  });
+
+  document.getElementById('delete-popup-cancel').addEventListener('click', () => {
+    console.log('delete-popup-cancel: Cancel clicked');
+    deletePopup.style.display = 'none';
+    selectMode = false;
+    selectedCategories.clear();
+    selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
+    document.querySelectorAll('.category-specific-button').forEach(button => {
+      button.style.display = 'none';
+      const innerCircle = button.querySelector('.inner-circle');
+      if (innerCircle) innerCircle.style.display = 'none';
+    });
+  });
+
+  document.getElementById('delete-popup-delete').addEventListener('click', () => {
+    console.log('delete-popup-delete: Delete clicked');
+    const deletedPositions = [];
+    selectedCategories.forEach(categoryDiv => {
+      const position = Array.from(categoryRow.querySelectorAll('div')).indexOf(categoryDiv);
+      deletedPositions.push(position);
+    });
+
+    selectedCategories.forEach(categoryDiv => {
+      categoryDiv.style.transition = 'opacity 0.3s';
+      categoryDiv.style.opacity = '0';
+      setTimeout(() => {
+        const span = categoryDiv.querySelector('span:last-child');
+        if (!span) {
+          console.error('delete-popup-delete: No span found for category div during delete:', categoryDiv);
+          return;
+        }
+        const categoryName = span.textContent.trim();
+        const position = Array.from(categoryRow.querySelectorAll('div')).indexOf(categoryDiv);
+        const categoriesPerLine = 4;
+        const lineNumber = Math.floor(position / categoriesPerLine) + 1;
+        removeCategory(lineNumber); // Notify colorManagement of the deletion
+        categoryDiv.remove();
+        categories = saveCategories(categoryRow); // Save updated categories
+      }, 300);
+    });
+
+    // After deletion, reassign colors to remaining categories in the affected lines
+    setTimeout(() => {
+      const affectedLines = new Set(deletedPositions.map(pos => Math.floor(pos / 4) + 1));
+      affectedLines.forEach(lineNumber => {
+        const startPosition = (lineNumber - 1) * 4;
+        const endPosition = startPosition + 4;
+        const categoryDivs = Array.from(categoryRow.querySelectorAll('div'));
+        for (let pos = startPosition; pos < endPosition && pos < categoryDivs.length; pos++) {
+          const categoryDiv = categoryDivs[pos];
+          const span = categoryDiv.querySelector('span:last-child');
+          if (!span) continue;
+          const categoryName = span.textContent.trim();
+          const newColor = getColor(categoryName, pos); // Reassign color based on new position
+          setColor(categoryName, newColor); // Update the color in userColors
+          const button = categoryDiv.querySelector('button');
+          if (button) {
+            button.style.backgroundColor = newColor; // Update the DOM
+          }
+        }
+      });
+    }, 300);
+
+    deletePopup.style.display = 'none';
+    selectMode = false;
+    selectedCategories.clear();
+    selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
+    document.querySelectorAll('.category-specific-button').forEach(button => {
+      button.style.display = 'none';
+      const innerCircle = button.querySelector('.inner-circle');
+      if (innerCircle) innerCircle.style.display = 'none';
+    });
+  });
+}
+
+// Wait for the category-row element to be available before initializing
+waitForElement('.category-row', () => {
+  console.log('waitForElement: Found .category-row, initializing app');
+  initializeApp();
+});
