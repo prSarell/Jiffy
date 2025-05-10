@@ -22,7 +22,7 @@ export function loadCategories(categoryRow) {
   console.log('loadCategories: Retrieved storedData from localStorage:', storedData);
   let categories = defaultCategories;
 
-  if (storedData && storedData.version === STORAGE_VERSION) {
+  if (storedData && storedData.version === STORAGE_VERSION && storedData.categories && storedData.categories.length > 0) {
     console.log('loadCategories: Using stored categories');
     categories = storedData.categories;
   } else {
