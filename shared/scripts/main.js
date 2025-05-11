@@ -68,7 +68,7 @@ function initializeApp() {
   let longHoldTimer = null;
   let isLongHold = false; // Flag to track if long hold duration is met
   let longHoldTarget = null; // Track the target category for long hold
-  const LONG_HOLD_DURATION = 800; // 800ms for long hold
+  const LONG_HOLD_DURATION = 500; // Long hold duration set to 500ms
 
   function showAddPopup() {
     console.log('showAddPopup: Opening add popup');
@@ -390,13 +390,11 @@ function initializeApp() {
         }
       } else if (popupButton.closest('#edit-options-popup')) { // Edit options popup buttons
         if (action === 'edit-name') {
+          closeEditOptionsPopup();
           showEditNamePopup(editingCategoryDiv);
-          closeEditOptionsPopup();
         } else if (action === 'edit-color') {
+          closeEditOptionsPopup();
           showEditColorPopup(editingCategoryDiv);
-          closeEditOptionsPopup();
-        } else if (action === 'cancel') {
-          closeEditOptionsPopup();
         }
       }
       return;
