@@ -100,6 +100,80 @@
       border-radius: 4px;
       background-color: #1A1A1A;
     }
+    #edit-options-popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    #edit-options-popup div {
+      background-color: #000000;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      width: 80%;
+      max-width: 300px;
+      border: 1px solid #333333;
+    }
+    #edit-options-popup h2 {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 16px;
+      margin: 0 0 10px;
+      color: #FFFFFF;
+    }
+    #edit-options-popup button {
+      background-color: #333333;
+      color: #FFFFFF;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      margin: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    #edit-options-popup button:hover {
+      background-color: #444444;
+    }
+    #edit-name-popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    #edit-name-popup div {
+      background-color: #000000;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      width: 80%;
+      max-width: 300px;
+      border: 1px solid #333333;
+    }
+    #edit-name-popup h2 {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 16px;
+      margin: 0 0 10px;
+      color: #FFFFFF;
+    }
+    #edit-name-popup input[type="text"] {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 10px;
+      border: 1px solid #333333;
+      border-radius: 4px;
+      background-color: #1A1A1A;
+      color: #FFFFFF;
+    }
   </style>
 </head>
 <body style="background-color: #000000; color: #FFFFFF; height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; margin: 0; padding: 0; position: relative; touch-action: manipulation;">
@@ -148,6 +222,22 @@
     <div>
       <h2 id="edit-color-popup-title" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; margin: 0 0 10px; color: #FFFFFF;">Edit Color</h2>
       <input id="color-input" type="color" value="#1E3A8A">
+      <button class="popup-button" data-action="confirm">Confirm</button>
+      <button class="popup-button" data-action="cancel">Cancel</button>
+    </div>
+  </div>
+  <div id="edit-options-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
+    <div>
+      <h2 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; margin: 0 0 10px; color: #FFFFFF;">Edit</h2>
+      <button data-action="edit-name">Name</button>
+      <button data-action="edit-color">Color</button>
+      <button class="popup-button" data-action="cancel">Cancel</button>
+    </div>
+  </div>
+  <div id="edit-name-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
+    <div>
+      <h2 id="edit-name-popup-title" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; margin: 0 0 10px; color: #FFFFFF;">Edit Name</h2>
+      <input id="name-input" type="text" placeholder="Enter new category name" style="width: 100%; padding: 5px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 4px; background-color: #1A1A1A; color: #FFFFFF;">
       <button class="popup-button" data-action="confirm">Confirm</button>
       <button class="popup-button" data-action="cancel">Cancel</button>
     </div>
