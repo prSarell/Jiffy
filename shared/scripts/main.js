@@ -25,6 +25,9 @@ function initializeApp() {
   const popup = document.getElementById('popup');
   const deletePopup = document.getElementById('delete-popup');
   const editColorPopup = document.getElementById('edit-color-popup');
+  // New DOM elements for edit options and name editing
+  const editOptionsPopup = document.getElementById('edit-options-popup');
+  const editNamePopup = document.getElementById('edit-name-popup');
   const selectContainer = document.getElementById('select-container');
   const categoryRow = document.querySelector('.category-row');
 
@@ -32,18 +35,23 @@ function initializeApp() {
     popup,
     deletePopup,
     editColorPopup,
+    editOptionsPopup,
+    editNamePopup,
     selectContainer,
     categoryRow
   });
 
-  if (!popup || !deletePopup || !editColorPopup || !selectContainer || !categoryRow) {
-    console.error('initializeApp: Required DOM elements not found:', { popup, deletePopup, editColorPopup, selectContainer, categoryRow });
+  if (!popup || !deletePopup || !editColorPopup || !editOptionsPopup || !editNamePopup || !selectContainer || !categoryRow) {
+    console.error('initializeApp: Required DOM elements not found:', { popup, deletePopup, editColorPopup, editOptionsPopup, editNamePopup, selectContainer, categoryRow });
     return;
   }
 
   if (popup.style.display !== 'none') popup.style.display = 'none';
   if (deletePopup.style.display !== 'none') deletePopup.style.display = 'none';
   if (editColorPopup.style.display !== 'none') editColorPopup.style.display = 'none';
+  // Initialize new popups
+  if (editOptionsPopup.style.display !== 'none') editOptionsPopup.style.display = 'none';
+  if (editNamePopup.style.display !== 'none') editNamePopup.style.display = 'none';
 
   let selectMode = false;
   const selectedCategories = new Set();
@@ -54,7 +62,9 @@ function initializeApp() {
 
   // Long hold variables
   let longHoldTimer = null;
-  const LONG_HOLD_DURATION = 500; // 500ms for long hold
+  let isLongHold = false; // Flag to track if long hold duration is met
+  let longHoldTarget = null; // Track the target category for long hold
+  const LONG_HOLD_DURATION = 800; // 800ms for long hold
 
   function showAddPopup() {
     console.log('showAddPopup: Opening add popup');
@@ -99,6 +109,20 @@ function initializeApp() {
     categories = saveCategories(categoryRow); // Save updated categories
   }
 
+  // New function to show the "Edit" options popup
+  function showEditOptionsPopup(categoryDiv) {
+    console.log('showEditOptionsPopup: Opening edit options popup');
+    editingCategoryDiv = categoryDiv; // Store the category being edited
+    editOptionsPopup.style.display = 'flex';
+  }
+
+  // New function to close the "Edit" options popup
+  function closeEditOptionsPopup() {
+    console.log('closeEditOptionsPopup: Closing edit options popup');
+    editingCategoryDiv = null; // Clear the editing category
+    editOptionsPopup.style.display = 'none';
+  }
+
   function showEditColorPopup(categoryDiv) {
     console.log('showEditColorPopup: Opening edit color popup');
     const title = document.getElementById('edit-color-popup-title');
@@ -129,15 +153,47 @@ function initializeApp() {
     editColorPopup.style.display = 'none';
   }
 
-  // Long hold event handlers for color editing (touch and mouse)
+  // New function to show the category name edit popup
+  function showEditNamePopup(categoryDiv) {
+    console.log('showEditNamePopup: Opening edit name popup');
+    const title = document.getElementById('edit-name-popup-title');
+    const input = document.getElementById('name-input');
+    if (!title || !input) {
+      console.error('showEditNamePopup: Edit name popup elements not found:', { title, input });
+      return;
+    }
+    const span = categoryDiv.querySelector('span:last-child');
+    const categoryName = span ? span.textContent.trim() : 'Unknown';
+    title.textContent = `Edit Name for ${categoryName}`;
+    input.value = categoryName; // Pre-fill with the current name
+    editingCategoryDiv = categoryDiv; // Store the category being edited
+    editNamePopup.style.display = 'flex';
+  }
+
+  // New function to close the category name edit popup
+  function closeEditNamePopup() {
+    console.log('closeEditNamePopup: Closing edit name popup');
+    const input = document.getElementById('name-input');
+    if (!input) {
+      console.error('closeEditNamePopup: Name input not found');
+      return;
+    }
+    input.value = '';
+    editingCategoryDiv = null; // Clear the editing category
+    editNamePopup.style.display = 'none';
+  }
+
+  // Long hold event handlers for edit options (touch and mouse)
   categoryRow.addEventListener('touchstart', (event) => {
     const touch = event.touches[0];
     const target = document.elementFromPoint(touch.clientX, touch.clientY);
     const categoryDiv = target.closest('.category-row > div');
     if (categoryDiv) {
+      longHoldTarget = categoryDiv;
+      isLongHold = false;
       longHoldTimer = setTimeout(() => {
-        console.log('touchstart: Long hold detected on category:', categoryDiv.querySelector('span:last-child').textContent.trim());
-        showEditColorPopup(categoryDiv);
+        console.log('touchstart: Long hold duration met on category:', longHoldTarget.querySelector('span:last-child').textContent.trim());
+        isLongHold = true; // Set flag to indicate long hold duration is met
       }, LONG_HOLD_DURATION);
     }
   });
@@ -147,6 +203,12 @@ function initializeApp() {
       clearTimeout(longHoldTimer);
       longHoldTimer = null;
     }
+    if (isLongHold && longHoldTarget) {
+      console.log('touchend: Long hold released, triggering edit options for category:', longHoldTarget.querySelector('span:last-child').textContent.trim());
+      showEditOptionsPopup(longHoldTarget); // Updated to show the new "Edit" popup
+    }
+    isLongHold = false;
+    longHoldTarget = null;
   });
 
   categoryRow.addEventListener('touchmove', (event) => {
@@ -154,14 +216,18 @@ function initializeApp() {
       clearTimeout(longHoldTimer);
       longHoldTimer = null;
     }
+    isLongHold = false;
+    longHoldTarget = null;
   });
 
   categoryRow.addEventListener('mousedown', (event) => {
     const target = event.target.closest('.category-row > div');
     if (target) {
+      longHoldTarget = target;
+      isLongHold = false;
       longHoldTimer = setTimeout(() => {
-        console.log('mousedown: Long hold detected on category:', target.querySelector('span:last-child').textContent.trim());
-        showEditColorPopup(target);
+        console.log('mousedown: Long hold duration met on category:', longHoldTarget.querySelector('span:last-child').textContent.trim());
+        isLongHold = true; // Set flag to indicate long hold duration is met
       }, LONG_HOLD_DURATION);
     }
   });
@@ -171,6 +237,12 @@ function initializeApp() {
       clearTimeout(longHoldTimer);
       longHoldTimer = null;
     }
+    if (isLongHold && longHoldTarget) {
+      console.log('mouseup: Long hold released, triggering edit options for category:', longHoldTarget.querySelector('span:last-child').textContent.trim());
+      showEditOptionsPopup(longHoldTarget); // Updated to show the new "Edit" popup
+    }
+    isLongHold = false;
+    longHoldTarget = null;
   });
 
   categoryRow.addEventListener('mousemove', (event) => {
@@ -178,6 +250,8 @@ function initializeApp() {
       clearTimeout(longHoldTimer);
       longHoldTimer = null;
     }
+    isLongHold = false;
+    longHoldTarget = null;
   });
 
   document.addEventListener('click', (event) => {
@@ -234,6 +308,46 @@ function initializeApp() {
           closeEditColorPopup();
         } else if (action === 'cancel') {
           closeEditColorPopup();
+        }
+      } else if (popupButton.closest('#edit-name-popup')) { // New: Edit name popup buttons
+        if (action === 'confirm') {
+          const input = document.getElementById('name-input');
+          if (!input || !editingCategoryDiv) {
+            console.error('click: Name input or editing category not found:', { input, editingCategoryDiv });
+            return;
+          }
+          const newName = input.value.trim();
+          if (newName) {
+            const span = editingCategoryDiv.querySelector('span:last-child');
+            if (!span) {
+              console.error('click: Span not found in editing category div:', editingCategoryDiv);
+              return;
+            }
+            const oldName = span.textContent.trim();
+            // Update the category name in the DOM
+            span.textContent = newName;
+            // Update userColors and colorGroups with the new name
+            const position = Array.from(categoryRow.querySelectorAll('div')).indexOf(editingCategoryDiv);
+            const currentColor = getColor(oldName, position);
+            setColor(newName, currentColor, oldName);
+            // Save updated categories to localStorage
+            categories = saveCategories(categoryRow);
+            closeEditNamePopup();
+          } else {
+            alert('Please enter a category name!');
+          }
+        } else if (action === 'cancel') {
+          closeEditNamePopup();
+        }
+      } else if (popupButton.closest('#edit-options-popup')) { // New: Edit options popup buttons
+        if (action === 'edit-name') {
+          closeEditOptionsPopup();
+          showEditNamePopup(editingCategoryDiv);
+        } else if (action === 'edit-color') {
+          closeEditOptionsPopup();
+          showEditColorPopup(editingCategoryDiv);
+        } else if (action === 'cancel') {
+          closeEditOptionsPopup();
         }
       }
       return;
