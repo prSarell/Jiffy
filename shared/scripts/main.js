@@ -18,7 +18,7 @@ document.addEventListener('click', (event) => {
   if (popupButton) {
     const action = popupButton.getAttribute('data-action');
     console.log(`click: Popup button clicked with action: ${action}`);
-    console.log('click: Popup button parent:', popupButton.closest('#edit-options-popup'));
+    console.log(`click: Popup button parent:`, popupButton.closest('#edit-options-popup'));
     if (popupButton.closest('#popup')) { // Add popup buttons
       if (action === 'confirm') {
         const input = document.getElementById('category-input');
@@ -88,11 +88,13 @@ document.addEventListener('click', (event) => {
       }
     } else if (popupButton.closest('#edit-options-popup')) { // Edit options popup buttons
       if (action === 'edit-name') {
-        closeEditOptionsPopup();
+        // Updated: Open the next popup before closing the current one
         showEditNamePopup(editingCategoryDiv);
-      } else if (action === 'edit-color') {
         closeEditOptionsPopup();
+      } else if (action === 'edit-color') {
+        // Updated: Open the next popup before closing the current one
         showEditColorPopup(editingCategoryDiv);
+        closeEditOptionsPopup();
       } else if (action === 'cancel') {
         closeEditOptionsPopup();
       }
