@@ -124,17 +124,27 @@ export function getColor(categoryName, position) {
   return newColor;
 }
 
-export function setColor(categoryName, color) {
-  console.log(`setColor: Setting color for ${categoryName} to ${color}`);
+export function setColor(categoryName, color, oldName = null) {
+  console.log(`setColor: Setting color for ${categoryName} to ${color}${oldName ? ` (old name: ${oldName})` : ''}`);
   // Remove the category from any existing color group
   for (const groupColor in colorGroups) {
-    colorGroups[groupColor] = colorGroups[groupColor].filter(name => name !== categoryName);
+    if (oldName && colorGroups[groupColor].includes(oldName)) {
+      colorGroups[groupColor] = colorGroups[groupColor].filter(name => name !== oldName);
+      colorGroups[groupColor].push(categoryName);
+    } else if (colorGroups[groupColor].includes(categoryName)) {
+      colorGroups[groupColor] = colorGroups[groupColor].filter(name => name !== categoryName);
+    }
     if (colorGroups[groupColor].length === 0) {
       delete colorGroups[groupColor];
     }
   }
   localStorage.setItem('colorGroups', JSON.stringify(colorGroups));
 
+  // Update userColors
+  if (oldName && userColors[oldName]) {
+    userColors[categoryName] = userColors[oldName];
+    delete userColors[oldName];
+  }
   userColors[categoryName] = color;
   localStorage.setItem('userColors', JSON.stringify(userColors));
 }
@@ -154,11 +164,15 @@ export function removeCategory(lineNumber) {
   }
 }
 
-export function groupCategories(categoryNames, color) {
-  console.log(`groupCategories: Grouping categories ${categoryNames.join(', ')} with color ${color}`);
-  // Remove these categories from any existing groups
-  categoryNames.forEach(categoryName => {
+export function groupCategories(categoryNames, color, oldNames = []) {
+  console.log(`groupCategories: Grouping categories ${categoryNames.join(', ')} with color ${color}${oldNames.length ? ` (replacing old names: ${oldNames.join(', ')})` : ''}`);
+  // Remove these categories (and their old names) from any existing groups
+  categoryNames.forEach((categoryName, index) => {
+    const oldName = oldNames[index] || null;
     for (const groupColor in colorGroups) {
+      if (oldName && colorGroups[groupColor].includes(oldName)) {
+        colorGroups[groupColor] = colorGroups[groupColor].filter(name => name !== oldName);
+      }
       colorGroups[groupColor] = colorGroups[groupColor].filter(name => name !== categoryName);
       if (colorGroups[groupColor].length === 0) {
         delete colorGroups[groupColor];
@@ -170,7 +184,12 @@ export function groupCategories(categoryNames, color) {
   colorGroups[color] = categoryNames;
 
   // Update userColors for each category in the group
-  categoryNames.forEach(categoryName => {
+  categoryNames.forEach((categoryName, index) => {
+    const oldName = oldNames[index] || null;
+    if (oldName && userColors[oldName]) {
+      userColors[categoryName] = userColors[oldName];
+      delete userColors[oldName];
+    }
     userColors[categoryName] = color;
   });
 
