@@ -378,8 +378,13 @@ export function setupEventHandlers(appContext) {
 
   categoryRow.addEventListener('click', (event) => {
     console.log('categoryRow click: Handling click event');
-    const button = event.target.closest('button');
-    if (button && button.querySelector('.category-specific-button') && appContext.selectMode) {
+    const categorySpecificButton = event.target.closest('.category-specific-button');
+    if (categorySpecificButton && appContext.selectMode) {
+      const button = categorySpecificButton.closest('button');
+      if (!button) {
+        console.error('categoryRow click: No parent button found for category-specific-button:', categorySpecificButton);
+        return;
+      }
       const categoryDiv = button.parentElement;
       const span = categoryDiv.querySelector('span:last-child');
       if (!span) {
@@ -387,9 +392,9 @@ export function setupEventHandlers(appContext) {
         return;
       }
       const categoryName = span.textContent.trim();
-      const innerCircle = button.querySelector('.inner-circle');
+      const innerCircle = categorySpecificButton.querySelector('.inner-circle');
       if (!innerCircle) {
-        console.error('categoryRow click: Inner circle not found for category button:', button);
+        console.error('categoryRow click: Inner circle not found for category button:', categorySpecificButton);
         return;
       }
       if (selectedCategories.has(categoryDiv)) {
