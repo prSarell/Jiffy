@@ -345,6 +345,7 @@ export function setupEventHandlers(appContext) {
           <span id="cancel-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Cancel</span>
         `;
         document.querySelectorAll('.category-specific-button').forEach(button => {
+          console.log('select-button: Showing category-specific-button:', button);
           button.style.display = 'block';
         });
       } else if (action === 'cancel-button') {
@@ -352,6 +353,7 @@ export function setupEventHandlers(appContext) {
         selectedCategories.clear();
         selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
         document.querySelectorAll('.category-specific-button').forEach(button => {
+          console.log('cancel-button: Hiding category-specific-button:', button);
           button.style.display = 'none';
           const innerCircle = button.querySelector('.inner-circle');
           if (innerCircle) innerCircle.style.display = 'none';
@@ -377,18 +379,24 @@ export function setupEventHandlers(appContext) {
   });
 
   categoryRow.addEventListener('click', (event) => {
-    console.log('categoryRow click: Handling click event, target:', event.target);
+    console.log('categoryRow click: Handling click event');
+    console.log('categoryRow click: Event target:', event.target);
+    console.log('categoryRow click: Event target classList:', event.target.classList);
+    console.log('categoryRow click: Event target parentElement:', event.target.parentElement);
     const categorySpecificButton = event.target.closest('.category-specific-button');
     console.log('categoryRow click: Found category-specific-button:', categorySpecificButton);
     if (categorySpecificButton) {
-      console.log('categoryRow click: Selection mode:', appContext.selectMode);
+      console.log('categoryRow click: Selection mode check, selectMode:', appContext.selectMode);
       if (appContext.selectMode) {
+        console.log('categoryRow click: In selection mode');
         const button = categorySpecificButton.closest('button');
+        console.log('categoryRow click: Found parent button:', button);
         if (!button) {
           console.error('categoryRow click: No parent button found for category-specific-button:', categorySpecificButton);
           return;
         }
         const categoryDiv = button.parentElement;
+        console.log('categoryRow click: Found categoryDiv:', categoryDiv);
         const span = categoryDiv.querySelector('span:last-child');
         if (!span) {
           console.error('categoryRow click: No span found for category div in select mode:', categoryDiv);
@@ -397,6 +405,7 @@ export function setupEventHandlers(appContext) {
         const categoryName = span.textContent.trim();
         console.log('categoryRow click: Category name:', categoryName);
         const innerCircle = categorySpecificButton.querySelector('.inner-circle');
+        console.log('categoryRow click: Found innerCircle:', innerCircle);
         if (!innerCircle) {
           console.error('categoryRow click: Inner circle not found for category-specific-button:', categorySpecificButton);
           return;
