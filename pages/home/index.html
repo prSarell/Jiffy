@@ -29,6 +29,8 @@
       border-radius: 50%;
       background-color: #000000;
       box-sizing: border-box;
+      pointer-events: auto; /* Ensure clicks are registered */
+      cursor: pointer;
     }
     .category-specific-button .inner-circle {
       display: none;
@@ -40,6 +42,7 @@
       height: 8px;
       border-radius: 50%;
       background-color: #FFFFFF;
+      pointer-events: none; /* Inner circle doesn’t need to handle clicks */
     }
     .popup-button[data-action="confirm"] {
       background-color: #333333;
@@ -218,26 +221,25 @@
       <button id="delete-popup-delete" style="background-color: #FF4444; color: #FFFFFF; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#FF6666';" onmouseout="this.style.backgroundColor='#FF4444';">Delete</button>
     </div>
   </div>
-  <div id="edit-color-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
+  <div id="edit-color-popup" style="display: none;">
     <div>
-      <h2 id="edit-color-popup-title" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; margin: 0 0 10px; color: #FFFFFF;">Edit Color</h2>
+      <h2 id="edit-color-popup-title">Edit Color</h2>
       <input id="color-input" type="color" value="#1E3A8A">
       <button class="popup-button" data-action="confirm">Confirm</button>
       <button class="popup-button" data-action="cancel">Cancel</button>
     </div>
   </div>
-  <div id="edit-options-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
+  <div id="edit-options-popup" style="display: none;">
     <div>
-      <h2 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; margin: 0 0 10px; color: #FFFFFF;">Edit</h2>
+      <h2>Edit</h2>
       <button data-action="edit-name">Name</button>
       <button data-action="edit-color">Color</button>
-      <button class="popup-button" data-action="cancel">Cancel</button>
     </div>
   </div>
-  <div id="edit-name-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
+  <div id="edit-name-popup" style="display: none;">
     <div>
-      <h2 id="edit-name-popup-title" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; margin: 0 0 10px; color: #FFFFFF;">Edit Name</h2>
-      <input id="name-input" type="text" placeholder="Enter new category name" style="width: 100%; padding: 5px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 4px; background-color: #1A1A1A; color: #FFFFFF;">
+      <h2 id="edit-name-popup-title">Edit Name</h2>
+      <input id="name-input" type="text" placeholder="Enter new category name">
       <button class="popup-button" data-action="confirm">Confirm</button>
       <button class="popup-button" data-action="cancel">Cancel</button>
     </div>
