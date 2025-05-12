@@ -519,12 +519,12 @@ export function setupEventHandlers(appContext) {
       console.log('delete-popup-delete: Updated categories after deletion:', updatedCategories);
       appContext.setCategories(updatedCategories);
 
-      // Reassign colors to remaining categories
+      // Reassign colors to remaining categories, preserving userColors
       const remainingDivs = Array.from(categoryRow.querySelectorAll('div'));
       remainingDivs.forEach((div, index) => {
         const span = div.querySelector('span:last-child');
         const categoryName = span ? span.textContent.trim() : 'Unknown';
-        const color = getColor(categoryName, index);
+        const color = userColors[categoryName] || getColor(categoryName, index);
         const button = div.querySelector('button');
         if (button) {
           button.style.backgroundColor = color;
