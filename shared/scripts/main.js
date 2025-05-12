@@ -73,7 +73,7 @@ function initializeApp() {
 
   // Expose state and DOM elements to other modules via a shared context
   const appContext = {
-    selectMode,
+    get selectMode() { return selectMode; }, // Getter to access selectMode
     selectedCategories,
     categories,
     editingCategoryDiv,
@@ -95,7 +95,11 @@ function initializeApp() {
     setLongHoldTimer: (timer) => { longHoldTimer = timer; },
     setIsLongHold: (state) => { isLongHold = state; },
     setLongHoldTarget: (target) => { longHoldTarget = target; },
-    setSelectMode: (mode) => { selectMode = mode; },
+    setSelectMode: (mode) => { 
+      console.log(`setSelectMode: Setting selectMode to ${mode}, previous value: ${selectMode}`);
+      selectMode = mode; 
+      console.log(`setSelectMode: New selectMode value: ${selectMode}`);
+    },
     setCategories: (newCategories) => { categories = newCategories; },
     addCategory: (categoryName) => addCategory(categoryName, appContext)
   };
