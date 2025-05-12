@@ -475,25 +475,65 @@ export function setupEventHandlers(appContext) {
   deletePopup.querySelector('#delete-popup-delete').addEventListener('click', (event) => {
     event.stopPropagation();
     console.log('delete-popup-delete: Delete clicked');
-    const deletedPositions = [];
-    selectedCategories.forEach(categoryDiv => {
-      const position = Array.from(categoryRow.querySelectorAll('div')).indexOf(categoryDiv);
-      deletedPositions.push(position);
-    });
+    console.log('delete-popup-delete: Selected categories:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child').textContent.trim()));
 
-    selectedCategories.forEach(categoryDiv => {
+    // Collect positions and line numbers to update color management
+    const lineNumbersToUpdate = new Set();
+    const categoriesPerLine = 4;
+    const categoryDivs = Array.from(categoryRow.querySelectorAll('div'));
+
+    // Map selected categories to their current positions and remove them immediately
+    const categoriesToRemove = Array.from(selectedCategories).map(categoryDiv => {
+      const position = categoryDivs.indexOf(categoryDiv);
+      if (position === -1) {
+        console.warn('delete-popup-delete: Category not found in DOM:', categoryDiv);
+        return null;
+      }
+      const lineNumber = Math.floor(position / categoriesPerLine) + 1;
+      lineNumbersToUpdate.add(lineNumber);
+      return { categoryDiv, position, lineNumber };
+    }).filter(item => item !== null);
+
+    console.log('delete-popup-delete: Categories to remove:', categoriesToRemove.map(item => ({
+      name: item.categoryDiv.querySelector('span:last-child').textContent.trim(),
+      position: item.position,
+      lineNumber: item.lineNumber
+    })));
+    console.log('delete-popup-delete: Lines to update:', Array.from(lineNumbersToUpdate));
+
+    // Apply fade-out animation and remove immediately
+    categoriesToRemove.forEach(({ categoryDiv, lineNumber }) => {
+      console.log('delete-popup-delete: Fading out and removing category:', categoryDiv.querySelector('span:last-child').textContent.trim());
       categoryDiv.style.transition = 'opacity 0.3s';
       categoryDiv.style.opacity = '0';
       setTimeout(() => {
-        const position = Array.from(categoryRow.querySelectorAll('div')).indexOf(categoryDiv);
-        const categoriesPerLine = 4;
-        const lineNumber = Math.floor(position / categoriesPerLine) + 1;
-        removeCategory(lineNumber);
         categoryDiv.remove();
-        appContext.setCategories(saveCategories(categoryRow));
+        console.log('delete-popup-delete: Removed category from DOM');
+        removeCategory(lineNumber); // Update color management for the line
       }, 300);
     });
 
+    // Update categories after removal
+    setTimeout(() => {
+      const updatedCategories = saveCategories(categoryRow);
+      console.log('delete-popup-delete: Updated categories after deletion:', updatedCategories);
+      appContext.setCategories(updatedCategories);
+
+      // Reassign colors to remaining categories
+      const remainingDivs = Array.from(categoryRow.querySelectorAll('div'));
+      remainingDivs.forEach((div, index) => {
+        const span = div.querySelector('span:last-child');
+        const categoryName = span ? span.textContent.trim() : 'Unknown';
+        const color = getColor(categoryName, index);
+        const button = div.querySelector('button');
+        if (button) {
+          button.style.backgroundColor = color;
+          console.log(`delete-popup-delete: Reassigned color ${color} to ${categoryName} at position ${index}`);
+        }
+      });
+    }, 350); // Slightly after removal to ensure DOM updates
+
+    // Reset the UI
     deletePopup.style.display = 'none';
     setSelectMode(false);
     selectedCategories.clear();
