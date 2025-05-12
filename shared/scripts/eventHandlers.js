@@ -377,33 +377,46 @@ export function setupEventHandlers(appContext) {
   });
 
   categoryRow.addEventListener('click', (event) => {
-    console.log('categoryRow click: Handling click event');
+    console.log('categoryRow click: Handling click event, target:', event.target);
     const categorySpecificButton = event.target.closest('.category-specific-button');
-    if (categorySpecificButton && appContext.selectMode) {
-      const button = categorySpecificButton.closest('button');
-      if (!button) {
-        console.error('categoryRow click: No parent button found for category-specific-button:', categorySpecificButton);
-        return;
-      }
-      const categoryDiv = button.parentElement;
-      const span = categoryDiv.querySelector('span:last-child');
-      if (!span) {
-        console.error('categoryRow click: No span found for category div in select mode:', categoryDiv);
-        return;
-      }
-      const categoryName = span.textContent.trim();
-      const innerCircle = categorySpecificButton.querySelector('.inner-circle');
-      if (!innerCircle) {
-        console.error('categoryRow click: Inner circle not found for category button:', categorySpecificButton);
-        return;
-      }
-      if (selectedCategories.has(categoryDiv)) {
-        selectedCategories.delete(categoryDiv);
-        innerCircle.style.display = 'none';
+    console.log('categoryRow click: Found category-specific-button:', categorySpecificButton);
+    if (categorySpecificButton) {
+      console.log('categoryRow click: Selection mode:', appContext.selectMode);
+      if (appContext.selectMode) {
+        const button = categorySpecificButton.closest('button');
+        if (!button) {
+          console.error('categoryRow click: No parent button found for category-specific-button:', categorySpecificButton);
+          return;
+        }
+        const categoryDiv = button.parentElement;
+        const span = categoryDiv.querySelector('span:last-child');
+        if (!span) {
+          console.error('categoryRow click: No span found for category div in select mode:', categoryDiv);
+          return;
+        }
+        const categoryName = span.textContent.trim();
+        console.log('categoryRow click: Category name:', categoryName);
+        const innerCircle = categorySpecificButton.querySelector('.inner-circle');
+        if (!innerCircle) {
+          console.error('categoryRow click: Inner circle not found for category-specific-button:', categorySpecificButton);
+          return;
+        }
+        console.log('categoryRow click: Selected categories before:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child').textContent.trim()));
+        if (selectedCategories.has(categoryDiv)) {
+          selectedCategories.delete(categoryDiv);
+          innerCircle.style.display = 'none';
+          console.log('categoryRow click: Deselected', categoryName);
+        } else {
+          selectedCategories.add(categoryDiv);
+          innerCircle.style.display = 'block';
+          console.log('categoryRow click: Selected', categoryName);
+        }
+        console.log('categoryRow click: Selected categories after:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child').textContent.trim()));
       } else {
-        selectedCategories.add(categoryDiv);
-        innerCircle.style.display = 'block';
+        console.log('categoryRow click: Not in selection mode, ignoring click');
       }
+    } else {
+      console.log('categoryRow click: Click target is not a category-specific-button');
     }
   });
 
