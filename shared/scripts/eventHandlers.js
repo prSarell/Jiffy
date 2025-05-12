@@ -240,6 +240,23 @@ export function setupEventHandlers(appContext) {
     console.log('document click: Handling click event');
     console.log('document click: Event target:', event.target);
     console.log('document click: Event target parentElement:', event.target.parentElement);
+
+    // Check for action buttons (Add, Rewards, etc.)
+    const actionButton = event.target.closest('.action-button');
+    console.log('document click: Found actionButton:', actionButton);
+    if (actionButton) {
+      const action = actionButton.getAttribute('data-action');
+      console.log(`document click: Action button clicked with action: ${action}`);
+      if (action === 'add') {
+        showAddPopup();
+      } else if (action === 'show-rewards') {
+        console.log('document click: Rewards action not implemented');
+      }
+      event.stopPropagation();
+      return;
+    }
+
+    // Check for select container actions (Select, Delete, Cancel)
     const selectContainerElement = document.querySelector('#select-container');
     console.log('document click: selectContainer element:', selectContainerElement);
     console.log('document click: selectContainer children:', selectContainerElement ? Array.from(selectContainerElement.children) : 'Not found');
@@ -260,6 +277,7 @@ export function setupEventHandlers(appContext) {
         document.querySelectorAll('.category-specific-button').forEach(button => {
           console.log('select-button: Showing category-specific-button:', button);
           button.style.display = 'block';
+          button.style.pointerEvents = 'auto'; // Ensure clicks are registered
         });
       } else if (action === 'cancel-button') {
         setSelectMode(false);
@@ -289,11 +307,13 @@ export function setupEventHandlers(appContext) {
           alert('Please select at least one category to delete.');
         }
       }
+      event.stopPropagation();
       return;
     }
 
+    // Check for popup buttons (Confirm, Cancel, Edit Name, Edit Color)
     const popupButton = event.target.closest('button[data-action]');
-    console.log('document click: Popup button detected:', popupButton);
+    console.log('document click: Found popupButton:', popupButton);
     if (popupButton) {
       const action = popupButton.getAttribute('data-action');
       console.log(`document click: Popup button clicked with action: ${action}`);
@@ -371,19 +391,11 @@ export function setupEventHandlers(appContext) {
           showEditColorPopup(appContext.editingCategoryDiv);
         }
       }
+      event.stopPropagation();
       return;
     }
 
-    const actionButton = event.target.closest('.action-button');
-    if (actionButton) {
-      const action = actionButton.getAttribute('data-action');
-      console.log(`document click: Action button clicked with action: ${action}`);
-      if (action === 'add') {
-        showAddPopup();
-      } else if (action === 'show-rewards') {
-        console.log('document click: Rewards action not implemented');
-      }
-    }
+    console.log('document click: No matching action found for click');
   });
 
   // Attach click listeners directly to .category-specific-button elements
@@ -399,6 +411,7 @@ export function setupEventHandlers(appContext) {
   }
 
   function handleCategorySpecificClick(event) {
+    event.stopPropagation();
     console.log('categorySpecificButton click: Handling click event');
     console.log('categorySpecificButton click: Event target:', event.target);
     console.log('categorySpecificButton click: Event target classList:', event.target.classList);
@@ -456,7 +469,8 @@ export function setupEventHandlers(appContext) {
   });
   observer.observe(categoryRow, { childList: true, subtree: true });
 
-  deletePopup.querySelector('#delete-popup-cancel').addEventListener('click', () => {
+  deletePopup.querySelector('#delete-popup-cancel').addEventListener('click', (event) => {
+    event.stopPropagation();
     console.log('delete-popup-cancel: Cancel clicked');
     deletePopup.style.display = 'none';
     setSelectMode(false);
@@ -469,7 +483,8 @@ export function setupEventHandlers(appContext) {
     });
   });
 
-  deletePopup.querySelector('#delete-popup-delete').addEventListener('click', () => {
+  deletePopup.querySelector('#delete-popup-delete').addEventListener('click', (event) => {
+    event.stopPropagation();
     console.log('delete-popup-delete: Delete clicked');
     const deletedPositions = [];
     selectedCategories.forEach(categoryDiv => {
