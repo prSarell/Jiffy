@@ -237,31 +237,72 @@ export function setupEventHandlers(appContext) {
   });
 
   document.addEventListener('click', (event) => {
-    console.log('click: Handling click event');
-    console.log('click: Event target:', event.target);
-    const actionButton = event.target.closest('.action-button');
-    if (actionButton) {
-      const action = actionButton.getAttribute('data-action');
-      console.log(`click: Action button clicked with action: ${action}`);
-      if (action === 'add') {
-        showAddPopup();
-      } else if (action === 'show-rewards') {
-        console.log('click: Rewards action not implemented');
+    console.log('document click: Handling click event');
+    console.log('document click: Event target:', event.target);
+    console.log('document click: Event target parentElement:', event.target.parentElement);
+    const selectContainerElement = document.querySelector('#select-container');
+    console.log('document click: selectContainer element:', selectContainerElement);
+    console.log('document click: selectContainer children:', selectContainerElement ? Array.from(selectContainerElement.children) : 'Not found');
+    const selectAction = event.target.closest('#select-container span');
+    console.log('document click: Found selectAction:', selectAction);
+    if (selectAction) {
+      const action = selectAction.id;
+      console.log(`document click: Select container clicked with action: ${action}`);
+      console.log(`document click: Current selectMode before action: ${appContext.selectMode}`);
+      if (action === 'select-button') {
+        setSelectMode(true);
+        console.log(`document click: Set selectMode to true, new value: ${appContext.selectMode}`);
+        selectAction.style.display = 'none';
+        selectContainer.innerHTML = `
+          <span id="delete-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Delete</span>
+          <span id="cancel-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Cancel</span>
+        `;
+        document.querySelectorAll('.category-specific-button').forEach(button => {
+          console.log('select-button: Showing category-specific-button:', button);
+          button.style.display = 'block';
+        });
+      } else if (action === 'cancel-button') {
+        setSelectMode(false);
+        console.log(`document click: Set selectMode to false, new value: ${appContext.selectMode}`);
+        selectedCategories.clear();
+        selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
+        document.querySelectorAll('.category-specific-button').forEach(button => {
+          console.log('cancel-button: Hiding category-specific-button:', button);
+          button.style.display = 'none';
+          const innerCircle = button.querySelector('.inner-circle');
+          if (innerCircle) innerCircle.style.display = 'none';
+        });
+      } else if (action === 'delete-button') {
+        if (selectedCategories.size > 0) {
+          const deletePopupMessage = document.getElementById('delete-popup-message');
+          if (!deletePopupMessage) {
+            console.error('document click: Delete popup message element not found');
+            return;
+          }
+          const categoryNames = Array.from(selectedCategories).map(cat => {
+            const span = cat.querySelector('span:last-child');
+            return span ? span.textContent : 'Unknown';
+          });
+          deletePopupMessage.textContent = selectedCategories.size === 1 ? `Delete ${categoryNames[0]}?` : `Delete ${categoryNames.length} items?`;
+          deletePopup.style.display = 'flex';
+        } else {
+          alert('Please select at least one category to delete.');
+        }
       }
       return;
     }
 
     const popupButton = event.target.closest('button[data-action]');
-    console.log('click: Popup button detected:', popupButton);
+    console.log('document click: Popup button detected:', popupButton);
     if (popupButton) {
       const action = popupButton.getAttribute('data-action');
-      console.log(`click: Popup button clicked with action: ${action}`);
-      console.log(`click: Popup button parent:`, popupButton.closest('#edit-options-popup'));
+      console.log(`document click: Popup button clicked with action: ${action}`);
+      console.log(`document click: Popup button parent:`, popupButton.closest('#edit-options-popup'));
       if (popupButton.closest('#popup')) { // Add popup buttons
         if (action === 'confirm') {
           const input = document.getElementById('category-input');
           if (!input) {
-            console.error('click: Category input not found');
+            console.error('document click: Category input not found');
             return;
           }
           const categoryName = input.value.trim();
@@ -279,7 +320,7 @@ export function setupEventHandlers(appContext) {
         if (action === 'confirm') {
           const input = document.getElementById('color-input');
           if (!input || !appContext.editingCategoryDiv) {
-            console.error('click: Color input or editing category not found:', { input, editingCategoryDiv: appContext.editingCategoryDiv });
+            console.error('document click: Color input or editing category not found:', { input, editingCategoryDiv: appContext.editingCategoryDiv });
             return;
           }
           const newColor = input.value;
@@ -298,14 +339,14 @@ export function setupEventHandlers(appContext) {
         if (action === 'confirm') {
           const input = document.getElementById('name-input');
           if (!input || !appContext.editingCategoryDiv) {
-            console.error('click: Name input or editing category not found:', { input, editingCategoryDiv: appContext.editingCategoryDiv });
+            console.error('document click: Name input or editing category not found:', { input, editingCategoryDiv: appContext.editingCategoryDiv });
             return;
           }
           const newName = input.value.trim();
           if (newName) {
             const span = appContext.editingCategoryDiv.querySelector('span:last-child');
             if (!span) {
-              console.error('click: Span not found in editing category div:', appContext.editingCategoryDiv);
+              console.error('document click: Span not found in editing category div:', appContext.editingCategoryDiv);
               return;
             }
             const oldName = span.textContent.trim();
@@ -333,50 +374,14 @@ export function setupEventHandlers(appContext) {
       return;
     }
 
-    const selectAction = event.target.closest('#select-container span');
-    if (selectAction) {
-      const action = selectAction.id;
-      console.log(`click: Select container clicked with action: ${action}`);
-      console.log(`click: Current selectMode before action: ${appContext.selectMode}`);
-      if (action === 'select-button') {
-        setSelectMode(true);
-        console.log(`click: Set selectMode to true, new value: ${appContext.selectMode}`);
-        selectAction.style.display = 'none';
-        selectContainer.innerHTML = `
-          <span id="delete-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Delete</span>
-          <span id="cancel-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-left: 5px; cursor: pointer;">Cancel</span>
-        `;
-        document.querySelectorAll('.category-specific-button').forEach(button => {
-          console.log('select-button: Showing category-specific-button:', button);
-          button.style.display = 'block';
-        });
-      } else if (action === 'cancel-button') {
-        setSelectMode(false);
-        console.log(`click: Set selectMode to false, new value: ${appContext.selectMode}`);
-        selectedCategories.clear();
-        selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
-        document.querySelectorAll('.category-specific-button').forEach(button => {
-          console.log('cancel-button: Hiding category-specific-button:', button);
-          button.style.display = 'none';
-          const innerCircle = button.querySelector('.inner-circle');
-          if (innerCircle) innerCircle.style.display = 'none';
-        });
-      } else if (action === 'delete-button') {
-        if (selectedCategories.size > 0) {
-          const deletePopupMessage = document.getElementById('delete-popup-message');
-          if (!deletePopupMessage) {
-            console.error('click: Delete popup message element not found');
-            return;
-          }
-          const categoryNames = Array.from(selectedCategories).map(cat => {
-            const span = cat.querySelector('span:last-child');
-            return span ? span.textContent : 'Unknown';
-          });
-          deletePopupMessage.textContent = selectedCategories.size === 1 ? `Delete ${categoryNames[0]}?` : `Delete ${categoryNames.length} items?`;
-          deletePopup.style.display = 'flex';
-        } else {
-          alert('Please select at least one category to delete.');
-        }
+    const actionButton = event.target.closest('.action-button');
+    if (actionButton) {
+      const action = actionButton.getAttribute('data-action');
+      console.log(`document click: Action button clicked with action: ${action}`);
+      if (action === 'add') {
+        showAddPopup();
+      } else if (action === 'show-rewards') {
+        console.log('document click: Rewards action not implemented');
       }
     }
   });
@@ -384,52 +389,57 @@ export function setupEventHandlers(appContext) {
   // Attach click listeners directly to .category-specific-button elements
   function attachSelectionListeners() {
     const buttons = document.querySelectorAll('.category-specific-button');
-    console.log('attachSelectionListeners: Found category-specific-buttons:', buttons);
+    console.log('attachSelectionListeners: Found category-specific-buttons:', buttons.length, buttons);
     buttons.forEach(button => {
       console.log('attachSelectionListeners: Attaching listener to button:', button);
-      button.addEventListener('click', (event) => {
-        console.log('categorySpecificButton click: Handling click event');
-        console.log('categorySpecificButton click: Event target:', event.target);
-        console.log('categorySpecificButton click: Event target classList:', event.target.classList);
-        console.log('categorySpecificButton click: Event target parentElement:', event.target.parentElement);
-        console.log('categorySpecificButton click: Selection mode:', appContext.selectMode);
-        if (appContext.selectMode) {
-          console.log('categorySpecificButton click: In selection mode');
-          const parentButton = button.closest('button');
-          if (!parentButton) {
-            console.error('categorySpecificButton click: No parent button found:', button);
-            return;
-          }
-          const categoryDiv = parentButton.parentElement;
-          console.log('categorySpecificButton click: Found categoryDiv:', categoryDiv);
-          const span = categoryDiv.querySelector('span:last-child');
-          if (!span) {
-            console.error('categorySpecificButton click: No span found for category div in select mode:', categoryDiv);
-            return;
-          }
-          const categoryName = span.textContent.trim();
-          console.log('categorySpecificButton click: Category name:', categoryName);
-          const innerCircle = button.querySelector('.inner-circle');
-          if (!innerCircle) {
-            console.error('categorySpecificButton click: Inner circle not found:', button);
-            return;
-          }
-          console.log('categorySpecificButton click: Selected categories before:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child').textContent.trim()));
-          if (selectedCategories.has(categoryDiv)) {
-            selectedCategories.delete(categoryDiv);
-            innerCircle.style.display = 'none';
-            console.log('categorySpecificButton click: Deselected', categoryName);
-          } else {
-            selectedCategories.add(categoryDiv);
-            innerCircle.style.display = 'block';
-            console.log('categorySpecificButton click: Selected', categoryName);
-          }
-          console.log('categorySpecificButton click: Selected categories after:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child').textContent.trim()));
-        } else {
-          console.log('categorySpecificButton click: Not in selection mode, ignoring click');
-        }
-      });
+      // Remove existing listeners to prevent duplicates
+      button.removeEventListener('click', handleCategorySpecificClick);
+      button.addEventListener('click', handleCategorySpecificClick);
     });
+  }
+
+  function handleCategorySpecificClick(event) {
+    console.log('categorySpecificButton click: Handling click event');
+    console.log('categorySpecificButton click: Event target:', event.target);
+    console.log('categorySpecificButton click: Event target classList:', event.target.classList);
+    console.log('categorySpecificButton click: Event target parentElement:', event.target.parentElement);
+    console.log('categorySpecificButton click: Selection mode:', appContext.selectMode);
+    const categorySpecificButton = event.currentTarget;
+    if (appContext.selectMode) {
+      console.log('categorySpecificButton click: In selection mode');
+      const parentButton = categorySpecificButton.closest('button');
+      if (!parentButton) {
+        console.error('categorySpecificButton click: No parent button found:', categorySpecificButton);
+        return;
+      }
+      const categoryDiv = parentButton.parentElement;
+      console.log('categorySpecificButton click: Found categoryDiv:', categoryDiv);
+      const span = categoryDiv.querySelector('span:last-child');
+      if (!span) {
+        console.error('categorySpecificButton click: No span found for category div in select mode:', categoryDiv);
+        return;
+      }
+      const categoryName = span.textContent.trim();
+      console.log('categorySpecificButton click: Category name:', categoryName);
+      const innerCircle = categorySpecificButton.querySelector('.inner-circle');
+      if (!innerCircle) {
+        console.error('categorySpecificButton click: Inner circle not found:', categorySpecificButton);
+        return;
+      }
+      console.log('categorySpecificButton click: Selected categories before:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child').textContent.trim()));
+      if (selectedCategories.has(categoryDiv)) {
+        selectedCategories.delete(categoryDiv);
+        innerCircle.style.display = 'none';
+        console.log('categorySpecificButton click: Deselected', categoryName);
+      } else {
+        selectedCategories.add(categoryDiv);
+        innerCircle.style.display = 'block';
+        console.log('categorySpecificButton click: Selected', categoryName);
+      }
+      console.log('categorySpecificButton click: Selected categories after:', Array.from(selectedCategories).map(div => div.querySelector('span:last-child').textContent.trim()));
+    } else {
+      console.log('categorySpecificButton click: Not in selection mode, ignoring click');
+    }
   }
 
   // Initial attachment of listeners
