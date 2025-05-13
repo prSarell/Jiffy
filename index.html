@@ -7,105 +7,6 @@
   <title>Jiffy - ADHD Task Manager</title>
   <link rel="manifest" href="./manifest.json">
   <link rel="stylesheet" href="./shared/styles.css">
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #000000;
-      color: #ffffff;
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: calc(100% - 40px);
-      padding: 20px;
-      background-color: #000000;
-      z-index: 10;
-    }
-    .jiffy-title {
-      font-size: 24px;
-      margin: 0;
-    }
-    .hamburger-menu {
-      font-size: 24px;
-      background: none;
-      border: none;
-      color: #ffffff;
-      cursor: pointer;
-    }
-    #select-container {
-      position: fixed;
-      top: 60px;
-      left: 20px;
-      z-index: 10;
-    }
-    #select-button {
-      font-size: 16px;
-      cursor: pointer;
-      padding: 5px 10px;
-      background-color: #333333;
-      border-radius: 5px;
-    }
-    #prompts-container {
-      position: fixed;
-      top: 60px;
-      right: 20px;
-      z-index: 10;
-    }
-    #rewards-container {
-      position: fixed;
-      top: 100px;
-      right: 20px;
-      z-index: 10;
-    }
-    #add-container {
-      position: fixed;
-      top: 100px;
-      left: 20px;
-      z-index: 10;
-    }
-    #add-button {
-      font-size: 16px;
-      padding: 5px 10px;
-      background-color: #333333;
-      border-radius: 5px;
-      border: none;
-      color: #ffffff;
-      cursor: pointer;
-    }
-    .category-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 140px;
-    }
-    .category-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 40px;
-      position: relative;
-    }
-    .category-button {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      cursor: pointer;
-      border: none;
-      position: relative;
-    }
-    .category-label {
-      font-size: 10px;
-      margin-top: 5px;
-      text-align: center;
-    }
-  </style>
 </head>
 <body>
   <header>
@@ -126,24 +27,6 @@
   </div>
   <div id="category-container" class="category-row">
     <!-- Categories will be reintroduced later -->
-    <!--
-    <div class="category-item">
-      <button class="category-button" style="background-color: #1E3A8A;"></button>
-      <span class="category-label">Home</span>
-    </div>
-    <div class="category-item">
-      <button class="category-button" style="background-color: #3B82F6;"></button>
-      <span class="category-label">Life</span>
-    </div>
-    <div class="category-item">
-      <button class="category-button" style="background-color: #60A5FA;"></button>
-      <span class="category-label">Work</span>
-    </div>
-    <div class="category-item">
-      <button class="category-button" style="background-color: #93C5FD;"></button>
-      <span class="category-label">School</span>
-    </div>
-    -->
   </div>
 </body>
 </html>
