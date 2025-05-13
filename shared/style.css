@@ -12,6 +12,13 @@ header {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: calc(100% - 40px);
+  padding: 20px;
+  background-color: #000000;
+  z-index: 10;
 }
 
 .jiffy-title {
@@ -28,7 +35,10 @@ header {
 }
 
 #select-container {
-  margin-bottom: 20px;
+  position: fixed;
+  top: 60px;
+  left: 20px;
+  z-index: 10;
 }
 
 #select-button {
@@ -39,8 +49,71 @@ header {
   border-radius: 5px;
 }
 
+#prompts-container {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  z-index: 10;
+}
+
+#rewards-container {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  z-index: 10;
+}
+
+#prompts-button, #rewards-button {
+  font-size: 16px;
+  padding: 5px 10px;
+  background-color: #333333;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#add-container {
+  position: fixed;
+  top: 100px;
+  left: 20px;
+  z-index: 10;
+}
+
+#add-button {
+  font-size: 16px;
+  padding: 5px 10px;
+  background-color: #333333;
+  border-radius: 5px;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+}
+
 .category-row {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  margin-top: 140px;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40px;
+  position: relative;
+}
+
+.category-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  position: relative;
+}
+
+.category-label {
+  font-size: 10px;
+  margin-top: 5px;
+  text-align: center;
 }
