@@ -312,6 +312,13 @@ export function setupEventHandlers(appContext) {
           });
           deletePopupMessage.textContent = selectedCategories.size === 1 ? `Delete ${categoryNames[0]}?` : `Delete ${categoryNames.length} items?`;
           deletePopup.style.display = 'flex';
+          // Hide category-specific select buttons while popup is open
+          document.querySelectorAll('.category-specific-button').forEach(button => {
+            console.log('delete-button: Hiding category-specific-button while popup is open:', button);
+            button.style.display = 'none';
+            const innerCircle = button.querySelector('.inner-circle');
+            if (innerCircle) innerCircle.style.display = 'none';
+          });
         } else {
           alert('Please select at least one category to delete.');
         }
@@ -465,8 +472,10 @@ export function setupEventHandlers(appContext) {
     setSelectMode(false);
     selectedCategories.clear();
     selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
+    // Restore category-specific select buttons
     document.querySelectorAll('.category-specific-button').forEach(button => {
-      button.style.display = 'none';
+      console.log('delete-popup-cancel: Restoring category-specific-button:', button);
+      button.style.display = 'block';
       const innerCircle = button.querySelector('.inner-circle');
       if (innerCircle) innerCircle.style.display = 'none';
     });
@@ -539,7 +548,8 @@ export function setupEventHandlers(appContext) {
     selectedCategories.clear();
     selectContainer.innerHTML = '<span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>';
     document.querySelectorAll('.category-specific-button').forEach(button => {
-      button.style.display = 'none';
+      console.log('delete-popup-delete: Restoring category-specific-button:', button);
+      button.style.display = 'block';
       const innerCircle = button.querySelector('.inner-circle');
       if (innerCircle) innerCircle.style.display = 'none';
     });
