@@ -120,7 +120,7 @@ function initializeApp() {
 
   // Register the service worker
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/jiffy/service-workers/sw.js')
+    navigator.serviceWorker.register('/jiffy/service_workers/sw.js')
       .then(registration => {
         console.log('Service Worker registered with scope:', registration.scope);
         // Start prompt cycling
