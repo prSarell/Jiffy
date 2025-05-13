@@ -3,18 +3,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jiffy - ADHD Task Manager</title>
   <link rel="manifest" href="./manifest.json">
-  <link rel="apple-touch-icon" href="./icon-512.png">
   <link rel="stylesheet" href="./shared/styles.css">
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       margin: 0;
-      padding: 0;
+      padding: 20px;
       background-color: #000000;
       color: #ffffff;
     }
@@ -22,92 +19,36 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 2vw 3vw;
-      background-color: #000000;
-      z-index: 10;
-      box-sizing: border-box;
+      margin-bottom: 20px;
     }
     .jiffy-title {
-      font-size: 6.73vw; /* Approx. 26.25px on iPhone 14 Pro */
-      font-weight: 500;
+      font-size: 24px;
       margin: 0;
-      text-align: center;
-      flex-grow: 1;
     }
     .hamburger-menu {
-      font-size: 6.15vw; /* Approx. 24px on iPhone 14 Pro */
-      font-weight: 500;
+      font-size: 24px;
       background: none;
       border: none;
       color: #ffffff;
       cursor: pointer;
-      padding: 0;
-      margin-left: auto;
     }
     #select-button {
-      font-size: 3.08vw; /* Approx. 12px on iPhone 14 Pro */
-      font-weight: 500;
+      font-size: 16px;
       cursor: pointer;
-      color: #ffffff;
-    }
-    #button-container {
-      position: fixed;
-      top: 50px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      z-index: 10;
-    }
-    .button-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    #prompts-button, #rewards-button, #add-button {
-      font-size: 0; /* Hide text inside buttons, use labels below */
-      background-color: rgb(74, 222, 128);
-      border: 2px solid rgb(59, 130, 246);
-      border-radius: 50%;
-      cursor: pointer;
-      width: 15vw; /* Approx. 60px on iPhone 14 Pro */
-      height: 15vw; /* Approx. 60px on iPhone 14 Pro */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .button-label {
-      font-size: 2.56vw; /* Approx. 10px on iPhone 14 Pro */
-      font-weight: 400;
-      margin-top: 5px;
-      text-align: center;
+      padding: 5px 10px;
+      background-color: #333333;
+      border-radius: 5px;
     }
   </style>
 </head>
 <body>
   <header>
-    <span id="select-button">Select</span>
     <h1 class="jiffy-title">Jiffy</h1>
     <button class="hamburger-menu">☰</button>
   </header>
-  <div id="button-container">
-    <div class="button-item">
-      <span id="prompts-button"></span>
-      <span class="button-label">Prompts</span>
-    </div>
-    <div class="button-item">
-      <span id="rewards-button"></span>
-      <span class="button-label">Rewards</span>
-    </div>
-    <div class="button-item">
-      <span id="add-button"></span>
-      <span class="button-label">Add</span>
-    </div>
+  <div id="select-container">
+    <span id="select-button">Select</span>
   </div>
+  <div id="category-container" class="category-row"></div>
 </body>
 </html>
