@@ -1,3 +1,4 @@
+// /jiffy/shared/scripts/main.js
 import { getCategories } from './categoryManagement.js';
 import { getColor } from './colorManagement.js';
 
@@ -18,15 +19,15 @@ function renderCategories() {
   categoryContainer.innerHTML = "";
   categories.forEach((category, index) => {
     const categoryDiv = document.createElement("div");
-    categoryDiv.style = "display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;";
+    categoryDiv.className = "category-item";
     const color = getColor(category.name, index);
     categoryDiv.innerHTML = `
-      <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${color}; cursor: pointer; border: none; position: relative;">
-        <span class="category-specific-button" style="display: none;">
+      <button class="category-button" style="background-color: ${color};">
+        <span class="category-specific-button">
           <span class="inner-circle"></span>
         </span>
       </button>
-      <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 10px; margin-top: 5px;">${category.name}</span>
+      <span class="category-label">${category.name}</span>
     `;
     categoryContainer.appendChild(categoryDiv);
     console.log(`renderCategories: Rendered ${category.name} with color ${color}`);
