@@ -11,12 +11,27 @@
     .category-row {
       display: flex !important;
       visibility: visible !important;
+      flex-wrap: nowrap !important; /* Prevent wrapping */
+      overflow-x: auto !important; /* Enable horizontal scrolling */
+      width: 240px; /* Keep fixed width */
+      scroll-behavior: smooth; /* Smooth scrolling */
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+      scrollbar-width: none; /* Hide scrollbar in Firefox */
+      -ms-overflow-style: none; /* Hide scrollbar in IE/Edge */
+    }
+    .category-row::-webkit-scrollbar {
+      display: none; /* Hide scrollbar in Chrome/Safari */
     }
     .category-row div {
       transition: opacity 0.3s ease;
       display: flex !important;
       visibility: visible !important;
       opacity: 1 !important;
+      flex: 0 0 auto; /* Prevent shrinking */
+      margin-right: 20px; /* Replace gap with margin for consistent spacing */
+    }
+    .category-row div:last-child {
+      margin-right: 0; /* Remove margin from the last item */
     }
     .category-specific-button {
       display: none;
