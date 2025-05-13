@@ -152,11 +152,19 @@ function initializeApp() {
       })
       .catch(error => {
         console.error('Service Worker registration failed:', error);
-        promptDisplay.textContent = 'Service Worker failed to register';
+        promptDisplay.textContent = 'Service Worker failed to register. Prompts will still display here.';
+        // Continue prompt cycling without service worker
+        cyclePrompts(prompt => {
+          promptDisplay.textContent = prompt.text || 'No prompt text';
+        });
       });
   } else {
     console.warn('Service Workers are not supported in this browser.');
-    promptDisplay.textContent = 'Service Workers not supported';
+    promptDisplay.textContent = 'Service Workers not supported. Prompts will still display here.';
+    // Continue prompt cycling without service worker
+    cyclePrompts(prompt => {
+      promptDisplay.textContent = prompt.text || 'No prompt text';
+    });
   }
 }
 
