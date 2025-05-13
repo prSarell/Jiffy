@@ -1,6 +1,4 @@
 // /jiffy/shared/scripts/categoryManagement.js
-// Manages category data and persistence for Jiffy
-
 import { setColor } from './colorManagement.js';
 
 // In-memory category data
@@ -39,7 +37,16 @@ export function loadCategories() {
   console.log("loadCategories: Loading categories");
   try {
     const stored = localStorage.getItem("jiffyCategories");
-    const loaded = stored ? JSON.parse(stored) : categories;
+    if (!stored) {
+      console.log("loadCategories: No stored categories, returning defaults");
+      return categories;
+    }
+    const loaded = JSON.parse(stored);
+    if (!Array.isArray(loaded) || !loaded.every(cat => cat.id && cat.name && cat.color)) {
+      console.warn("loadCategories: Invalid data in localStorage, resetting to default");
+      localStorage.setItem("jiffyCategories", JSON.stringify(categories));
+      return categories;
+    }
     console.log("loadCategories: Loaded categories:", loaded);
     return loaded;
   } catch (error) {
