@@ -89,13 +89,15 @@
     }
     #category-container {
       position: fixed;
-      top: 110px; /* Increased to avoid overlap with button-container */
+      top: 120px; /* Increased further to ensure no overlap */
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       justify-content: center;
       gap: 10px;
       z-index: 9;
+      width: 100%;
+      visibility: visible;
     }
     .category-item {
       display: flex;
@@ -119,6 +121,16 @@
       text-align: center;
     }
   </style>
+  <script>
+    console.log("Jiffy: Page loaded");
+    console.log("Jiffy: Checking category container...");
+    const categoryContainer = document.getElementById("category-container");
+    if (categoryContainer) {
+      console.log("Jiffy: Category container found, child elements:", categoryContainer.children);
+    } else {
+      console.error("Jiffy: Category container not found!");
+    }
+  </script>
 </head>
 <body>
   <header>
