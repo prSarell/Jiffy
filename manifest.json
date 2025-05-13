@@ -1,7 +1,7 @@
 {
   "name": "Jiffy",
   "short_name": "Jiffy",
-  "start_url": "/jiffy/pages/home/",
+  "start_url": "/jiffy/pages/home/index.html",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
