@@ -19,6 +19,15 @@ const exampleCategoryColors = {
   'School': '#93C5FD'
 };
 
+// Monochrome variations for each base color (shades for positions 0-3 in a line)
+const monochromeVariations = {
+  '#1E3A8A': ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'], // Blue shades
+  '#15803D': ['#15803D', '#22C55E', '#4ADE80', '#86EFAC'], // Green shades
+  '#B91C1C': ['#B91C1C', '#EF4444', '#F87171', '#FCA5A5'], // Red shades
+  '#6B21A8': ['#6B21A8', '#A855F7', '#C084FC', '#D8B4FE'], // Purple shades
+  '#EA580C': ['#EA580C', '#F97316', '#FB923C', '#FDBA74']  // Orange shades
+};
+
 // Initialize userColors with predefined colors for example categories
 Object.keys(exampleCategoryColors).forEach(categoryName => {
   userColors[categoryName] = exampleCategoryColors[categoryName];
@@ -26,6 +35,12 @@ Object.keys(exampleCategoryColors).forEach(categoryName => {
 
 export function getColor(categoryName, position) {
   console.log(`getColor: Called for ${categoryName} at position ${position}`);
+
+  // Validate inputs
+  if (!categoryName || position == null || position < 0) {
+    console.warn(`getColor: Invalid input (categoryName: ${categoryName}, position: ${position}), returning fallback`);
+    return defaultColors[0]; // Fallback to Blue-900
+  }
 
   // Check if the category has a user-defined color (includes example categories)
   if (userColors[categoryName]) {
@@ -70,10 +85,11 @@ export function getColor(categoryName, position) {
     console.log(`getColor: No previous line base color, assigned base color for line ${lineNumber}: ${baseColor}`);
   }
 
-  // Use the base color directly for simplicity (no monochrome variations for now)
-  const assignedColor = baseColor;
+  // Assign a monochrome variation based on the position within the line
+  const variations = monochromeVariations[baseColor] || [baseColor];
+  const assignedColor = variations[positionInLine % variations.length];
   console.log(`getColor: Base color for line ${lineNumber}: ${baseColor}`);
-  console.log(`getColor: Assigned color for position ${positionInLine}: ${assignedColor}`);
+  console.log(`getColor: Assigned monochrome variation for position ${positionInLine}: ${assignedColor}`);
 
   // Save the assigned color for the position
   linePositionColors[lineNumber][positionInLine] = assignedColor;
