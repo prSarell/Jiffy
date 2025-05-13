@@ -3,7 +3,7 @@
 
 import { setColor } from './colorManagement.js';
 
-// In-memory category data (replace with your storage logic)
+// In-memory category data
 let categories = [
   { id: 1, name: "Home", color: "#1E3A8A" },
   { id: 2, name: "Life", color: "#3B82F6" },
@@ -11,7 +11,7 @@ let categories = [
   { id: 4, name: "School", color: "#93C5FD" }
 ];
 
-// Save categories to storage (e.g., localStorage or backend)
+// Save categories to storage
 export function saveCategories(newCategories) {
   console.log("saveCategories: Saving categories:", newCategories);
   if (!Array.isArray(newCategories)) {
@@ -22,7 +22,6 @@ export function saveCategories(newCategories) {
   try {
     localStorage.setItem("jiffyCategories", JSON.stringify(newCategories));
     console.log("saveCategories: Categories saved to localStorage");
-    // Sync colors with colorManagement.js
     newCategories.forEach(category => {
       if (category.name && category.color) {
         setColor(category.name, category.color);
@@ -55,10 +54,10 @@ export function addCategory(name, color) {
   const newCategory = {
     id: categories.length + 1,
     name,
-    color: color || "#1E3A8A" // Fallback to blue-900
+    color: color || "#1E3A8A"
   };
   categories.push(newCategory);
-  setColor(name, newCategory.color); // Sync with colorManagement.js
+  setColor(name, newCategory.color);
   saveCategories(categories);
   return newCategory;
 }
