@@ -1,93 +1,122 @@
-// /jiffy/shared/scripts/categoryManagement.js
-import { getColor } from './colorManagement.js';
+// /jiffy/shared/scripts/colorManagement.js
+const userColors = {};
+const linePositionColors = {};
+const lineCategoryCounts = {};
 
-export function loadCategories(categoryRow) {
-  console.log('loadCategories: Starting category loading...');
-  console.log('loadCategories: categoryRow element:', categoryRow);
-  const storedData = localStorage.getItem('categoryData');
-  console.log('loadCategories: Retrieved storedData from localStorage:', storedData);
+const defaultColors = [
+  '#1E3A8A', // Line 1: Blue-900
+  '#15803D', // Line 2: Green-700
+  '#B91C1C', // Line 3: Red-700
+  '#6B21A8', // Line 4: Purple-800
+  '#EA580C'  // Line 5: Orange-700
+];
 
-  const defaultCategories = [
-    { name: 'Home', position: 0 },
-    { name: 'Life', position: 1 },
-    { name: 'Work', position: 2 },
-    { name: 'School', position: 3 }
-  ];
+// Predefined colors for example categories
+const exampleCategoryColors = {
+  'Home': '#1E3A8A',
+  'Life': '#3B82F6',
+  'Work': '#60A5FA',
+  'School': '#93C5FD'
+};
 
-  let categories = defaultCategories;
+// Monochrome variations for each base color (shades for positions 0-3 in a line)
+const monochromeVariations = {
+  '#1E3A8A': ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'], // Blue shades
+  '#15803D': ['#15803D', '#22C55E', '#4ADE80', '#86EFAC'], // Green shades
+  '#B91C1C': ['#B91C1C', '#EF4444', '#F87171', '#FCA5A5'], // Red shades
+  '#6B21A8': ['#6B21A8', '#A855F7', '#C084FC', '#D8B4FE'], // Purple shades
+  '#EA580C': ['#EA580C', '#F97316', '#FB923C', '#FDBA74']  // Orange shades
+};
 
-  // Validate stored data
-  if (storedData) {
-    try {
-      const parsedData = JSON.parse(storedData);
-      if (parsedData && Array.isArray(parsedData)) {
-        categories = parsedData;
-        console.log('loadCategories: Using stored categories (array):', categories);
-      } else if (parsedData && parsedData.categories && Array.isArray(parsedData.categories)) {
-        categories = parsedData.categories;
-        console.log('loadCategories: Using stored categories from parsedData.categories:', categories);
-      } else {
-        console.warn('loadCategories: Invalid stored data format, falling back to default categories');
-        localStorage.removeItem('categoryData'); // Clear invalid data
-      }
-    } catch (e) {
-      console.error('loadCategories: Failed to parse storedData, falling back to default categories:', e);
-      localStorage.removeItem('categoryData'); // Clear invalid data
-    }
-  } else {
-    console.log('loadCategories: No stored data, using default categories');
+// Initialize userColors with predefined colors for example categories
+Object.keys(exampleCategoryColors).forEach(categoryName => {
+  userColors[categoryName] = exampleCategoryColors[categoryName];
+});
+
+export function getColor(categoryName, position) {
+  console.log(`getColor: Called for ${categoryName} at position ${position}`);
+
+  // Check if the category has a user-defined color (includes example categories)
+  if (userColors[categoryName]) {
+    console.log(`getColor: ${categoryName} found in userColors with color ${userColors[categoryName]}`);
+    return userColors[categoryName];
   }
 
-  console.log('loadCategories: Categories to load:', categories);
-  console.log('loadCategories: Cleared categoryRow.innerHTML');
-  categoryRow.innerHTML = ''; // Clear existing categories
+  // Calculate the line number and position within the line (4 categories per line)
+  const categoriesPerLine = 4;
+  const lineNumber = Math.floor(position / categoriesPerLine) + 1;
+  const positionInLine = position % categoriesPerLine;
+  console.log(`getColor: Calculated lineNumber=${lineNumber}, positionInLine=${positionInLine}`);
 
-  categories.forEach((category, index) => {
-    console.log(`loadCategories: Processing category at index ${index}:`, category);
-    const color = getColor(category.name, index); // Get color for the category
-    console.log(`loadCategories: Color for ${category.name}:`, color);
-    const categoryDiv = document.createElement('div');
-    categoryDiv.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
-    categoryDiv.innerHTML = `
-      <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${color}; cursor: pointer; border: none; position: relative;">
-        <span class="category-specific-button" style="display: none;">
-          <span class="inner-circle"></span>
-        </span>
-      </button>
-      <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">${category.name}</span>
-    `;
-    console.log(`loadCategories: Created categoryDiv for ${category.name}:`, categoryDiv);
-    categoryRow.appendChild(categoryDiv);
-    console.log(`loadCategories: Appended ${category.name} to categoryRow`);
-  });
+  // Initialize linePositionColors and lineCategoryCounts for the line if not present
+  if (!linePositionColors[lineNumber]) {
+    console.log(`getColor: Initializing linePositionColors[${lineNumber}]`);
+    linePositionColors[lineNumber] = {};
+  }
+  if (!lineCategoryCounts[lineNumber]) {
+    console.log(`getColor: Initializing lineCategoryCounts[${lineNumber}]`);
+    lineCategoryCounts[lineNumber] = 0;
+  }
 
-  console.log(`loadCategories: Loaded ${categories.length} categories into DOM`);
-  console.log('loadCategories: categoryRow.innerHTML after loading:', categoryRow.innerHTML);
-  return categories;
+  // If the position already has a color assigned, return it
+  if (linePositionColors[lineNumber][positionInLine]) {
+    console.log(`getColor: Position ${positionInLine} in line ${lineNumber} already has color ${linePositionColors[lineNumber][positionInLine]}`);
+    return linePositionColors[lineNumber][positionInLine];
+  }
+
+  // Determine the base color for the line
+  let baseColor;
+  const previousLine = lineNumber - 1;
+  if (previousLine >= 1 && linePositionColors[previousLine] && linePositionColors[previousLine][0]) {
+    console.log(`getColor: Previous line (${previousLine}) base color: ${linePositionColors[previousLine][0]}`);
+    const previousBaseColor = linePositionColors[previousLine][0];
+    const availableColors = defaultColors.filter(color => color !== previousBaseColor);
+    console.log(`getColor: Excluded previous base color ${previousBaseColor}. Available colors:`, availableColors);
+    baseColor = availableColors[lineCategoryCounts[lineNumber] % availableColors.length];
+    console.log(`getColor: Assigned new base color for line ${lineNumber}: ${baseColor}`);
+  } else {
+    baseColor = defaultColors[lineCategoryCounts[lineNumber] % defaultColors.length];
+    console.log(`getColor: No previous line base color, assigned base color for line ${lineNumber}: ${baseColor}`);
+  }
+
+  // Assign a monochrome variation based on the position within the line
+  const variations = monochromeVariations[baseColor] || [baseColor];
+  const assignedColor = variations[positionInLine % variations.length];
+  console.log(`getColor: Base color for line ${lineNumber}: ${baseColor}`);
+  console.log(`getColor: Assigned monochrome variation for position ${positionInLine}: ${assignedColor}`);
+
+  // Save the assigned color for the position
+  linePositionColors[lineNumber][positionInLine] = assignedColor;
+  console.log(`getColor: Saved position color: linePositionColors[${lineNumber}][${positionInLine}] = ${assignedColor}`);
+
+  // Increment the category count for the line
+  lineCategoryCounts[lineNumber]++;
+  console.log(`getColor: Incremented lineCategoryCounts[${lineNumber}] to ${lineCategoryCounts[lineNumber]}`);
+
+  // Save the color for the category
+  setColor(categoryName, assignedColor);
+  console.log(`getColor: Set color for ${categoryName} to ${assignedColor}`);
+  return assignedColor;
 }
 
-export function saveCategories(categoryRow) {
-  console.log('saveCategories: Starting category saving...');
-  console.log('saveCategories: categoryRow element:', categoryRow);
-  const categoryDivs = categoryRow.querySelectorAll('div');
-  console.log('saveCategories: Found categoryDivs:', categoryDivs);
-
-  const categories = Array.from(categoryDivs).map((div, index) => {
-    const span = div.querySelector('span:last-child');
-    const categoryName = span ? span.textContent.trim() : null;
-    if (!categoryName) {
-      console.warn(`saveCategories: Invalid category name at index ${index}:`, categoryName);
-      return null;
-    }
-    return { name: categoryName, position: index };
-  }).filter(category => category !== null);
-
-  console.log('saveCategories: Processed categories:', categories);
-  if (categories.length === 0) {
-    console.warn('saveCategories: No valid categories to save');
-  } else {
-    localStorage.setItem('categoryData', JSON.stringify(categories));
-    console.log(`saveCategories: Saved ${categories.length} categories:`, categories);
+export function setColor(categoryName, color, oldName = null) {
+  console.log(`setColor: Setting color for ${categoryName} to ${color}`);
+  userColors[categoryName] = color;
+  if (oldName && oldName !== categoryName) {
+    console.log(`setColor: Removing old category name ${oldName} from userColors`);
+    delete userColors[oldName];
   }
-  return categories;
+}
+
+export function removeCategory(lineNumber) {
+  console.log(`removeCategory: Removing category from line ${lineNumber}`);
+  if (lineCategoryCounts[lineNumber]) {
+    lineCategoryCounts[lineNumber]--;
+    console.log(`removeCategory: Decremented lineCategoryCounts[${lineNumber}] to ${lineCategoryCounts[lineNumber]}`);
+    if (lineCategoryCounts[lineNumber] === 0) {
+      delete linePositionColors[lineNumber];
+      delete lineCategoryCounts[lineNumber];
+      console.log(`removeCategory: Cleared linePositionColors and lineCategoryCounts for line ${lineNumber}`);
+    }
+  }
 }
