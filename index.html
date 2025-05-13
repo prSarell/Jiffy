@@ -15,20 +15,45 @@
       background-color: #000000;
       color: #ffffff;
     }
-    .jiffy-title {
-      font-size: 28px;
-      font-weight: bold;
-      text-align: center;
-      margin: 15px 0;
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
+      padding: 10px 15px;
+      background-color: #000000;
       z-index: 10;
+    }
+    .jiffy-title {
+      font-size: 21px;
+      font-weight: bold;
+      margin: 0;
+    }
+    .hamburger-menu {
+      font-size: 24px;
+      background: none;
+      border: none;
+      color: #ffffff;
+      cursor: pointer;
+      padding: 0;
+    }
+    #select-button {
+      font-size: 12px;
+      cursor: pointer;
+      padding: 4px 8px;
+      background-color: #333333;
+      border-radius: 4px;
     }
   </style>
 </head>
 <body>
-  <h1 class="jiffy-title">Jiffy</h1>
+  <header>
+    <span id="select-button">Select</span>
+    <h1 class="jiffy-title">Jiffy</h1>
+    <button class="hamburger-menu">☰</button>
+  </header>
 </body>
 </html>
