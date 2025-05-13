@@ -1,10 +1,6 @@
-// /jiffy/shared/scripts/main.js
-// Initializes and renders Jiffy’s UI
-
 import { getCategories } from './categoryManagement.js';
 import { getColor } from './colorManagement.js';
 
-// Render category buttons
 function renderCategories() {
   console.log("renderCategories: Rendering categories");
   const categoryContainer = document.getElementById("category-container");
@@ -19,28 +15,27 @@ function renderCategories() {
     return;
   }
 
-  categoryContainer.innerHTML = ""; // Clear existing content
-
+  categoryContainer.innerHTML = "";
   categories.forEach((category, index) => {
-    const button = document.createElement("button");
-    button.textContent = category.name || "Unnamed";
+    const categoryDiv = document.createElement("div");
+    categoryDiv.style = "display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;";
     const color = getColor(category.name, index);
-    button.style.backgroundColor = color || "#1E3A8A"; // Fallback to Blue-900
-    button.className = "category-button";
-    // Placeholder click handler for testing
-    button.addEventListener("click", () => {
-      console.log(`Clicked category: ${category.name}`);
-    });
-    categoryContainer.appendChild(button);
+    categoryDiv.innerHTML = `
+      <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${color}; cursor: pointer; border: none; position: relative;">
+        <span class="category-specific-button" style="display: none;">
+          <span class="inner-circle"></span>
+        </span>
+      </button>
+      <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 10px; margin-top: 5px;">${category.name}</span>
+    `;
+    categoryContainer.appendChild(categoryDiv);
     console.log(`renderCategories: Rendered ${category.name} with color ${color}`);
   });
 }
 
-// Initialize the app
 function init() {
   console.log("init: Initializing Jiffy");
   renderCategories();
 }
 
-// Run initialization after DOM is ready
 document.addEventListener("DOMContentLoaded", init);
