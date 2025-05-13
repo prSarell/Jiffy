@@ -1,115 +1,46 @@
 // /jiffy/shared/scripts/main.js
+// Initializes and renders Jiffy’s UI
+
+import { getCategories } from './categoryManagement.js';
 import { getColor } from './colorManagement.js';
-import { loadCategories, saveCategories } from './categoryManagement.js';
-import { setupEventHandlers } from './eventHandlers.js';
-import { initializePopups } from './popupManager.js';
-import { addCategory } from './categoryActions.js';
 
-// Function to wait for an element to be available
-function waitForElement(selector, callback, maxAttempts = 10, interval = 100) {
-  let attempts = 0;
-  const intervalId = setInterval(() => {
-    const element = document.querySelector(selector);
-    attempts++;
-    console.log(`waitForElement: Attempt ${attempts} to find ${selector}:`, element);
-    if (element) {
-      clearInterval(intervalId);
-      callback(element);
-    } else if (attempts >= maxAttempts) {
-      clearInterval(intervalId);
-      console.error(`waitForElement: Failed to find ${selector} after ${maxAttempts} attempts`);
-    }
-  }, interval);
-}
-
-function initializeApp() {
-  console.log('initializeApp: Starting app initialization');
-
-  // DOM elements
-  const popup = document.getElementById('popup');
-  const deletePopup = document.getElementById('delete-popup');
-  const editColorPopup = document.getElementById('edit-color-popup');
-  const editOptionsPopup = document.getElementById('edit-options-popup');
-  const editNamePopup = document.getElementById('edit-name-popup');
-  const selectContainer = document.getElementById('select-container');
-  const categoryRow = document.querySelector('.category-row');
-
-  console.log('initializeApp: DOM elements retrieved:', {
-    popup,
-    deletePopup,
-    editColorPopup,
-    editOptionsPopup,
-    editNamePopup,
-    selectContainer,
-    categoryRow
-  });
-
-  // Required DOM elements check
-  if (!popup || !deletePopup || !editColorPopup || !selectContainer || !categoryRow) {
-    console.error('initializeApp: Required DOM elements not found:', { popup, deletePopup, editColorPopup, selectContainer, categoryRow });
+// Render category buttons
+function renderCategories() {
+  console.log("renderCategories: Rendering categories");
+  const categoryContainer = document.getElementById("category-container");
+  if (!categoryContainer) {
+    console.error("renderCategories: Category container not found");
     return;
   }
-  if (!editOptionsPopup) {
-    console.warn('initializeApp: Optional element edit-options-popup not found; long press edit options may not work.');
+
+  const categories = getCategories();
+  if (!Array.isArray(categories)) {
+    console.error("renderCategories: Invalid categories, expected an array");
+    return;
   }
-  if (!editNamePopup) {
-    console.warn('initializeApp: Optional element edit-name-popup not found; name editing may not work.');
-  }
 
-  // Initialize popup visibility
-  initializePopups({ popup, deletePopup, editColorPopup, editOptionsPopup, editNamePopup });
+  categoryContainer.innerHTML = ""; // Clear existing content
 
-  // State variables
-  let selectMode = false;
-  const selectedCategories = new Set();
-  let categories = loadCategories(categoryRow);
-  console.log('initializeApp: Initial categories loaded:', categories);
-
-  let editingCategoryDiv = null;
-  let longHoldTimer = null;
-  let isLongHold = false;
-  let longHoldTarget = null;
-  const LONG_HOLD_DURATION = 500;
-
-  // Expose state and DOM elements to other modules via a shared context
-  const appContext = {
-    get selectMode() { return selectMode; }, // Getter to access selectMode
-    selectedCategories,
-    categories,
-    editingCategoryDiv,
-    longHoldTimer,
-    isLongHold,
-    longHoldTarget,
-    LONG_HOLD_DURATION,
-    popup,
-    deletePopup,
-    editColorPopup,
-    editOptionsPopup,
-    editNamePopup,
-    selectContainer,
-    categoryRow,
-    getColor,
-    loadCategories,
-    saveCategories,
-    setEditingCategoryDiv: (div) => { editingCategoryDiv = div; },
-    setLongHoldTimer: (timer) => { longHoldTimer = timer; },
-    setIsLongHold: (state) => { isLongHold = state; },
-    setLongHoldTarget: (target) => { longHoldTarget = target; },
-    setSelectMode: (mode) => { 
-      console.log(`setSelectMode: Setting selectMode to ${mode}, previous value: ${selectMode}`);
-      selectMode = mode; 
-      console.log(`setSelectMode: New selectMode value: ${selectMode}`);
-    },
-    setCategories: (newCategories) => { categories = newCategories; },
-    addCategory: (categoryName) => addCategory(categoryName, appContext)
-  };
-
-  // Setup event handlers
-  setupEventHandlers(appContext);
+  categories.forEach((category, index) => {
+    const button = document.createElement("button");
+    button.textContent = category.name || "Unnamed";
+    const color = getColor(category.name, index);
+    button.style.backgroundColor = color || "#1E3A8A"; // Fallback to Blue-900
+    button.className = "category-button";
+    // Placeholder click handler for testing
+    button.addEventListener("click", () => {
+      console.log(`Clicked category: ${category.name}`);
+    });
+    categoryContainer.appendChild(button);
+    console.log(`renderCategories: Rendered ${category.name} with color ${color}`);
+  });
 }
 
-// Wait for the category-row element to be available before initializing
-waitForElement('.category-row', () => {
-  console.log('waitForElement: Found .category-row, initializing app');
-  initializeApp();
-});
+// Initialize the app
+function init() {
+  console.log("init: Initializing Jiffy");
+  renderCategories();
+}
+
+// Run initialization after DOM is ready
+document.addEventListener("DOMContentLoaded", init);
