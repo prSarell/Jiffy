@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Jiffy - ADHD Task Manager</title>
   <link rel="manifest" href="./manifest.json">
   <link rel="stylesheet" href="./shared/styles.css">
@@ -23,29 +23,33 @@
       top: 0;
       left: 0;
       width: 100%;
-      padding: 10px 15px;
+      padding: 2vw 3vw;
       background-color: #000000;
       z-index: 10;
+      box-sizing: border-box;
     }
     .jiffy-title {
-      font-size: 21px;
-      font-weight: bold;
+      font-size: 5.5vw; /* Approx. 21px on iPhone 14 Pro (390px viewport width) */
+      font-weight: 500;
       margin: 0;
+      text-align: center;
+      flex-grow: 1;
     }
     .hamburger-menu {
-      font-size: 24px;
+      font-size: 6.2vw; /* Approx. 24px on iPhone 14 Pro */
+      font-weight: 500;
       background: none;
       border: none;
       color: #ffffff;
       cursor: pointer;
       padding: 0;
+      margin-left: auto;
     }
     #select-button {
-      font-size: 12px;
+      font-size: 2.6vw; /* Approx. 10px on iPhone 14 Pro */
+      font-weight: 500;
       cursor: pointer;
-      padding: 4px 8px;
-      background-color: #333333;
-      border-radius: 4px;
+      color: #ffffff;
     }
   </style>
 </head>
