@@ -1,22 +1,37 @@
 // /jiffy/shared/scripts/categoryActions.js
-import { getColor } from './colorManagement.js';
-import { saveCategories } from './categoryManagement.js';
+import { getColor, setColor } from './colorManagement.js';
+import { saveCategories, getCategories } from './categoryManagement.js';
 
 export function addCategory(categoryName, appContext) {
   console.log(`addCategory: Adding category: ${categoryName}`);
-  const { categoryRow, setCategories, getColor } = appContext;
+  if (!categoryName) {
+    console.error("addCategory: Category name is required");
+    return;
+  }
+  const { categoryRow, setCategories } = appContext;
+  if (!categoryRow) {
+    console.error("addCategory: categoryRow is null");
+    return;
+  }
   const position = categoryRow.querySelectorAll('div').length;
   const color = getColor(categoryName, position);
   const categoryDiv = document.createElement('div');
-  categoryDiv.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
+  categoryDiv.className = 'category-item';
   categoryDiv.innerHTML = `
-    <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${color}; cursor: pointer; border: none; position: relative;">
-      <span class="category-specific-button" style="display: none;">
+    <button class="category-button" style="background-color: ${color};">
+      <span class="category-specific-button">
         <span class="inner-circle"></span>
       </span>
     </button>
-    <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">${categoryName}</span>
+    <span class="category-label">${categoryName}</span>
   `;
   categoryRow.appendChild(categoryDiv);
-  setCategories(saveCategories(categoryRow));
+
+  // Update categories
+  const categories = getCategories();
+  const newCategory = { id: categories.length + 1, name: categoryName, color };
+  categories.push(newCategory);
+  setColor(categoryName, color);
+  const success = saveCategories(categories);
+  setCategories(success ? categories : getCategories());
 }
