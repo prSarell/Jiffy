@@ -1,4 +1,5 @@
-// /jiffy/shared/scripts/eventHandlers.js
+import { getPrompts } from './promptManagement.js';
+
 export function setupEventHandlers(appContext) {
   const {
     selectMode,
@@ -258,7 +259,43 @@ export function setupEventHandlers(appContext) {
       if (action === 'add') {
         showAddPopup();
       } else if (action === 'show-rewards') {
-        console.log('document click: Rewards action not implemented');
+        // Display the current prompt in the UI
+        const prompts = getPrompts().filter(prompt => !prompt.done);
+        const promptDisplay = document.getElementById('prompt-display');
+        if (prompts.length > 0) {
+          const currentPrompt = prompts[0]; // For simplicity, take the first prompt
+          promptDisplay.textContent = currentPrompt.text || 'No prompt text';
+          // Send push notification
+          if ('serviceWorker' in navigator && 'PushManager' in window) {
+            navigator.serviceWorker.ready.then(registration => {
+              registration.pushManager.getSubscription().then(subscription => {
+                if (subscription) {
+                  fetch('/send-push', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                      subscription,
+                      title: 'Jiffy Prompt',
+                      body: currentPrompt.text || 'New Prompt'
+                    }),
+                    headers: {
+                      'Content-Type': 'application/json'
+                    }
+                  }).catch(error => {
+                    console.error('Error sending push notification:', error);
+                    promptDisplay.textContent = 'Error sending notification';
+                  });
+                } else {
+                  console.warn('Push subscription not found');
+                  promptDisplay.textContent = 'Push subscription not found';
+                }
+              });
+            });
+          } else {
+            promptDisplay.textContent = 'Notifications not supported';
+          }
+        } else {
+          promptDisplay.textContent = 'No active prompts';
+        }
       }
       event.stopPropagation();
       return;
