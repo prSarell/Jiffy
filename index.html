@@ -7,26 +7,28 @@
   <title>Jiffy - ADHD Task Manager</title>
   <link rel="manifest" href="./manifest.json">
   <link rel="stylesheet" href="./shared/styles.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #000000;
+      color: #ffffff;
+    }
+    .jiffy-title {
+      font-size: 28px;
+      font-weight: bold;
+      text-align: center;
+      margin: 15px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 10;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1 class="jiffy-title">Jiffy</h1>
-    <button class="hamburger-menu">☰</button>
-  </header>
-  <div id="add-container">
-    <button id="add-button">Add</button>
-  </div>
-  <div id="select-container">
-    <span id="select-button">Select</span>
-  </div>
-  <div id="prompts-container">
-    <span id="prompts-button">Prompts</span>
-  </div>
-  <div id="rewards-container">
-    <span id="rewards-button">Rewards</span>
-  </div>
-  <div id="category-container" class="category-row">
-    <!-- Categories will be reintroduced later -->
-  </div>
+  <h1 class="jiffy-title">Jiffy</h1>
 </body>
 </html>
