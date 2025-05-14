@@ -54,7 +54,7 @@
       top: env(safe-area-inset-top);
       left: 0;
       width: 100%;
-      padding: 3px 20px; /* Increased horizontal padding to bring Select and Hamburger Menu inward */
+      padding: 3px 30px; /* Increased horizontal padding to bring Select and Hamburger Menu inward */
       background-color: #000000;
       z-index: 10;
       box-sizing: border-box;
@@ -85,14 +85,14 @@
     }
     #button-container {
       position: fixed;
-      top: 35px;
+      top: 30px; /* Adjusted due to smaller buttons */
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       justify-content: center;
-      gap: 8px; /* Reduced gap to fit buttons */
+      gap: 6px; /* Reduced gap to fit buttons */
       z-index: 10;
-      min-height: 50px;
+      min-height: 40px;
     }
     .button-item {
       display: flex;
@@ -105,8 +105,8 @@
       border: 2px solid rgb(59, 130, 246);
       border-radius: 50%;
       cursor: pointer;
-      width: 50px; /* Reduced size to fit screen */
-      height: 50px; /* Reduced size to fit screen */
+      width: 30px; /* Reduced to match app icon size */
+      height: 30px; /* Reduced to match app icon size */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -143,12 +143,12 @@
   <style>
     #category-container {
       position: absolute;
-      top: 120px; /* Adjusted due to smaller buttons */
+      top: 110px; /* Adjusted due to smaller buttons */
       left: 0;
       right: 0;
       display: flex;
       justify-content: center;
-      gap: 8px; /* Reduced gap to fit buttons */
+      gap: 6px; /* Reduced gap to fit buttons */
       z-index: 9;
       width: 100%;
       visibility: visible;
@@ -164,8 +164,8 @@
       font-size: 0;
       border-radius: 50%;
       cursor: pointer;
-      width: 50px; /* Reduced size to fit screen */
-      height: 50px; /* Reduced size to fit screen */
+      width: 30px; /* Reduced to match app icon size */
+      height: 30px; /* Reduced to match app icon size */
       display: flex;
       justify-content: center;
       align-items: center;
