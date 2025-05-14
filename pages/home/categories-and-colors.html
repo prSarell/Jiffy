@@ -24,12 +24,12 @@
 <style>
   #category-container {
     position: absolute;
-    top: 140px; /* Adjusted to fit iPhone 14 Pro viewport and match index.html */
+    top: 120px; /* Adjusted due to smaller buttons */
     left: 0;
     right: 0;
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 8px; /* Reduced gap to fit buttons */
     z-index: 9;
     width: 100%;
     visibility: visible;
@@ -42,17 +42,17 @@
     align-items: center;
   }
   .category-button {
-    font-size: 0; /* Hide text inside buttons, use labels below */
+    font-size: 0;
     border-radius: 50%;
     cursor: pointer;
-    width: 15vw; /* Approx. 60px on iPhone 14 Pro */
-    height: 15vw; /* Approx. 60px on iPhone 14 Pro */
+    width: 50px; /* Reduced size to fit screen */
+    height: 50px; /* Reduced size to fit screen */
     display: flex;
     justify-content: center;
     align-items: center;
   }
   .category-label {
-    font-size: 2.56vw; /* Approx. 10px on iPhone 14 Pro */
+    font-size: 10px;
     font-weight: 400;
     margin-top: 5px;
     text-align: center;
