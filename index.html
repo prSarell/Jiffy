@@ -1,5 +1,10 @@
 /jiffy/index.html
 
+<!-- 
+File: /jiffy/index.html
+Purpose: This file serves as the entry point for the Jiffy app when accessed via the root URL (/jiffy/). It redirects the user to the main app page at /jiffy/pages/home/index.html using both a meta refresh tag and JavaScript for reliability. It also sets up the initial PWA configuration (manifest and icon links) to ensure the app icon and standalone mode are recognized by the browser when the app is added to the Home Screen.
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,8 +15,8 @@
   <title>Jiffy - Redirecting</title>
   <meta http-equiv="refresh" content="0;url=/pages/home/index.html">
   <link rel="manifest" href="/manifest.json">
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon-180.png?v=3">
-  <link rel="apple-touch-icon" sizes="512x512" href="/assets/icon-512.png?v=3">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon-180.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/assets/icon-512.png">
 </head>
 <body>
   <p>Redirecting to Jiffy...</p>
