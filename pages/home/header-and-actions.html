@@ -14,7 +14,7 @@
   </div>
   <div class="button-item">
     <span id="rewards-button"></span>
-    <span class="category-label">Rewards</span>
+    <span class="button-label">Rewards</span>
   </div>
   <div class="button-item">
     <span id="add-button"></span>
@@ -29,16 +29,16 @@
     align-items: center;
     position: fixed;
     top: 0;
-    top: env(safe-area-inset-top); /* Respect iPhone 14 Pro notch */
+    top: env(safe-area-inset-top);
     left: 0;
     width: 100%;
-    padding: 4px 12px; /* Adjusted padding in px */
+    padding: 3px 20px; /* Increased horizontal padding */
     background-color: #000000;
     z-index: 10;
     box-sizing: border-box;
   }
   .jiffy-title {
-    font-size: 18px; /* Fixed size for consistency */
+    font-size: 14px;
     font-weight: 500;
     margin: 0;
     text-align: center;
@@ -46,7 +46,7 @@
     color: #ffffff;
   }
   .hamburger-menu {
-    font-size: 16px; /* Fixed size for consistency */
+    font-size: 12px;
     font-weight: 500;
     background: none;
     border: none;
@@ -56,21 +56,21 @@
     margin-left: auto;
   }
   #select-button {
-    font-size: 8px; /* Fixed size for consistency */
+    font-size: 6px;
     font-weight: 500;
     cursor: pointer;
     color: #ffffff;
   }
   #button-container {
     position: fixed;
-    top: 40px;
+    top: 35px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 8px; /* Reduced gap to fit buttons */
     z-index: 10;
-    min-height: 60px;
+    min-height: 50px;
   }
   .button-item {
     display: flex;
@@ -78,19 +78,19 @@
     align-items: center;
   }
   #prompts-button, #rewards-button, #add-button {
-    font-size: 0; /* Hide text inside buttons, use labels below */
+    font-size: 0;
     background-color: rgb(74, 222, 128);
     border: 2px solid rgb(59, 130, 246);
     border-radius: 50%;
     cursor: pointer;
-    width: 60px; /* Fixed size for consistency */
-    height: 60px; /* Fixed size for consistency */
+    width: 50px; /* Reduced size to fit screen */
+    height: 50px; /* Reduced size to fit screen */
     display: flex;
     justify-content: center;
     align-items: center;
   }
   .button-label {
-    font-size: 10px; /* Fixed size for consistency */
+    font-size: 10px;
     font-weight: 400;
     margin-top: 5px;
     text-align: center;
