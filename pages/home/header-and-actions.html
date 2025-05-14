@@ -14,7 +14,7 @@
   </div>
   <div class="button-item">
     <span id="rewards-button"></span>
-    <span class="button-label">Rewards</span>
+    <span class="category-label">Rewards</span>
   </div>
   <div class="button-item">
     <span id="add-button"></span>
@@ -29,15 +29,16 @@
     align-items: center;
     position: fixed;
     top: 0;
+    top: env(safe-area-inset-top); /* Respect iPhone 14 Pro notch */
     left: 0;
     width: 100%;
-    padding: 1vw 3vw; /* Further reduced padding */
+    padding: 4px 12px; /* Adjusted padding in px */
     background-color: #000000;
     z-index: 10;
     box-sizing: border-box;
   }
   .jiffy-title {
-    font-size: 4.62vw; /* Reduced to 18px on iPhone 14 Pro */
+    font-size: 18px; /* Fixed size for consistency */
     font-weight: 500;
     margin: 0;
     text-align: center;
@@ -45,7 +46,7 @@
     color: #ffffff;
   }
   .hamburger-menu {
-    font-size: 4.1vw; /* Reduced to 16px on iPhone 14 Pro */
+    font-size: 16px; /* Fixed size for consistency */
     font-weight: 500;
     background: none;
     border: none;
@@ -55,7 +56,7 @@
     margin-left: auto;
   }
   #select-button {
-    font-size: 2.05vw; /* Reduced to 8px on iPhone 14 Pro */
+    font-size: 8px; /* Fixed size for consistency */
     font-weight: 500;
     cursor: pointer;
     color: #ffffff;
@@ -82,14 +83,14 @@
     border: 2px solid rgb(59, 130, 246);
     border-radius: 50%;
     cursor: pointer;
-    width: 15vw; /* Approx. 60px on iPhone 14 Pro */
-    height: 15vw; /* Approx. 60px on iPhone 14 Pro */
+    width: 60px; /* Fixed size for consistency */
+    height: 60px; /* Fixed size for consistency */
     display: flex;
     justify-content: center;
     align-items: center;
   }
   .button-label {
-    font-size: 2.56vw; /* Approx. 10px on iPhone 14 Pro */
+    font-size: 10px; /* Fixed size for consistency */
     font-weight: 400;
     margin-top: 5px;
     text-align: center;
