@@ -1,15 +1,26 @@
+/jiffy/index.html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <title>Jiffy - Redirecting</title>
-  <meta http-equiv="refresh" content="0;url=/jiffy/pages/home/index.html">
+  <meta http-equiv="refresh" content="0;url=/pages/home/index.html">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon-180.png?v=3">
+  <link rel="apple-touch-icon" sizes="512x512" href="/assets/icon-512.png?v=3">
 </head>
 <body>
   <p>Redirecting to Jiffy...</p>
   <script>
-    window.location.href = '/jiffy/pages/home/index.html';
+    console.log("Jiffy Redirect: Starting redirect...");
+    const targetUrl = '/pages/home/index.html';
+    console.log("Jiffy Redirect: Target URL:", targetUrl);
+    window.location.href = targetUrl;
+    console.log("Jiffy Redirect: Redirect initiated");
   </script>
 </body>
 </html>
