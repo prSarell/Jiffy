@@ -1,1 +1,73 @@
+/jiffy/pages/home/categories-and-colors.html
 
+<!-- This file manages the Categories and Colors section of Jiffy’s home page, displaying the example categories (Home, Life, Work, School) as circular buttons with labels below, positioned in a centered horizontal line below the Header and Actions section. It uses inline styles to handle category rendering and will eventually integrate with colorManagement.js for dynamic color assignment and grouping, ensuring an ADHD-friendly visual hierarchy for task organization. -->
+
+<div id="category-container">
+  <div class="category-item">
+    <span class="category-button" style="background-color: #1E3A8A;"></span>
+    <span class="category-label">Home</span>
+  </div>
+  <div class="category-item">
+    <span class="category-button" style="background-color: #3B82F6;"></span>
+    <span class="category-label">Life</span>
+  </div>
+  <div class="category-item">
+    <span class="category-button" style="background-color: #60A5FA;"></span>
+    <span class="category-label">Work</span>
+  </div>
+  <div class="category-item">
+    <span class="category-button" style="background-color: #93C5FD;"></span>
+    <span class="category-label">School</span>
+  </div>
+</div>
+
+<style>
+  #category-container {
+    position: absolute;
+    top: 170px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    z-index: 9;
+    width: 100%;
+    visibility: visible;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+  .category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .category-button {
+    font-size: 0; /* Hide text inside buttons, use labels below */
+    border-radius: 50%;
+    cursor: pointer;
+    width: 15vw; /* Approx. 60px on iPhone 14 Pro */
+    height: 15vw; /* Approx. 60px on iPhone 14 Pro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .category-label {
+    font-size: 2.56vw; /* Approx. 10px on iPhone 14 Pro */
+    font-weight: 400;
+    margin-top: 5px;
+    text-align: center;
+    color: #ffffff;
+  }
+</style>
+
+<script>
+  console.log("Jiffy Categories and Colors: Loaded at", new Date());
+  console.log("Jiffy Categories and Colors: Checking category container...");
+  const categoryContainer = document.getElementById("category-container");
+  if (categoryContainer) {
+    console.log("Jiffy Categories and Colors: Category container found, child elements:", categoryContainer.children);
+    console.log("Jiffy Categories and Colors: Category container bounding rect:", categoryContainer.getBoundingClientRect());
+  } else {
+    console.error("Jiffy Categories and Colors: Category container not found!");
+  }
+</script>
