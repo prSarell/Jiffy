@@ -84,7 +84,7 @@
     }
     #button-container {
       position: fixed;
-      top: 50px;
+      top: 40px; /* Reduced to fit within viewport */
       left: 50%;
       transform: translateX(-50%);
       display: flex;
@@ -142,7 +142,7 @@
   <style>
     #category-container {
       position: absolute;
-      top: 180px; /* Adjusted to sit on the line below, accounting for button-container height (60px) + labels (10px) + extra spacing */
+      top: 140px; /* Adjusted to fit within iPhone 14 Pro viewport (844px height) */
       left: 0;
       right: 0;
       display: flex;
@@ -163,8 +163,8 @@
       font-size: 0; /* Hide text inside buttons, use labels below */
       border-radius: 50%;
       cursor: pointer;
-      width: 15vw; /* Match size of Prompts, Rewards, Add buttons */
-      height: 15vw; /* Match size of Prompts, Rewards, Add buttons */
+      width: 15vw; /* Approx. 60px on iPhone 14 Pro */
+      height: 15vw; /* Approx. 60px on iPhone 14 Pro */
       display: flex;
       justify-content: center;
       align-items: center;
