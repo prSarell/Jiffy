@@ -1,5 +1,10 @@
 /jiffy/manifest.json
 
+/* 
+File: /jiffy/manifest.json
+Purpose: This file defines the Progressive Web App (PWA) configuration for Jiffy. It specifies metadata such as the app name, description, start URL, display mode (standalone for full-screen), background color, theme color, and icon paths. This ensures the app can be added to the Home Screen with the correct icon and launches in full-screen mode without a browser address bar.
+*/
+
 {
   "name": "Jiffy - ADHD Task Manager",
   "short_name": "Jiffy",
