@@ -32,7 +32,7 @@ Future steps will add more elements incrementally.
       padding-top: env(safe-area-inset-top);
       overflow-y: hidden;
       overscroll-behavior-y: contain;
-      position: fixed; /* Lock body to prevent any scrolling */
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
@@ -294,6 +294,7 @@ Future steps will add more elements incrementally.
         dot.dataset.index = index;
         paginationContainer.appendChild(dot);
       });
+      console.log("jiffy: Pagination dots created, count:", categories.length);
     }
 
     // Function to update active pagination dot
