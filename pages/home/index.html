@@ -2,8 +2,8 @@
 
 <!-- 
 File: /jiffy/pages/home/index.html
-Purpose: This file serves as the main entry point for Jiffy’s home page after the redirect from /jiffy/index.html. It sets up the PWA configuration (manifest, meta tags, icon links) to ensure the app launches in full-screen mode with the correct icon on the Home Screen. It contains the core UI elements of the app, which are being rebuilt step by step for maximum stability. Currently, it includes:
-  - Header Section: Select text (left-aligned), Jiffy title (centered), Hamburger Menu (right-aligned).
+Purpose: This file serves as the main entry point for jiffy’s home page after the redirect from /jiffy/index.html. It sets up the PWA configuration (manifest, meta tags, icon links) to ensure the app launches in full-screen mode with the correct icon on the Home Screen. It contains the core UI elements of the app, which are being rebuilt step by step for maximum stability. Currently, it includes:
+  - Header Section: Select text (left-aligned), jiffy title (centered), Hamburger Menu (right-aligned).
 Future steps will add more elements incrementally, such as the action buttons (Prompts, Rewards, Add) and category buttons (Home, Life, Work, School).
 -->
 
@@ -14,10 +14,10 @@ Future steps will add more elements incrementally, such as the action buttons (P
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <title>Jiffy - ADHD Task Manager</title>
-  <link rel="manifest" href="../../manifest.json">
-  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/icon-180.png">
-  <link rel="apple-touch-icon" sizes="512x512" href="../../assets/icon-512.png">
+  <title>jiffy - ADHD Task Manager</title>
+  <link rel="manifest" href="/Jiffy/manifest.json">
+  <link rel="apple-touch-icon" sizes="180x180" href="/Jiffy/assets/icon-180.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/Jiffy/assets/icon-512.png">
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -70,48 +70,48 @@ Future steps will add more elements incrementally, such as the action buttons (P
   <!-- Header Section -->
   <header>
     <span id="select-button">Select</span>
-    <h1 class="jiffy-title">Jiffy</h1>
+    <h1 class="jiffy-title">jiffy</h1>
     <button class="hamburger-menu">☰</button>
   </header>
 
   <script>
-    console.log("Jiffy: Page loaded at", new Date());
-    console.log("Jiffy: Checking PWA setup...");
+    console.log("jiffy: Page loaded at", new Date());
+    console.log("jiffy: Checking PWA setup...");
     // Check if running in standalone mode
     if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-      console.log("Jiffy: Running in standalone mode");
+      console.log("jiffy: Running in standalone mode");
     } else {
-      console.error("Jiffy: NOT running in standalone mode");
+      console.error("jiffy: NOT running in standalone mode");
     }
     // Check if PWA manifest is loaded
     const manifestLink = document.querySelector('link[rel="manifest"]');
     if (manifestLink) {
-      console.log("Jiffy: Manifest link found:", manifestLink.href);
+      console.log("jiffy: Manifest link found:", manifestLink.href);
       fetch(manifestLink.href)
         .then(response => {
           if (response.ok) {
-            console.log("Jiffy: Manifest loaded successfully, status:", response.status);
+            console.log("jiffy: Manifest loaded successfully, status:", response.status);
             return response.json();
           } else {
-            console.error("Jiffy: Failed to load manifest, status:", response.status);
+            console.error("jiffy: Failed to load manifest, status:", response.status);
           }
         })
-        .then(data => console.log("Jiffy: Manifest content:", data))
-        .catch(error => console.error("Jiffy: Error loading manifest:", error));
+        .then(data => console.log("jiffy: Manifest content:", data))
+        .catch(error => console.error("jiffy: Error loading manifest:", error));
     } else {
-      console.error("Jiffy: Manifest link not found!");
+      console.error("jiffy: Manifest link not found!");
     }
     // Check if icons are loaded
     const iconLinks = document.querySelectorAll('link[rel="apple-touch-icon"]');
     iconLinks.forEach(link => {
-      console.log("Jiffy: Icon link found:", link.href);
+      console.log("jiffy: Icon link found:", link.href);
       const img = new Image();
-      img.onload = () => console.log("Jiffy: Icon loaded successfully:", link.href);
-      img.onerror = () => console.error("Jiffy: Failed to load icon:", link.href);
+      img.onload = () => console.log("jiffy: Icon loaded successfully:", link.href);
+      img.onerror = () => console.error("jiffy: Failed to load icon:", link.href);
       img.src = link.href;
     });
     if (iconLinks.length === 0) {
-      console.error("Jiffy: No icon links found!");
+      console.error("jiffy: No icon links found!");
     }
   </script>
 </body>
