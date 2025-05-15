@@ -43,7 +43,7 @@ Future steps will add more elements incrementally.
       padding: 4px 36px;
       padding-top: calc(4px + env(safe-area-inset-top));
       background-color: #000000;
-      z-index: 20; /* Increased to ensure header stays on top */
+      z-index: 30; /* Increased to ensure header stays on top */
       box-sizing: border-box;
     }
     .jiffy-title {
@@ -78,10 +78,9 @@ Future steps will add more elements incrementally.
       display: flex;
       justify-content: center;
       gap: 14px;
-      z-index: 20; /* Increased from 10 to 20 to ensure action buttons stay on top */
+      z-index: 30; /* Increased to 30 to ensure action buttons stay on top */
       min-height: 36px;
-      background-color: #000000; /* Ensure background matches body to avoid transparency */
-      padding-bottom: 6px; /* Cover the labels */
+      clip-path: inset(0 0 0 0); /* Prevent content from sliding underneath */
     }
     .button-item {
       display: flex;
@@ -109,7 +108,7 @@ Future steps will add more elements incrementally.
     }
     #category-container {
       position: absolute;
-      top: 90px;
+      top: 120px; /* Increased from 90px to 120px to start below action buttons */
       left: 0;
       right: 0;
       display: flex;
