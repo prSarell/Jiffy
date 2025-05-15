@@ -3,7 +3,7 @@ File: /jiffy/pages/home/index.html
 Purpose: This file serves as the main entry point for jiffy’s home page after the redirect from /jiffy/index.html. It sets up the PWA configuration (manifest, meta tags, icon links) to ensure the app launches in full-screen mode with the correct icon on the Home Screen. It contains the core UI elements of the app, which are being rebuilt step by step for maximum stability. Currently, it includes:
   - Header Section: Select text (left-aligned), jiffy title (centered), Hamburger Menu (right-aligned).
   - Action Buttons: Prompts, Rewards, and Add buttons (centered below the header, circular, light green background with blue outline).
-  - Category Buttons: Dynamically generated, swipeable horizontally, with predefined colors (example categories: Home, Life, Work, School).
+  - Category Buttons: Dynamically generated, swipeable horizontally, centered below action buttons, with predefined colors (example categories: Home, Life, Work, School).
   - Pagination Dots: White dots at the bottom to indicate the number of categories and highlight the active one during scrolling.
 Future steps will add more elements incrementally.
 -->
@@ -106,7 +106,7 @@ Future steps will add more elements incrementally.
     }
     #category-container {
       position: absolute;
-      top: 150px;
+      top: 110px; /* Reduced from 150px to bring closer to action buttons */
       left: 0;
       right: 0;
       display: flex;
@@ -119,6 +119,7 @@ Future steps will add more elements incrementally.
       z-index: 9;
       padding: 0 12px;
       box-sizing: border-box;
+      justify-content: center; /* Center the categories horizontally */
     }
     #category-container::-webkit-scrollbar {
       display: none;
