@@ -4,21 +4,28 @@ function restrictCategoryScrolling() {
   // Track touch start position
   let touchStartY = 0;
   let touchStartX = 0;
+  let isHorizontalSwipe = false;
 
   categoryContainer.addEventListener("touchstart", (e) => {
     const touch = e.touches[0];
     touchStartY = touch.clientY;
     touchStartX = touch.clientX;
+    isHorizontalSwipe = false; // Reset swipe direction
   }, { passive: true });
 
-  // Prevent vertical scrolling on touchmove
+  // Determine swipe direction and allow horizontal scrolling
   categoryContainer.addEventListener("touchmove", (e) => {
     const touch = e.touches[0];
     const deltaY = Math.abs(touch.clientY - touchStartY);
     const deltaX = Math.abs(touch.clientX - touchStartX);
 
-    // If the vertical movement is greater than horizontal, prevent the event
-    if (deltaY > deltaX) {
+    // Determine the dominant swipe direction
+    if (!isHorizontalSwipe && (deltaX > deltaY)) {
+      isHorizontalSwipe = true; // Mark as horizontal swipe
+    }
+
+    // Prevent vertical scrolling if the swipe is not horizontal
+    if (!isHorizontalSwipe && deltaY > 0) {
       e.preventDefault();
     }
   }, { passive: false });
