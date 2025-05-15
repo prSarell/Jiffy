@@ -12,7 +12,7 @@ Future steps will add more elements incrementally, such as the category buttons 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>jiffy - ADHD Task Manager</title>
   <link rel="apple-touch-icon" href="/jiffy/assets/icon-180.png">
   <link rel="apple-touch-icon-precomposed" href="/jiffy/assets/icon-180.png">
@@ -27,6 +27,7 @@ Future steps will add more elements incrementally, such as the category buttons 
       padding: 0;
       background-color: #000000;
       color: #ffffff;
+      padding-top: env(safe-area-inset-top); /* Ensure content starts below the notch */
     }
     header {
       display: flex;
@@ -34,10 +35,10 @@ Future steps will add more elements incrementally, such as the category buttons 
       align-items: center;
       position: fixed;
       top: 0;
-      top: env(safe-area-inset-top);
       left: 0;
       width: 100%;
       padding: 3px 30px;
+      padding-top: calc(3px + env(safe-area-inset-top)); /* Add safe area inset to padding */
       background-color: #000000;
       z-index: 10;
       box-sizing: border-box;
@@ -68,7 +69,7 @@ Future steps will add more elements incrementally, such as the category buttons 
     }
     #button-container {
       position: fixed;
-      top: 40px;
+      top: calc(40px + env(safe-area-inset-top)); /* Adjust for safe area */
       left: 50%;
       transform: translateX(-50%);
       display: flex;
