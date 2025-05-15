@@ -159,14 +159,15 @@ Future steps will add more elements incrementally.
       color: #ffffff;
     }
     #pagination-container {
-      position: absolute;
+      position: fixed; /* Changed to fixed to ensure visibility in standalone mode */
       bottom: 20px;
       left: 0;
       right: 0;
       display: flex;
       justify-content: center;
       gap: 4px;
-      z-index: 10;
+      z-index: 40; /* Increased to ensure visibility above other elements */
+      padding-bottom: env(safe-area-inset-bottom); /* Account for bottom safe area */
     }
     .pagination-dot {
       width: 4px;
