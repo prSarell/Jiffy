@@ -27,7 +27,7 @@ Future steps will add more elements incrementally, such as the category buttons 
       padding: 0;
       background-color: #000000;
       color: #ffffff;
-      padding-top: env(safe-area-inset-top); /* Ensure content starts below the notch */
+      padding-top: env(safe-area-inset-top);
     }
     header {
       display: flex;
@@ -37,14 +37,14 @@ Future steps will add more elements incrementally, such as the category buttons 
       top: 0;
       left: 0;
       width: 100%;
-      padding: 3px 30px;
-      padding-top: calc(3px + env(safe-area-inset-top)); /* Add safe area inset to padding */
+      padding: 4px 36px;
+      padding-top: calc(4px + env(safe-area-inset-top));
       background-color: #000000;
       z-index: 10;
       box-sizing: border-box;
     }
     .jiffy-title {
-      font-size: 17px;
+      font-size: 20px;
       font-weight: 500;
       margin: 0;
       text-align: center;
@@ -52,7 +52,7 @@ Future steps will add more elements incrementally, such as the category buttons 
       color: #ffffff;
     }
     .hamburger-menu {
-      font-size: 14px;
+      font-size: 17px;
       font-weight: 500;
       background: none;
       border: none;
@@ -62,21 +62,21 @@ Future steps will add more elements incrementally, such as the category buttons 
       margin-left: auto;
     }
     #select-button {
-      font-size: 7px;
+      font-size: 8px;
       font-weight: 500;
       cursor: pointer;
       color: #ffffff;
     }
     #button-container {
       position: fixed;
-      top: calc(40px + env(safe-area-inset-top)); /* Adjust for safe area */
+      top: calc(48px + env(safe-area-inset-top));
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       justify-content: center;
-      gap: 12px;
+      gap: 14px;
       z-index: 10;
-      min-height: 30px;
+      min-height: 36px;
     }
     .button-item {
       display: flex;
@@ -89,16 +89,16 @@ Future steps will add more elements incrementally, such as the category buttons 
       border: 2px solid rgb(59, 130, 246);
       border-radius: 50%;
       cursor: pointer;
-      width: 30px;
-      height: 30px;
+      width: 36px;
+      height: 36px;
       display: flex;
       justify-content: center;
       align-items: center;
     }
     .button-label {
-      font-size: 7px;
+      font-size: 8px;
       font-weight: 400;
-      margin-top: 5px;
+      margin-top: 6px;
       text-align: center;
       color: #ffffff;
     }
