@@ -31,7 +31,7 @@ Future steps will add more elements incrementally.
       color: #ffffff;
       padding-top: env(safe-area-inset-top);
       overflow-y: hidden;
-      overscroll-behavior-y: contain; /* Prevent vertical overscroll */
+      overscroll-behavior-y: contain;
     }
     header {
       display: flex;
@@ -119,8 +119,8 @@ Future steps will add more elements incrementally.
       overflow-y: hidden;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
-      touch-action: pan-x; /* Restrict touch gestures to horizontal scrolling */
-      overscroll-behavior-y: contain; /* Prevent vertical overscroll */
+      touch-action: pan-x;
+      overscroll-behavior-y: contain;
       gap: 14px;
       z-index: 9;
       padding: 0 12px;
@@ -210,6 +210,9 @@ Future steps will add more elements incrementally.
     <!-- Dots will be dynamically added by JavaScript -->
   </div>
 
+  <!-- Import eventHandlers.js -->
+  <script src="/jiffy/shared/scripts/eventHandlers.js"></script>
+
   <script>
     // Initial categories (example categories for testing user-created functionality)
     let categories = [
@@ -263,17 +266,6 @@ Future steps will add more elements incrementally.
         categoryLabel.className = "category-label";
         categoryLabel.textContent = category.name;
 
-        // Add long press to delete category
-        categoryButton.addEventListener("touchstart", (e) => {
-          e.preventDefault(); // Prevent default touch behavior
-          const longPress = setTimeout(() => {
-            if (confirm(`Delete category "${category.name}"?`)) {
-              removeCategory(category.name);
-            }
-          }, 1000);
-          categoryButton.addEventListener("touchend", () => clearTimeout(longPress));
-        });
-
         categoryItem.appendChild(categoryButton);
         categoryItem.appendChild(categoryLabel);
         categoryContainer.appendChild(categoryItem);
@@ -282,6 +274,9 @@ Future steps will add more elements incrementally.
       // Create pagination dots
       createPaginationDots();
       updateActiveDot(); // Initial update
+
+      // Apply touch event restrictions after rendering categories
+      restrictCategoryScrolling();
     }
 
     // Function to create pagination dots
@@ -311,16 +306,6 @@ Future steps will add more elements incrementally.
 
     // Add scroll event listener to update active dot
     document.getElementById("category-container").addEventListener("scroll", updateActiveDot);
-
-    // Prevent vertical scrolling on touchmove for category container
-    document.getElementById("category-container").addEventListener("touchmove", (e) => {
-      const touch = e.touches[0];
-      const deltaY = Math.abs(touch.clientY - touch.startY);
-      const deltaX = Math.abs(touch.clientX - touch.startX);
-      if (deltaY > deltaX) {
-        e.preventDefault(); // Prevent vertical scrolling
-      }
-    }, { passive: false });
 
     // Function to add a new category
     function addCategory(name, color) {
