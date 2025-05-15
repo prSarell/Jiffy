@@ -1,13 +1,25 @@
 function restrictCategoryScrolling() {
   const categoryContainer = document.getElementById("category-container");
 
+  // Track touch start position
+  let touchStartY = 0;
+  let touchStartX = 0;
+
+  categoryContainer.addEventListener("touchstart", (e) => {
+    const touch = e.touches[0];
+    touchStartY = touch.clientY;
+    touchStartX = touch.clientX;
+  }, { passive: true });
+
   // Prevent vertical scrolling on touchmove
   categoryContainer.addEventListener("touchmove", (e) => {
     const touch = e.touches[0];
-    const deltaY = Math.abs(touch.clientY - touch.startY);
-    const deltaX = Math.abs(touch.clientX - touch.startX);
+    const deltaY = Math.abs(touch.clientY - touchStartY);
+    const deltaX = Math.abs(touch.clientX - touchStartX);
+
+    // If the vertical movement is greater than horizontal, prevent the event
     if (deltaY > deltaX) {
-      e.preventDefault(); // Prevent vertical scrolling
+      e.preventDefault();
     }
   }, { passive: false });
 
