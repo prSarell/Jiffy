@@ -1,6 +1,6 @@
 {
-  "name": "Jiffy - ADHD Task Manager",
-  "short_name": "Jiffy",
+  "name": "jiffy - ADHD Task Manager",
+  "short_name": "jiffy",
   "description": "A task management app designed for ADHD users with clear, colorful categories.",
   "start_url": "/pages/home/index.html",
   "display": "standalone",
