@@ -20,11 +20,11 @@ function restrictCategoryScrolling() {
     const deltaX = Math.abs(touch.clientX - touchStartX);
 
     // Determine the dominant swipe direction
-    if (!isHorizontalSwipe && (deltaX > deltaY)) {
+    if (deltaX > deltaY) {
       isHorizontalSwipe = true; // Mark as horizontal swipe
     }
 
-    // Prevent vertical scrolling if the swipe is not horizontal
+    // Prevent vertical scrolling if the swipe is primarily vertical
     if (!isHorizontalSwipe && deltaY > 0) {
       e.preventDefault();
     }
