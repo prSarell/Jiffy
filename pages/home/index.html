@@ -43,7 +43,7 @@ Future steps will add more elements incrementally.
       padding: 4px 36px;
       padding-top: calc(4px + env(safe-area-inset-top));
       background-color: #000000;
-      z-index: 30; /* Increased to ensure header stays on top */
+      z-index: 30;
       box-sizing: border-box;
     }
     .jiffy-title {
@@ -78,9 +78,9 @@ Future steps will add more elements incrementally.
       display: flex;
       justify-content: center;
       gap: 14px;
-      z-index: 30; /* Increased to 30 to ensure action buttons stay on top */
+      z-index: 30;
       min-height: 36px;
-      clip-path: inset(0 0 0 0); /* Prevent content from sliding underneath */
+      clip-path: inset(0 0 0 0);
     }
     .button-item {
       display: flex;
@@ -108,7 +108,7 @@ Future steps will add more elements incrementally.
     }
     #category-container {
       position: absolute;
-      top: 120px; /* Increased from 90px to 120px to start below action buttons */
+      top: 0px; /* Will be dynamically set by JavaScript */
       left: 0;
       right: 0;
       display: flex;
@@ -118,6 +118,7 @@ Future steps will add more elements incrementally.
       overflow-y: hidden;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
+      touch-action: pan-x; /* Restrict touch gestures to horizontal scrolling */
       gap: 14px;
       z-index: 9;
       padding: 0 12px;
@@ -234,6 +235,16 @@ Future steps will add more elements incrementally.
       localStorage.setItem("jiffyCategories", JSON.stringify(categories));
     }
 
+    // Dynamically position the category container below the action buttons
+    function positionCategoryContainer() {
+      const buttonContainer = document.getElementById("button-container");
+      const categoryContainer = document.getElementById("category-container");
+      const buttonContainerRect = buttonContainer.getBoundingClientRect();
+      const topPosition = buttonContainerRect.bottom + 10; // Add 10px margin below action buttons
+      categoryContainer.style.top = `${topPosition}px`;
+      console.log("jiffy: Positioned category container at top:", topPosition);
+    }
+
     // Function to dynamically create category buttons
     function createCategoryButtons() {
       const categoryContainer = document.getElementById("category-container");
@@ -331,8 +342,12 @@ Future steps will add more elements incrementally.
       }
     });
 
-    // Create category buttons on page load
+    // Create category buttons on page load and position the container
     createCategoryButtons();
+    positionCategoryContainer();
+
+    // Reposition on window resize (e.g., orientation change)
+    window.addEventListener("resize", positionCategoryContainer);
 
     console.log("jiffy: Page loaded at", new Date());
     console.log("jiffy: Checking PWA setup...");
