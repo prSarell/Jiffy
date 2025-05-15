@@ -1,5 +1,3 @@
-/jiffy/pages/home/index.html
-
 <!-- 
 File: /jiffy/pages/home/index.html
 Purpose: This file serves as the main entry point for jiffy’s home page after the redirect from /jiffy/index.html. It sets up the PWA configuration (manifest, meta tags, icon links) to ensure the app launches in full-screen mode with the correct icon on the Home Screen. It contains the core UI elements of the app, which are being rebuilt step by step for maximum stability. Currently, it includes:
@@ -15,9 +13,12 @@ Future steps will add more elements incrementally, such as the action buttons (P
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <title>jiffy - ADHD Task Manager</title>
-  <link rel="manifest" href="/Jiffy/manifest.json">
-  <link rel="apple-touch-icon" sizes="180x180" href="/Jiffy/assets/icon-180.png">
-  <link rel="apple-touch-icon" sizes="512x512" href="/Jiffy/assets/icon-512.png">
+  <link rel="apple-touch-icon" href="/jiffy/assets/icon-180.png">
+  <link rel="apple-touch-icon-precomposed" href="/jiffy/assets/icon-180.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/jiffy/assets/icon-180.png">
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/jiffy/assets/icon-180.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/jiffy/assets/icon-512.png">
+  <link rel="apple-touch-icon-precomposed" sizes="512x512" href="/jiffy/assets/icon-512.png">
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
