@@ -106,7 +106,7 @@ Future steps will add more elements incrementally.
     }
     #category-container {
       position: absolute;
-      top: 110px; /* Reduced from 150px to bring closer to action buttons */
+      top: 115px; /* Adjusted from 110px to 115px (lowered by 5px, 1/8 of 40px) */
       left: 0;
       right: 0;
       display: flex;
@@ -119,7 +119,7 @@ Future steps will add more elements incrementally.
       z-index: 9;
       padding: 0 12px;
       box-sizing: border-box;
-      justify-content: center; /* Center the categories horizontally */
+      justify-content: center;
     }
     #category-container::-webkit-scrollbar {
       display: none;
@@ -304,40 +304,3 @@ Future steps will add more elements incrementally.
     const addButton = document.getElementById("add-button");
     addButton.addEventListener("click", () => {
       const name = prompt("Enter category name:");
-      if (name) {
-        const color = prompt("Enter color (e.g., #FF0000):", "#FF0000");
-        if (color) {
-          addCategory(name, color);
-        }
-      }
-    });
-
-    // Create category buttons on page load
-    createCategoryButtons();
-
-    console.log("jiffy: Page loaded at", new Date());
-    console.log("jiffy: Checking PWA setup...");
-    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-      console.log("jiffy: Running in standalone mode");
-    } else {
-      console.error("jiffy: NOT running in standalone mode");
-    }
-    console.log("jiffy: Checking button container...");
-    const buttonContainer = document.getElementById("button-container");
-    if (buttonContainer) {
-      console.log("jiffy: Button container found, child elements:", buttonContainer.children);
-      console.log("jiffy: Button container bounding rect:", buttonContainer.getBoundingClientRect());
-    } else {
-      console.error("jiffy: Button container not found!");
-    }
-    console.log("jiffy: Checking category container...");
-    const categoryContainer = document.getElementById("category-container");
-    if (categoryContainer) {
-      console.log("jiffy: Category container found, child elements:", categoryContainer.children);
-      console.log("jiffy: Category container bounding rect:", categoryContainer.getBoundingClientRect());
-    } else {
-      console.error("jiffy: Category container not found!");
-    }
-  </script>
-</body>
-</html>
