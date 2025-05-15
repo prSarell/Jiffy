@@ -106,7 +106,7 @@ Future steps will add more elements incrementally.
     }
     #category-container {
       position: absolute;
-      top: 115px; /* Adjusted from 110px to 115px (lowered by 5px, 1/8 of 40px) */
+      top: 115px;
       left: 0;
       right: 0;
       display: flex;
@@ -215,8 +215,20 @@ Future steps will add more elements incrementally.
 
     // Load categories from localStorage if available
     const savedCategories = localStorage.getItem("jiffyCategories");
+    console.log("jiffy: Loading categories from localStorage:", savedCategories);
     if (savedCategories) {
-      categories = JSON.parse(savedCategories);
+      try {
+        categories = JSON.parse(savedCategories);
+        console.log("jiffy: Successfully loaded categories:", categories);
+      } catch (error) {
+        console.error("jiffy: Failed to parse categories from localStorage:", error);
+        // Reset to default if parsing fails
+        localStorage.setItem("jiffyCategories", JSON.stringify(categories));
+      }
+    } else {
+      // Save initial categories to localStorage if none exist
+      console.log("jiffy: No categories in localStorage, saving initial set");
+      localStorage.setItem("jiffyCategories", JSON.stringify(categories));
     }
 
     // Function to dynamically create category buttons
@@ -286,7 +298,9 @@ Future steps will add more elements incrementally.
     // Function to add a new category
     function addCategory(name, color) {
       categories.push({ name, color });
+      console.log("jiffy: Adding category, new list:", categories);
       localStorage.setItem("jiffyCategories", JSON.stringify(categories));
+      console.log("jiffy: Updated localStorage after adding:", localStorage.getItem("jiffyCategories"));
       createCategoryButtons();
     }
 
@@ -295,7 +309,9 @@ Future steps will add more elements incrementally.
       const index = categories.findIndex(category => category.name === name);
       if (index !== -1) {
         categories.splice(index, 1);
+        console.log("jiffy: Removing category, new list:", categories);
         localStorage.setItem("jiffyCategories", JSON.stringify(categories));
+        console.log("jiffy: Updated localStorage after removing:", localStorage.getItem("jiffyCategories"));
         createCategoryButtons();
       }
     }
@@ -304,3 +320,40 @@ Future steps will add more elements incrementally.
     const addButton = document.getElementById("add-button");
     addButton.addEventListener("click", () => {
       const name = prompt("Enter category name:");
+      if (name) {
+        const color = prompt("Enter color (e.g., #FF0000):", "#FF0000");
+        if (color) {
+          addCategory(name, color);
+        }
+      }
+    });
+
+    // Create category buttons on page load
+    createCategoryButtons();
+
+    console.log("jiffy: Page loaded at", new Date());
+    console.log("jiffy: Checking PWA setup...");
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+      console.log("jiffy: Running in standalone mode");
+    } else {
+      console.error("jiffy: NOT running in standalone mode");
+    }
+    console.log("jiffy: Checking button container...");
+    const buttonContainer = document.getElementById("button-container");
+    if (buttonContainer) {
+      console.log("jiffy: Button container found, child elements:", buttonContainer.children);
+      console.log("jiffy: Button container bounding rect:", buttonContainer.getBoundingClientRect());
+    } else {
+      console.error("jiffy: Button container not found!");
+    }
+    console.log("jiffy: Checking category container...");
+    const categoryContainer = document.getElementById("category-container");
+    if (categoryContainer) {
+      console.log("jiffy: Category container found, child elements:", categoryContainer.children);
+      console.log("jiffy: Category container bounding rect:", categoryContainer.getBoundingClientRect());
+    } else {
+      console.error("jiffy: Category container not found!");
+    }
+  </script>
+</body>
+</html>
