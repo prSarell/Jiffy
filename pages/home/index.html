@@ -2,7 +2,8 @@
 File: /jiffy/pages/home/index.html
 Purpose: This file serves as the main entry point for jiffy’s home page after the redirect from /jiffy/index.html. It sets up the PWA configuration (manifest, meta tags, icon links) to ensure the app launches in full-screen mode with the correct icon on the Home Screen. It contains the core UI elements of the app, which are being rebuilt step by step for maximum stability. Currently, it includes:
   - Header Section: Select text (left-aligned), jiffy title (centered), Hamburger Menu (right-aligned).
-Future steps will add more elements incrementally, such as the action buttons (Prompts, Rewards, Add) and category buttons (Home, Life, Work, School).
+  - Action Buttons: Prompts, Rewards, and Add buttons (centered below the header, circular, light mint green background with royal blue outline).
+Future steps will add more elements incrementally, such as the category buttons (Home, Life, Work, School).
 -->
 
 <!DOCTYPE html>
@@ -65,6 +66,41 @@ Future steps will add more elements incrementally, such as the action buttons (P
       cursor: pointer;
       color: #ffffff;
     }
+    #button-container {
+      position: fixed;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      z-index: 10;
+      min-height: 30px;
+    }
+    .button-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #prompts-button, #rewards-button, #add-button {
+      font-size: 0;
+      background-color: rgb(74, 222, 128);
+      border: 2px solid rgb(59, 130, 246);
+      border-radius: 50%;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .button-label {
+      font-size: 7px;
+      font-weight: 400;
+      margin-top: 5px;
+      text-align: center;
+      color: #ffffff;
+    }
   </style>
 </head>
 <body>
@@ -75,6 +111,22 @@ Future steps will add more elements incrementally, such as the action buttons (P
     <button class="hamburger-menu">☰</button>
   </header>
 
+  <!-- Action Buttons Section -->
+  <div id="button-container">
+    <div class="button-item">
+      <span id="prompts-button"></span>
+      <span class="button-label">Prompts</span>
+    </div>
+    <div class="button-item">
+      <span id="rewards-button"></span>
+      <span class="button-label">Rewards</span>
+    </div>
+    <div class="button-item">
+      <span id="add-button"></span>
+      <span class="button-label">Add</span>
+    </div>
+  </div>
+
   <script>
     console.log("jiffy: Page loaded at", new Date());
     console.log("jiffy: Checking PWA setup...");
@@ -84,35 +136,14 @@ Future steps will add more elements incrementally, such as the action buttons (P
     } else {
       console.error("jiffy: NOT running in standalone mode");
     }
-    // Check if PWA manifest is loaded
-    const manifestLink = document.querySelector('link[rel="manifest"]');
-    if (manifestLink) {
-      console.log("jiffy: Manifest link found:", manifestLink.href);
-      fetch(manifestLink.href)
-        .then(response => {
-          if (response.ok) {
-            console.log("jiffy: Manifest loaded successfully, status:", response.status);
-            return response.json();
-          } else {
-            console.error("jiffy: Failed to load manifest, status:", response.status);
-          }
-        })
-        .then(data => console.log("jiffy: Manifest content:", data))
-        .catch(error => console.error("jiffy: Error loading manifest:", error));
+    // Check button container
+    console.log("jiffy: Checking button container...");
+    const buttonContainer = document.getElementById("button-container");
+    if (buttonContainer) {
+      console.log("jiffy: Button container found, child elements:", buttonContainer.children);
+      console.log("jiffy: Button container bounding rect:", buttonContainer.getBoundingClientRect());
     } else {
-      console.error("jiffy: Manifest link not found!");
-    }
-    // Check if icons are loaded
-    const iconLinks = document.querySelectorAll('link[rel="apple-touch-icon"]');
-    iconLinks.forEach(link => {
-      console.log("jiffy: Icon link found:", link.href);
-      const img = new Image();
-      img.onload = () => console.log("jiffy: Icon loaded successfully:", link.href);
-      img.onerror = () => console.error("jiffy: Failed to load icon:", link.href);
-      img.src = link.href;
-    });
-    if (iconLinks.length === 0) {
-      console.error("jiffy: No icon links found!");
+      console.error("jiffy: Button container not found!");
     }
   </script>
 </body>
