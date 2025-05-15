@@ -3,7 +3,9 @@ File: /jiffy/pages/home/index.html
 Purpose: This file serves as the main entry point for jiffy’s home page after the redirect from /jiffy/index.html. It sets up the PWA configuration (manifest, meta tags, icon links) to ensure the app launches in full-screen mode with the correct icon on the Home Screen. It contains the core UI elements of the app, which are being rebuilt step by step for maximum stability. Currently, it includes:
   - Header Section: Select text (left-aligned), jiffy title (centered), Hamburger Menu (right-aligned).
   - Action Buttons: Prompts, Rewards, and Add buttons (centered below the header, circular, light green background with blue outline).
-Future steps will add more elements incrementally, such as the category buttons (Home, Life, Work, School).
+  - Category Buttons: Dynamically generated, swipeable horizontally, with predefined colors (example categories: Home, Life, Work, School).
+  - Pagination Dots: White dots at the bottom to indicate the number of categories and highlight the active one during scrolling.
+Future steps will add more elements incrementally.
 -->
 
 <!DOCTYPE html>
@@ -102,6 +104,69 @@ Future steps will add more elements incrementally, such as the category buttons 
       text-align: center;
       color: #ffffff;
     }
+    #category-container {
+      position: absolute;
+      top: 150px;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      gap: 14px;
+      z-index: 9;
+      padding: 0 12px;
+      box-sizing: border-box;
+    }
+    #category-container::-webkit-scrollbar {
+      display: none;
+    }
+    .category-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 0 0 auto;
+    }
+    .category-button {
+      font-size: 0;
+      border-radius: 50%;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .category-label {
+      font-size: 8px;
+      font-weight: 400;
+      margin-top: 6px;
+      text-align: center;
+      color: #ffffff;
+    }
+    #pagination-container {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      z-index: 10;
+    }
+    .pagination-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #ffffff;
+      border-radius: 50%;
+      opacity: 0.5;
+      transition: opacity 0.3s ease;
+    }
+    .pagination-dot.active {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -128,16 +193,134 @@ Future steps will add more elements incrementally, such as the category buttons 
     </div>
   </div>
 
+  <!-- Categories and Colors Section -->
+  <div id="category-container">
+    <!-- Categories will be dynamically added by JavaScript -->
+  </div>
+
+  <!-- Pagination Dots -->
+  <div id="pagination-container">
+    <!-- Dots will be dynamically added by JavaScript -->
+  </div>
+
   <script>
+    // Initial categories (example categories for testing user-created functionality)
+    let categories = [
+      { name: "Home", color: "#1E3A8A" },
+      { name: "Life", color: "#3B82F6" },
+      { name: "Work", color: "#60A5FA" },
+      { name: "School", color: "#93C5FD" }
+    ];
+
+    // Load categories from localStorage if available
+    const savedCategories = localStorage.getItem("jiffyCategories");
+    if (savedCategories) {
+      categories = JSON.parse(savedCategories);
+    }
+
+    // Function to dynamically create category buttons
+    function createCategoryButtons() {
+      const categoryContainer = document.getElementById("category-container");
+      categoryContainer.innerHTML = ''; // Clear existing buttons
+      categories.forEach(category => {
+        const categoryItem = document.createElement("div");
+        categoryItem.className = "category-item";
+
+        const categoryButton = document.createElement("span");
+        categoryButton.className = "category-button";
+        categoryButton.style.backgroundColor = category.color;
+
+        const categoryLabel = document.createElement("span");
+        categoryLabel.className = "category-label";
+        categoryLabel.textContent = category.name;
+
+        // Add long press to delete category
+        categoryButton.addEventListener("touchstart", () => {
+          const longPress = setTimeout(() => {
+            if (confirm(`Delete category "${category.name}"?`)) {
+              removeCategory(category.name);
+            }
+          }, 1000);
+          categoryButton.addEventListener("touchend", () => clearTimeout(longPress));
+        });
+
+        categoryItem.appendChild(categoryButton);
+        categoryItem.appendChild(categoryLabel);
+        categoryContainer.appendChild(categoryItem);
+      });
+
+      // Create pagination dots
+      createPaginationDots();
+      updateActiveDot(); // Initial update
+    }
+
+    // Function to create pagination dots
+    function createPaginationDots() {
+      const paginationContainer = document.getElementById("pagination-container");
+      paginationContainer.innerHTML = ''; // Clear existing dots
+      categories.forEach((_, index) => {
+        const dot = document.createElement("span");
+        dot.className = "pagination-dot";
+        dot.dataset.index = index;
+        paginationContainer.appendChild(dot);
+      });
+    }
+
+    // Function to update active pagination dot
+    function updateActiveDot() {
+      const categoryContainer = document.getElementById("category-container");
+      const scrollPosition = categoryContainer.scrollLeft;
+      const categoryWidth = 40 + 14; // Width of category button (40px) + gap (14px)
+      const activeIndex = Math.round(scrollPosition / categoryWidth);
+
+      const dots = document.querySelectorAll(".pagination-dot");
+      dots.forEach((dot, index) => {
+        dot.classList.toggle("active", index === activeIndex);
+      });
+    }
+
+    // Add scroll event listener to update active dot
+    document.getElementById("category-container").addEventListener("scroll", updateActiveDot);
+
+    // Function to add a new category
+    function addCategory(name, color) {
+      categories.push({ name, color });
+      localStorage.setItem("jiffyCategories", JSON.stringify(categories));
+      createCategoryButtons();
+    }
+
+    // Function to remove a category
+    function removeCategory(name) {
+      const index = categories.findIndex(category => category.name === name);
+      if (index !== -1) {
+        categories.splice(index, 1);
+        localStorage.setItem("jiffyCategories", JSON.stringify(categories));
+        createCategoryButtons();
+      }
+    }
+
+    // Make the Add button functional
+    const addButton = document.getElementById("add-button");
+    addButton.addEventListener("click", () => {
+      const name = prompt("Enter category name:");
+      if (name) {
+        const color = prompt("Enter color (e.g., #FF0000):", "#FF0000");
+        if (color) {
+          addCategory(name, color);
+        }
+      }
+    });
+
+    // Create category buttons on page load
+    createCategoryButtons();
+
     console.log("jiffy: Page loaded at", new Date());
     console.log("jiffy: Checking PWA setup...");
-    // Check if running in standalone mode
     if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
       console.log("jiffy: Running in standalone mode");
     } else {
       console.error("jiffy: NOT running in standalone mode");
     }
-    // Check button container
     console.log("jiffy: Checking button container...");
     const buttonContainer = document.getElementById("button-container");
     if (buttonContainer) {
@@ -145,6 +328,14 @@ Future steps will add more elements incrementally, such as the category buttons 
       console.log("jiffy: Button container bounding rect:", buttonContainer.getBoundingClientRect());
     } else {
       console.error("jiffy: Button container not found!");
+    }
+    console.log("jiffy: Checking category container...");
+    const categoryContainer = document.getElementById("category-container");
+    if (categoryContainer) {
+      console.log("jiffy: Category container found, child elements:", categoryContainer.children);
+      console.log("jiffy: Category container bounding rect:", categoryContainer.getBoundingClientRect());
+    } else {
+      console.error("jiffy: Category container not found!");
     }
   </script>
 </body>
