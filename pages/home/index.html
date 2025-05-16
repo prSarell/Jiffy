@@ -33,10 +33,10 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
 
     #placeholder-categories {
       position: absolute;
-      top: 50%;
+      top: 50px; /* Fixed position to ensure visibility */
       left: 0;
       right: 0;
-      margin-top: -25px; /* Simplified centering without transform */
+      height: 60px; /* Ensure container has height */
       display: flex;
       flex-direction: row;
       flex-wrap: nowrap;
@@ -48,6 +48,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       justify-content: center;
       min-width: 600px; /* Force overflow to ensure scrolling */
       will-change: scroll-position;
+      border: 1px solid white; /* Add border for visibility */
     }
 
     #placeholder-categories::-webkit-scrollbar {
@@ -55,8 +56,8 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
     }
 
     #blue-circle {
-      width: 50px;
-      height: 50px;
+      width: 100px; /* Increased size for visibility */
+      height: 100px;
       background-color: blue;
       border-radius: 50%;
       flex: 0 0 auto;
