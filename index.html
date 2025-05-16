@@ -1,11 +1,9 @@
 <!-- 
 File: /jiffy/pages/home/index.html
-Purpose: This file serves as the main entry point for jiffy’s home page after the redirect from /jiffy/index.html. It sets up the PWA configuration (manifest, meta tags, icon links) to ensure the app launches in full-screen mode with the correct icon on the Home Screen. It contains the core UI elements of the app, which are being rebuilt step by step for maximum stability. Currently, it includes:
-  - Header Section: Select text (left-aligned), jiffy title (centered), Hamburger Menu (right-aligned).
-  - Action Buttons: Prompts, Rewards, and Add buttons (centered below the header, circular, light green background with blue outline).
-  - Category Buttons: Dynamically generated, swipeable horizontally, centered below action buttons, with predefined colors (example categories: Home, Life, Work, School).
-  - Pagination Dots: White dots at the bottom to indicate the number of categories and highlight the active one during scrolling.
-Future steps will add more elements incrementally.
+Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with colored placeholders:
+  - Green Square (top): Placeholder for header and action buttons (fixed).
+  - Blue Circle (center): Placeholder for categories (horizontally scrollable).
+  - Orange Rectangle (bottom): Placeholder for pagination dots (fixed).
 -->
 
 <!DOCTYPE html>
@@ -22,14 +20,13 @@ Future steps will add more elements incrementally.
   <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/jiffy/assets/icon-180.png">
   <link rel="apple-touch-icon" sizes="512x512" href="/jiffy/assets/icon-512.png">
   <link rel="apple-touch-icon-precomposed" sizes="512x512" href="/jiffy/assets/icon-512.png">
+  <!-- Inline styles temporarily to rule out CSS loading issue -->
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       margin: 0;
       padding: 0;
       background-color: #000000;
-      color: #ffffff;
-      padding-top: env(safe-area-inset-top);
       overflow: hidden;
       position: fixed;
       top: 0;
@@ -37,85 +34,23 @@ Future steps will add more elements incrementally.
       width: 100%;
       height: 100%;
     }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+
+    #placeholder-header {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      padding: 4px 36px;
-      padding-top: calc(4px + env(safe-area-inset-top));
-      background-color: #000000;
+      height: 50px;
+      background-color: green;
       z-index: 30;
-      box-sizing: border-box;
     }
-    .jiffy-title {
-      font-size: 20px;
-      font-weight: 500;
-      margin: 0;
-      text-align: center;
-      flex-grow: 1;
-      color: #ffffff;
-    }
-    .hamburger-menu {
-      font-size: 17px;
-      font-weight: 500;
-      background: none;
-      border: none;
-      color: #ffffff;
-      cursor: pointer;
-      padding: 0;
-      margin-left: auto;
-    }
-    #select-button {
-      font-size: 8px;
-      font-weight: 500;
-      cursor: pointer;
-      color: #ffffff;
-    }
-    #button-container {
-      position: fixed;
-      top: calc(48px + env(safe-area-inset-top));
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      justify-content: center;
-      gap: 14px;
-      z-index: 30;
-      min-height: 36px;
-      clip-path: inset(0 0 0 0);
-    }
-    .button-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    #prompts-button, #rewards-button, #add-button {
-      font-size: 0;
-      background-color: rgb(187, 254, 187);
-      border: 2px solid rgb(0, 71, 153);
-      border-radius: 50%;
-      cursor: pointer;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .button-label {
-      font-size: 8px;
-      font-weight: 400;
-      margin-top: 6px;
-      text-align: center;
-      color: #ffffff;
-    }
-    #category-container {
+
+    #placeholder-categories {
       position: absolute;
-      top: 0px; /* Will be dynamically set by JavaScript */
+      top: 50%;
       left: 0;
       right: 0;
+      transform: translateY(-50%);
       display: flex;
       flex-direction: row;
       flex-wrap: nowrap;
@@ -124,259 +59,71 @@ Future steps will add more elements incrementally.
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
       touch-action: pan-x;
-      gap: 14px;
-      z-index: 9;
-      padding: 0 12px;
-      box-sizing: border-box;
       justify-content: center;
-      min-width: 600px; /* Force overflow to ensure scrolling */
+      min-width: 600px;
       will-change: scroll-position;
     }
-    #category-container::-webkit-scrollbar {
+
+    #placeholder-categories::-webkit-scrollbar {
       display: none;
     }
-    .category-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+
+    #blue-circle {
+      width: 50px;
+      height: 50px;
+      background-color: blue;
+      border-radius: 50%;
       flex: 0 0 auto;
     }
-    .category-button {
-      font-size: 0;
-      border-radius: 50%;
-      cursor: pointer;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .category-label {
-      font-size: 8px;
-      font-weight: 400;
-      margin-top: 6px;
-      text-align: center;
-      color: #ffffff;
-    }
-    #pagination-container {
+
+    #placeholder-pagination {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      display: flex;
-      justify-content: center;
-      gap: 4px;
+      height: 20px;
+      background-color: orange;
       z-index: 40;
-      padding-bottom: calc(env(safe-area-inset-bottom) + 10px); /* Increased padding to move dots further down */
-      overflow: hidden; /* Prevent any scrolling */
-    }
-    .pagination-dot {
-      width: 4px;
-      height: 4px;
-      background-color: #ffffff;
-      border-radius: 50%;
-      opacity: 0.5;
-      transition: opacity 0.3s ease;
-    }
-    .pagination-dot.active {
-      opacity: 1;
+      overflow: hidden;
     }
   </style>
 </head>
 <body>
-  <!-- Header Section -->
-  <header>
-    <span id="select-button">Select</span>
-    <h1 class="jiffy-title">jiffy</h1>
-    <button class="hamburger-menu">☰</button>
-  </header>
+  <!-- Placeholder for Header and Action Buttons -->
+  <div id="placeholder-header"></div>
 
-  <!-- Action Buttons Section -->
-  <div id="button-container">
-    <div class="button-item">
-      <span id="prompts-button"></span>
-      <span class="button-label">Prompts</span>
-    </div>
-    <div class="button-item">
-      <span id="rewards-button"></span>
-      <span class="button-label">Rewards</span>
-    </div>
-    <div class="button-item">
-      <span id="add-button"></span>
-      <span class="button-label">Add</span>
-    </div>
+  <!-- Placeholder for Categories (Scrollable) -->
+  <div id="placeholder-categories">
+    <div id="blue-circle"></div>
   </div>
 
-  <!-- Categories and Colors Section -->
-  <div id="category-container">
-    <!-- Categories will be dynamically added by JavaScript -->
-  </div>
-
-  <!-- Pagination Dots -->
-  <div id="pagination-container">
-    <!-- Dots will be dynamically added by JavaScript -->
-  </div>
+  <!-- Placeholder for Pagination Dots -->
+  <div id="placeholder-pagination"></div>
 
   <!-- Import eventHandlers.js -->
   <script src="/jiffy/shared/scripts/eventHandlers.js"></script>
 
   <script>
-    // Initial categories (example categories for testing user-created functionality)
-    let categories = [
-      { name: "Home", color: "#1E3A8A" },
-      { name: "Life", color: "#3B82F6" },
-      { name: "Work", color: "#60A5FA" },
-      { name: "School", color: "#93C5FD" }
-    ];
+    try {
+      // Initialize placeholders (no functionality needed)
+      setupPlaceholders();
 
-    // Load categories from localStorage if available
-    const savedCategories = localStorage.getItem("jiffyCategories");
-    console.log("jiffy: Loading categories from localStorage:", savedCategories);
-    if (savedCategories) {
-      try {
-        categories = JSON.parse(savedCategories);
-        console.log("jiffy: Successfully loaded categories:", categories);
-      } catch (error) {
-        console.error("jiffy: Failed to parse categories from localStorage:", error);
-        // Reset to default if parsing fails
-        localStorage.setItem("jiffyCategories", JSON.stringify(categories));
+      console.log("jiffy: Page loaded at", new Date());
+      console.log("jiffy: Checking PWA setup...");
+      if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+        console.log("jiffy: Running in standalone mode");
+      } else {
+        console.error("jiffy: NOT running in standalone mode");
       }
-    } else {
-      // Save initial categories to localStorage if none exist
-      console.log("jiffy: No categories in localStorage, saving initial set");
-      localStorage.setItem("jiffyCategories", JSON.stringify(categories));
-    }
-
-    // Dynamically position the category container below the action buttons
-    function positionCategoryContainer() {
-      const buttonContainer = document.getElementById("button-container");
-      const categoryContainer = document.getElementById("category-container");
-      const buttonContainerRect = buttonContainer.getBoundingClientRect();
-      const topPosition = buttonContainerRect.bottom + 10; // Add 10px margin below action buttons
-      categoryContainer.style.top = `${topPosition}px`;
-      console.log("jiffy: Positioned category container at top:", topPosition);
-    }
-
-    // Function to dynamically create category buttons
-    function createCategoryButtons() {
-      const categoryContainer = document.getElementById("category-container");
-      categoryContainer.innerHTML = ''; // Clear existing buttons
-      categories.forEach(category => {
-        const categoryItem = document.createElement("div");
-        categoryItem.className = "category-item";
-
-        const categoryButton = document.createElement("span");
-        categoryButton.className = "category-button";
-        categoryButton.style.backgroundColor = category.color;
-
-        const categoryLabel = document.createElement("span");
-        categoryLabel.className = "category-label";
-        categoryLabel.textContent = category.name;
-
-        categoryItem.appendChild(categoryButton);
-        categoryItem.appendChild(categoryLabel);
-        categoryContainer.appendChild(categoryItem);
-      });
-
-      // Create pagination dots
-      createPaginationDots();
-      updateActiveDot(); // Initial update
-
-      // Apply touch event restrictions after rendering categories
-      restrictCategoryScrolling();
-    }
-
-    // Function to create pagination dots
-    function createPaginationDots() {
-      const paginationContainer = document.getElementById("pagination-container");
-      paginationContainer.innerHTML = ''; // Clear existing dots
-      categories.forEach((_, index) => {
-        const dot = document.createElement("span");
-        dot.className = "pagination-dot";
-        dot.dataset.index = index;
-        paginationContainer.appendChild(dot);
-      });
-      console.log("jiffy: Pagination dots created, count:", categories.length);
-    }
-
-    // Function to update active pagination dot
-    function updateActiveDot() {
-      const categoryContainer = document.getElementById("category-container");
-      const scrollPosition = categoryContainer.scrollLeft;
-      const categoryWidth = 40 + 14; // Width of category button (40px) + gap (14px)
-      const activeIndex = Math.round(scrollPosition / categoryWidth);
-
-      const dots = document.querySelectorAll(".pagination-dot");
-      dots.forEach((dot, index) => {
-        dot.classList.toggle("active", index === activeIndex);
-      });
-    }
-
-    // Add scroll event listener to update active dot
-    document.getElementById("category-container").addEventListener("scroll", updateActiveDot);
-
-    // Function to add a new category
-    function addCategory(name, color) {
-      categories.push({ name, color });
-      console.log("jiffy: Adding category, new list:", categories);
-      localStorage.setItem("jiffyCategories", JSON.stringify(categories));
-      console.log("jiffy: Updated localStorage after adding:", localStorage.getItem("jiffyCategories"));
-      createCategoryButtons();
-    }
-
-    // Function to remove a category
-    function removeCategory(name) {
-      const index = categories.findIndex(category => category.name === name);
-      if (index !== -1) {
-        categories.splice(index, 1);
-        console.log("jiffy: Removing category, new list:", categories);
-        localStorage.setItem("jiffyCategories", JSON.stringify(categories));
-        console.log("jiffy: Updated localStorage after removing:", localStorage.getItem("jiffyCategories"));
-        createCategoryButtons();
+      console.log("jiffy: Checking placeholder containers...");
+      const placeholderCategories = document.getElementById("placeholder-categories");
+      if (placeholderCategories) {
+        console.log("jiffy: Categories placeholder found, bounding rect:", placeholderCategories.getBoundingClientRect());
+      } else {
+        console.error("jiffy: Categories placeholder not found!");
       }
-    }
-
-    // Make the Add button functional
-    const addButton = document.getElementById("add-button");
-    addButton.addEventListener("click", () => {
-      const name = prompt("Enter category name:");
-      if (name) {
-        const color = prompt("Enter color (e.g., #FF0000):", "#FF0000");
-        if (color) {
-          addCategory(name, color);
-        }
-      }
-    });
-
-    // Create category buttons on page load and position the container
-    createCategoryButtons();
-    positionCategoryContainer();
-
-    // Reposition on window resize (e.g., orientation change)
-    window.addEventListener("resize", positionCategoryContainer);
-
-    console.log("jiffy: Page loaded at", new Date());
-    console.log("jiffy: Checking PWA setup...");
-    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-      console.log("jiffy: Running in standalone mode");
-    } else {
-      console.error("jiffy: NOT running in standalone mode");
-    }
-    console.log("jiffy: Checking button container...");
-    const buttonContainer = document.getElementById("button-container");
-    if (buttonContainer) {
-      console.log("jiffy: Button container found, child elements:", buttonContainer.children);
-      console.log("jiffy: Button container bounding rect:", buttonContainer.getBoundingClientRect());
-    } else {
-      console.error("jiffy: Button container not found!");
-    }
-    console.log("jiffy: Checking category container...");
-    const categoryContainer = document.getElementById("category-container");
-    if (categoryContainer) {
-      console.log("jiffy: Category container found, child elements:", categoryContainer.children);
-      console.log("jiffy: Category container bounding rect:", categoryContainer.getBoundingClientRect());
-    } else {
-      console.error("jiffy: Category container not found!");
+    } catch (error) {
+      console.error("jiffy: Error during initialization:", error);
     }
   </script>
 </body>
