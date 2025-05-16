@@ -160,14 +160,14 @@ Future steps will add more elements incrementally.
     }
     #pagination-container {
       position: fixed;
-      bottom: 0; /* Position at the very bottom */
+      bottom: 0;
       left: 0;
       right: 0;
       display: flex;
       justify-content: center;
       gap: 4px;
       z-index: 40;
-      padding-bottom: calc(env(safe-area-inset-bottom) + 5px); /* Ensure space above bottom edge */
+      padding-bottom: calc(env(safe-area-inset-bottom) + 5px);
     }
     .pagination-dot {
       width: 4px;
@@ -220,12 +220,17 @@ Future steps will add more elements incrementally.
   <script src="/jiffy/shared/scripts/eventHandlers.js"></script>
 
   <script>
-    // Initial categories (example categories for testing user-created functionality)
+    // Initial categories (example categories for testing user-created functionality, expanded for testing overflow)
     let categories = [
       { name: "Home", color: "#1E3A8A" },
       { name: "Life", color: "#3B82F6" },
       { name: "Work", color: "#60A5FA" },
-      { name: "School", color: "#93C5FD" }
+      { name: "School", color: "#93C5FD" },
+      { name: "Health", color: "#1E90FF" },
+      { name: "Hobbies", color: "#4682B4" },
+      { name: "Family", color: "#87CEEB" },
+      { name: "Friends", color: "#00BFFF" },
+      { name: "Travel", color: "#5F9EA0" }
     ];
 
     // Load categories from localStorage if available
