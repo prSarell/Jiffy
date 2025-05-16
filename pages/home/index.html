@@ -1,8 +1,9 @@
 <!-- 
 File: /jiffy/pages/home/index.html
-Purpose: A minimal version of jiffy’s home page to focus on fixing horizontal scrolling. It includes:
-  - Category Buttons: Dynamically generated, swipeable horizontally, with predefined colors (example categories: Home, Life, Work, School).
-Future steps will reintroduce other elements incrementally.
+Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with colored placeholders:
+  - Green Square (top): Placeholder for header and action buttons (fixed).
+  - Blue Circle (center): Placeholder for categories (horizontally scrollable).
+  - Orange Rectangle (bottom): Placeholder for pagination dots (fixed).
 -->
 
 <!DOCTYPE html>
@@ -22,17 +23,23 @@ Future steps will reintroduce other elements incrementally.
   <link rel="stylesheet" href="/jiffy/shared/styles/styles.css">
 </head>
 <body>
-  <!-- Categories and Colors Section -->
-  <div id="category-container">
-    <!-- Categories will be dynamically added by JavaScript -->
+  <!-- Placeholder for Header and Action Buttons -->
+  <div id="placeholder-header"></div>
+
+  <!-- Placeholder for Categories (Scrollable) -->
+  <div id="placeholder-categories">
+    <div id="blue-circle"></div>
   </div>
+
+  <!-- Placeholder for Pagination Dots -->
+  <div id="placeholder-pagination"></div>
 
   <!-- Import eventHandlers.js -->
   <script src="/jiffy/shared/scripts/eventHandlers.js"></script>
 
   <script>
-    // Create category buttons on page load
-    setupCategories();
+    // Initialize placeholders (no functionality needed)
+    setupPlaceholders();
 
     console.log("jiffy: Page loaded at", new Date());
     console.log("jiffy: Checking PWA setup...");
@@ -41,13 +48,12 @@ Future steps will reintroduce other elements incrementally.
     } else {
       console.error("jiffy: NOT running in standalone mode");
     }
-    console.log("jiffy: Checking category container...");
-    const categoryContainer = document.getElementById("category-container");
-    if (categoryContainer) {
-      console.log("jiffy: Category container found, child elements:", categoryContainer.children);
-      console.log("jiffy: Category container bounding rect:", categoryContainer.getBoundingClientRect());
+    console.log("jiffy: Checking placeholder containers...");
+    const placeholderCategories = document.getElementById("placeholder-categories");
+    if (placeholderCategories) {
+      console.log("jiffy: Categories placeholder found, bounding rect:", placeholderCategories.getBoundingClientRect());
     } else {
-      console.error("jiffy: Category container not found!");
+      console.error("jiffy: Categories placeholder not found!");
     }
   </script>
 </body>
