@@ -1,7 +1,6 @@
 <!-- 
 File: /jiffy/pages/home/index.html
-Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with a blue circle placeholder:
-  - Blue Circle (center): Placeholder for categories (horizontally scrollable).
+Purpose: A minimal version of jiffy’s home page to test rendering a blue circle in the center of the screen.
 -->
 
 <!DOCTYPE html>
@@ -31,44 +30,21 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       height: 100%;
     }
 
-    #placeholder-categories {
-      position: absolute;
-      top: 50px; /* Fixed position to ensure visibility */
-      left: 0;
-      right: 0;
-      height: 60px; /* Ensure container has height */
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      overflow-y: hidden;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-      touch-action: pan-x;
-      justify-content: center;
-      min-width: 600px; /* Force overflow to ensure scrolling */
-      will-change: scroll-position;
-      border: 1px solid white; /* Add border for visibility */
-    }
-
-    #placeholder-categories::-webkit-scrollbar {
-      display: none;
-    }
-
     #blue-circle {
-      width: 100px; /* Increased size for visibility */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); /* Center the circle precisely */
+      width: 100px;
       height: 100px;
       background-color: blue;
       border-radius: 50%;
-      flex: 0 0 auto;
     }
   </style>
 </head>
 <body>
-  <!-- Placeholder for Categories (Scrollable) -->
-  <div id="placeholder-categories">
-    <div id="blue-circle"></div>
-  </div>
+  <!-- Blue Circle (Centered) -->
+  <div id="blue-circle"></div>
 
   <script>
     try {
@@ -79,14 +55,8 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       } else {
         console.error("jiffy: NOT running in standalone mode");
       }
-      console.log("jiffy: Checking placeholder containers...");
-      const placeholderCategories = document.getElementById("placeholder-categories");
+      console.log("jiffy: Checking blue circle...");
       const blueCircle = document.getElementById("blue-circle");
-      if (placeholderCategories) {
-        console.log("jiffy: Categories placeholder found, bounding rect:", placeholderCategories.getBoundingClientRect());
-      } else {
-        console.error("jiffy: Categories placeholder not found!");
-      }
       if (blueCircle) {
         console.log("jiffy: Blue circle found, bounding rect:", blueCircle.getBoundingClientRect());
       } else {
