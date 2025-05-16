@@ -160,14 +160,14 @@ Future steps will add more elements incrementally.
     }
     #pagination-container {
       position: fixed;
-      bottom: env(safe-area-inset-bottom); /* Position at the very bottom, respecting safe area */
+      bottom: 0; /* Position at the very bottom */
       left: 0;
       right: 0;
       display: flex;
       justify-content: center;
       gap: 4px;
       z-index: 40;
-      padding-bottom: 5px; /* Small padding to avoid edge */
+      padding-bottom: calc(env(safe-area-inset-bottom) + 5px); /* Ensure space above bottom edge */
     }
     .pagination-dot {
       width: 4px;
