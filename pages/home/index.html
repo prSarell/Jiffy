@@ -1,3 +1,4 @@
+
 <!-- 
 File: /jiffy/pages/home/index.html
 Purpose: This file serves as the main entry point for jiffy’s home page after the redirect from /jiffy/index.html. It sets up the PWA configuration (manifest, meta tags, icon links) to ensure the app launches in full-screen mode with the correct icon on the Home Screen. It contains the core UI elements of the app, which are being rebuilt step by step for maximum stability. Currently, it includes:
@@ -30,7 +31,8 @@ Future steps will add more elements incrementally.
       background-color: #000000;
       color: #ffffff;
       padding-top: env(safe-area-inset-top);
-      overflow: hidden; /* Simplify by removing overscroll-behavior */
+      overflow-y: hidden;
+      overscroll-behavior-y: contain;
       position: fixed;
       top: 0;
       left: 0;
@@ -124,13 +126,12 @@ Future steps will add more elements incrementally.
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
       touch-action: pan-x;
+      overscroll-behavior-y: contain;
       gap: 14px;
       z-index: 9;
       padding: 0 12px;
       box-sizing: border-box;
-      justify-content: center; /* Center-justify the categories */
-      min-width: 600px; /* Force overflow to ensure scrolling */
-      will-change: scroll-position;
+      justify-content: center;
     }
     #category-container::-webkit-scrollbar {
       display: none;
@@ -160,14 +161,14 @@ Future steps will add more elements incrementally.
     }
     #pagination-container {
       position: fixed;
-      bottom: 0;
+      bottom: 0; /* Position at the very bottom */
       left: 0;
       right: 0;
       display: flex;
       justify-content: center;
       gap: 4px;
       z-index: 40;
-      padding-bottom: calc(env(safe-area-inset-bottom) + 5px);
+      padding-bottom: calc(env(safe-area-inset-bottom) + 5px); /* Ensure space above bottom edge */
     }
     .pagination-dot {
       width: 4px;
@@ -220,7 +221,7 @@ Future steps will add more elements incrementally.
   <script src="/jiffy/shared/scripts/eventHandlers.js"></script>
 
   <script>
-    // Initial categories (reverted to original four example categories)
+    // Initial categories (example categories for testing user-created functionality)
     let categories = [
       { name: "Home", color: "#1E3A8A" },
       { name: "Life", color: "#3B82F6" },
