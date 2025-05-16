@@ -1,18 +1,6 @@
 function restrictCategoryScrolling() {
   const categoryContainer = document.getElementById("category-container");
 
-  // Allow horizontal scrolling by default, only prevent vertical motion
-  categoryContainer.addEventListener("touchmove", (e) => {
-    const touch = e.touches[0];
-    const deltaX = touch.clientX - touch.startX;
-    const deltaY = touch.clientY - touch.startY;
-
-    // Prevent vertical scrolling if there's any vertical movement
-    if (Math.abs(deltaY) > 0) {
-      e.preventDefault();
-    }
-  }, { passive: false });
-
   // Add long press to delete category
   categoryContainer.querySelectorAll(".category-button").forEach(button => {
     button.addEventListener("touchstart", (e) => {
