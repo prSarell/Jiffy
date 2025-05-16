@@ -30,8 +30,7 @@ Future steps will add more elements incrementally.
       background-color: #000000;
       color: #ffffff;
       padding-top: env(safe-area-inset-top);
-      overflow-y: hidden;
-      overscroll-behavior-y: contain;
+      overflow: hidden; /* Simplify by removing overscroll-behavior */
       position: fixed;
       top: 0;
       left: 0;
@@ -125,14 +124,13 @@ Future steps will add more elements incrementally.
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
       touch-action: pan-x;
-      overscroll-behavior-y: contain;
       gap: 14px;
       z-index: 9;
       padding: 0 12px;
       box-sizing: border-box;
-      justify-content: flex-start;
+      justify-content: center; /* Center-justify the categories */
       min-width: 600px; /* Force overflow to ensure scrolling */
-      will-change: scroll-position; /* Optimize scrolling performance */
+      will-change: scroll-position;
     }
     #category-container::-webkit-scrollbar {
       display: none;
