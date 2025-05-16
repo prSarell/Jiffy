@@ -1,9 +1,6 @@
 <!-- 
 File: /jiffy/pages/home/index.html
-Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with colored placeholders:
-  - Green Square (top): Placeholder for header and action buttons (fixed).
-  - Blue Circle (center): Placeholder for categories (horizontally scrollable).
-  - Orange Rectangle (bottom): Placeholder for pagination dots (fixed).
+Purpose: A minimal version of jiffy’s home page to test rendering a black background.
 -->
 
 <!DOCTYPE html>
@@ -20,40 +17,27 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
   <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/jiffy/assets/icon-180.png">
   <link rel="apple-touch-icon" sizes="512x512" href="/jiffy/assets/icon-512.png">
   <link rel="apple-touch-icon-precomposed" sizes="512x512" href="/jiffy/assets/icon-512.png">
-  <link rel="stylesheet" href="/jiffy/shared/styles/styles.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000000;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
 </head>
 <body>
-  <!-- Placeholder for Header and Action Buttons -->
-  <div id="placeholder-header"></div>
-
-  <!-- Placeholder for Categories (Scrollable) -->
-  <div id="placeholder-categories">
-    <div id="blue-circle"></div>
-  </div>
-
-  <!-- Placeholder for Pagination Dots -->
-  <div id="placeholder-pagination"></div>
-
-  <!-- Import eventHandlers.js -->
-  <script src="/jiffy/shared/scripts/eventHandlers.js"></script>
-
   <script>
-    // Initialize placeholders (no functionality needed)
-    setupPlaceholders();
-
     console.log("jiffy: Page loaded at", new Date());
     console.log("jiffy: Checking PWA setup...");
     if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
       console.log("jiffy: Running in standalone mode");
     } else {
       console.error("jiffy: NOT running in standalone mode");
-    }
-    console.log("jiffy: Checking placeholder containers...");
-    const placeholderCategories = document.getElementById("placeholder-categories");
-    if (placeholderCategories) {
-      console.log("jiffy: Categories placeholder found, bounding rect:", placeholderCategories.getBoundingClientRect());
-    } else {
-      console.error("jiffy: Categories placeholder not found!");
     }
   </script>
 </body>
