@@ -27,15 +27,23 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: #f0f0f0;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
     }
 
     .scroll-container {
       display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
       overflow-x: auto;
+      overflow-y: hidden;
       scroll-snap-type: x mandatory;
       padding: 16px;
       gap: 16px;
       -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+      touch-action: pan-x pinch-zoom; /* Ensure horizontal scrolling */
+      width: 100%; /* Ensure container takes full width */
     }
 
     .scroll-item {
@@ -76,6 +84,33 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
     <div class="scroll-item">Item 4</div>
     <div class="scroll-item">Item 5</div>
   </div>
-  <script src="/jiffy/shared/scripts/eventHandlers.js"></script>
+  <script>
+    try {
+      console.log("jiffy: Page loaded at", new Date());
+      console.log("jiffy: Checking PWA setup...");
+      if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+        console.log("jiffy: Running in standalone mode");
+      } else {
+        console.error("jiffy: NOT running in standalone mode");
+      }
+      console.log("jiffy: Checking scroll container...");
+      const scrollContainer = document.getElementById("scrollContainer");
+      const scrollItems = document.querySelectorAll(".scroll-item");
+      if (scrollContainer) {
+        console.log("jiffy: Scroll container found, bounding rect:", scrollContainer.getBoundingClientRect());
+      } else {
+        console.error("jiffy: Scroll container not found!");
+      }
+      if (scrollItems.length > 0) {
+        scrollItems.forEach((item, index) => {
+          console.log(`jiffy: Scroll item ${index + 1} found, bounding rect:`, item.getBoundingClientRect());
+        });
+      } else {
+        console.error("jiffy: Scroll items not found!");
+      }
+    } catch (error) {
+      console.error("jiffy: Error during initialization:", error);
+    }
+  </script>
 </body>
 </html>
