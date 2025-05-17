@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   scrollContainer.addEventListener('touchmove', (e) => {
     if (!isScrolling) return;
-    e.preventDefault(); // Prevent vertical scroll
+    e.preventDefault();
     const x = e.touches[0].pageX;
     scrollLeft = x - startX;
     scrollContainer.scrollLeft = scrollLeft;
@@ -36,5 +36,18 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     console.error("jiffy: NOT running in standalone mode");
   }
-  console.log("jiffy: Scroll container bounding rect:", scrollContainer.getBoundingClientRect());
+  console.log("jiffy: Checking scroll container...");
+  const scrollItems = document.querySelectorAll(".scroll-item");
+  if (scrollContainer) {
+    console.log("jiffy: Scroll container found, bounding rect:", scrollContainer.getBoundingClientRect());
+  } else {
+    console.error("jiffy: Scroll container not found!");
+  }
+  if (scrollItems.length > 0) {
+    scrollItems.forEach((item, index) => {
+      console.log(`jiffy: Scroll item ${index + 1} found, bounding rect:`, item.getBoundingClientRect());
+    });
+  } else {
+    console.error("jiffy: Scroll items not found!");
+  }
 });
