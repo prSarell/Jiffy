@@ -40,7 +40,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       top: 0;
       left: 0;
       width: 100%;
-      height: 50px;
+      height: 100px; /* Doubled from 50px */
       background-color: green;
       z-index: 30;
     }
@@ -48,7 +48,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
     .swiper {
       width: 100%;
       position: absolute;
-      top: 50px; /* Below the header */
+      top: 100px; /* Adjusted to start below the doubled header */
       bottom: 20px; /* Above the pagination dots */
       padding: 16px;
       touch-action: pan-x pinch-zoom;
@@ -56,12 +56,12 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
     }
 
     .swiper-wrapper {
-      height: 100%; /* Match the full height of the .swiper container */
+      height: 100%;
     }
 
     .swiper-slide {
       width: 80%;
-      height: 100%; /* Match the full height of the .swiper container */
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
