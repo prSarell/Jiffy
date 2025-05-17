@@ -1,6 +1,6 @@
 <!-- 
 File: /jiffy/pages/home/index.html
-Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with colored items.
+Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with colored items using Swiper.js.
 -->
 
 <!DOCTYPE html>
@@ -22,6 +22,8 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
   <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/jiffy/assets/icon-180.png">
   <link rel="apple-touch-icon" sizes="512x512" href="/jiffy/assets/icon-512.png">
   <link rel="apple-touch-icon-precomposed" sizes="512x512" href="/jiffy/assets/icon-512.png">
+  <!-- Swiper.js CSS via CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css">
   <style>
     body {
       margin: 0;
@@ -32,28 +34,16 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       height: 100vh;
     }
 
-    .scroll-container {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      overflow-y: hidden;
-      scroll-snap-type: x mandatory;
-      padding: 16px;
-      gap: 16px;
-      -webkit-overflow-scrolling: touch;
-      touch-action: pan-x pinch-zoom;
+    .swiper {
       width: 100%;
-      overscroll-behavior-x: contain;
-      -webkit-user-select: none; /* Prevent text selection */
-      user-select: none;
+      height: 232px; /* 200px height + 16px padding on top/bottom */
+      padding: 16px;
     }
 
-    .scroll-item {
-      flex: 0 0 80%;
+    .swiper-slide {
+      width: 80%;
       height: 200px;
       border-radius: 8px;
-      scroll-snap-align: start;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -64,33 +54,36 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       user-select: none;
     }
 
-    .scroll-item:nth-child(1) { background-color: #ff6b6b; }
-    .scroll-item:nth-child(2) { background-color: #4ecdc4; }
-    .scroll-item:nth-child(3) { background-color: #45b7d1; }
-    .scroll-item:nth-child(4) { background-color: #96ceb4; }
-    .scroll-item:nth-child(5) { background-color: #ffeead; }
-
-    .scroll-container::-webkit-scrollbar {
-      display: none;
-    }
-
-    .scroll-container {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
+    .swiper-slide:nth-child(1) { background-color: #ff6b6b; }
+    .swiper-slide:nth-child(2) { background-color: #4ecdc4; }
+    .swiper-slide:nth-child(3) { background-color: #45b7d1; }
+    .swiper-slide:nth-child(4) { background-color: #96ceb4; }
+    .swiper-slide:nth-child(5) { background-color: #ffeead; }
   </style>
 </head>
 <body>
-  <div class="scroll-container" id="scrollContainer">
-    <div class="scroll-item">Item 1</div>
-    <div class="scroll-item">Item 2</div>
-    <div class="scroll-item">Item 3</div>
-    <div class="scroll-item">Item 4</div>
-    <div class="scroll-item">Item 5</div>
+  <!-- Swiper.js container -->
+  <div class="swiper" id="scrollSwiper">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide">Item 1</div>
+      <div class="swiper-slide">Item 2</div>
+      <div class="swiper-slide">Item 3</div>
+      <div class="swiper-slide">Item 4</div>
+      <div class="swiper-slide">Item 5</div>
+    </div>
   </div>
+  <!-- Swiper.js via CDN -->
+  <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const scrollContainer = document.getElementById('scrollContainer');
+      // Initialize Swiper
+      const swiper = new Swiper('#scrollSwiper', {
+        slidesPerView: 'auto',
+        spaceBetween: 16,
+        centeredSlides: false,
+        slideToClickedSlide: true,
+        grabCursor: true
+      });
 
       // Add console logging for debugging
       console.log("jiffy: Page loaded at", new Date());
@@ -100,19 +93,20 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       } else {
         console.error("jiffy: NOT running in standalone mode");
       }
-      console.log("jiffy: Checking scroll container...");
-      const scrollItems = document.querySelectorAll(".scroll-item");
-      if (scrollContainer) {
-        console.log("jiffy: Scroll container found, bounding rect:", scrollContainer.getBoundingClientRect());
+      console.log("jiffy: Checking swiper container...");
+      const swiperContainer = document.getElementById("scrollSwiper");
+      const swiperSlides = document.querySelectorAll(".swiper-slide");
+      if (swiperContainer) {
+        console.log("jiffy: Swiper container found, bounding rect:", swiperContainer.getBoundingClientRect());
       } else {
-        console.error("jiffy: Scroll container not found!");
+        console.error("jiffy: Swiper container not found!");
       }
-      if (scrollItems.length > 0) {
-        scrollItems.forEach((item, index) => {
-          console.log(`jiffy: Scroll item ${index + 1} found, bounding rect:`, item.getBoundingClientRect());
+      if (swiperSlides.length > 0) {
+        swiperSlides.forEach((slide, index) => {
+          console.log(`jiffy: Swiper slide ${index + 1} found, bounding rect:`, slide.getBoundingClientRect());
         });
       } else {
-        console.error("jiffy: Scroll items not found!");
+        console.error("jiffy: Swiper slides not found!");
       }
     });
   </script>
