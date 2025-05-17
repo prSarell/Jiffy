@@ -1,40 +1,44 @@
 /* styles.css for jiffy app */
 body {
   margin: 0;
-  padding: 0;
-  background-color: #000000;
-  overflow: hidden;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #f0f0f0;
 }
 
-#scroll-container {
+.scroll-container {
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
   overflow-x: auto;
-  overflow-y: hidden;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-x;
-  overscroll-behavior-x: contain;
-  justify-content: flex-start;
-  min-width: 1000px; /* Force overflow for scrolling */
-  height: 120px;
-  border: 1px solid white; /* For visibility */
+  scroll-snap-type: x mandatory;
+  padding: 16px;
+  gap: 16px;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
-#scroll-container::-webkit-scrollbar {
+.scroll-item {
+  flex: 0 0 80%;
+  height: 200px;
+  border-radius: 8px;
+  scroll-snap-align: start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.scroll-item:nth-child(1) { background-color: #ff6b6b; }
+.scroll-item:nth-child(2) { background-color: #4ecdc4; }
+.scroll-item:nth-child(3) { background-color: #45b7d1; }
+.scroll-item:nth-child(4) { background-color: #96ceb4; }
+.scroll-item:nth-child(5) { background-color: #ffeead; }
+
+/* Hide scrollbar for cleaner look */
+.scroll-container::-webkit-scrollbar {
   display: none;
 }
 
-.scroll-circle {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  flex: 0 0 auto;
-  margin: 10px;
+.scroll-container {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
