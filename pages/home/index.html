@@ -22,7 +22,51 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
   <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/jiffy/assets/icon-180.png">
   <link rel="apple-touch-icon" sizes="512x512" href="/jiffy/assets/icon-512.png">
   <link rel="apple-touch-icon-precomposed" sizes="512x512" href="/jiffy/assets/icon-512.png">
-  <link rel="stylesheet" href="/jiffy/shared/styles/styles.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .scroll-container {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 16px;
+      gap: 16px;
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
+
+    .scroll-item {
+      flex: 0 0 80%;
+      height: 200px;
+      border-radius: 8px;
+      scroll-snap-align: start;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .scroll-item:nth-child(1) { background-color: #ff6b6b; }
+    .scroll-item:nth-child(2) { background-color: #4ecdc4; }
+    .scroll-item:nth-child(3) { background-color: #45b7d1; }
+    .scroll-item:nth-child(4) { background-color: #96ceb4; }
+    .scroll-item:nth-child(5) { background-color: #ffeead; }
+
+    /* Hide scrollbar for cleaner look */
+    .scroll-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scroll-container {
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+  </style>
 </head>
 <body>
   <div class="scroll-container" id="scrollContainer">
