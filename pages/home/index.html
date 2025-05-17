@@ -1,9 +1,6 @@
 <!-- 
 File: /jiffy/pages/home/index.html
-Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with placeholders:
-  - Green Square (top): Placeholder for header and action buttons (fixed).
-  - Blue Circles (center): Placeholder for categories (horizontally scrollable).
-  - Orange Rectangle (bottom): Placeholder for pagination dots (fixed).
+Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with colored circles.
 -->
 
 <!DOCTYPE html>
@@ -13,7 +10,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>jiffy - ADHD Task Manager</title>
+  <title>jiffy - Horizontal Scroll Test</title>
   <link rel="apple-touch-icon" href="/jiffy/assets/icon-180.png">
   <link rel="apple-touch-icon-precomposed" href="/jiffy/assets/icon-180.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/jiffy/assets/icon-180.png">
@@ -23,28 +20,17 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
   <link rel="stylesheet" href="/jiffy/shared/styles/styles.css">
 </head>
 <body>
-  <!-- Placeholder for Header and Action Buttons -->
-  <div id="placeholder-header"></div>
-
-  <!-- Placeholder for Categories (Scrollable) -->
-  <div id="placeholder-categories">
-    <div class="blue-circle"></div>
-    <div class="blue-circle"></div>
-    <div class="blue-circle"></div>
-    <div class="blue-circle"></div>
+  <!-- Container for Horizontal Scrolling Test -->
+  <div id="scroll-container">
+    <!-- Circles will be added dynamically by JavaScript -->
   </div>
-
-  <!-- Placeholder for Pagination Dots -->
-  <div id="placeholder-pagination"></div>
-
-  <div id="test-text">Test Text</div>
 
   <!-- Import eventHandlers.js -->
   <script src="/jiffy/shared/scripts/eventHandlers.js"></script>
 
   <script>
     try {
-      setupPlaceholders();
+      setupScrollTest();
 
       console.log("jiffy: Page loaded at", new Date());
       console.log("jiffy: Checking PWA setup...");
@@ -53,38 +39,20 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       } else {
         console.error("jiffy: NOT running in standalone mode");
       }
-      console.log("jiffy: Checking elements...");
-      const placeholderHeader = document.getElementById("placeholder-header");
-      const placeholderCategories = document.getElementById("placeholder-categories");
-      const blueCircles = document.querySelectorAll(".blue-circle");
-      const placeholderPagination = document.getElementById("placeholder-pagination");
-      const testText = document.getElementById("test-text");
-      if (placeholderHeader) {
-        console.log("jiffy: Header placeholder found, bounding rect:", placeholderHeader.getBoundingClientRect());
+      console.log("jiffy: Checking scroll container...");
+      const scrollContainer = document.getElementById("scroll-container");
+      const scrollCircles = document.querySelectorAll(".scroll-circle");
+      if (scrollContainer) {
+        console.log("jiffy: Scroll container found, bounding rect:", scrollContainer.getBoundingClientRect());
       } else {
-        console.error("jiffy: Header placeholder not found!");
+        console.error("jiffy: Scroll container not found!");
       }
-      if (placeholderCategories) {
-        console.log("jiffy: Categories placeholder found, bounding rect:", placeholderCategories.getBoundingClientRect());
-      } else {
-        console.error("jiffy: Categories placeholder not found!");
-      }
-      if (blueCircles.length > 0) {
-        blueCircles.forEach((circle, index) => {
-          console.log(`jiffy: Blue circle ${index + 1} found, bounding rect:`, circle.getBoundingClientRect());
+      if (scrollCircles.length > 0) {
+        scrollCircles.forEach((circle, index) => {
+          console.log(`jiffy: Scroll circle ${index + 1} found, bounding rect:`, circle.getBoundingClientRect());
         });
       } else {
-        console.error("jiffy: Blue circles not found!");
-      }
-      if (placeholderPagination) {
-        console.log("jiffy: Pagination placeholder found, bounding rect:", placeholderPagination.getBoundingClientRect());
-      } else {
-        console.error("jiffy: Pagination placeholder not found!");
-      }
-      if (testText) {
-        console.log("jiffy: Test text found, bounding rect:", testText.getBoundingClientRect());
-      } else {
-        console.error("jiffy: Test text not found!");
+        console.error("jiffy: Scroll circles not found!");
       }
     } catch (error) {
       console.error("jiffy: Error during initialization:", error);
