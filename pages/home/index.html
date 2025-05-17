@@ -1,6 +1,6 @@
 <!-- 
 File: /jiffy/pages/home/index.html
-Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with colored items using Swiper.js.
+Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with Jiffy categories using Swiper.js.
 -->
 
 <!DOCTYPE html>
@@ -47,33 +47,50 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
 
     .swiper {
       width: 100%;
-      height: 232px; /* 200px height + 16px padding on top/bottom */
-      padding: 16px;
-      touch-action: pan-x pinch-zoom;
       position: absolute;
-      top: 50px;
-      bottom: 20px;
+      top: 50px; /* Below the header */
+      bottom: 20px; /* Above the pagination dots */
+      padding: 8px 12px;
+      touch-action: pan-x pinch-zoom;
+      overflow: hidden;
+    }
+
+    .swiper-wrapper {
+      height: 72px; /* 40px button height + 6px label margin + 8px label height + 16px padding */
     }
 
     .swiper-slide {
-      width: 80%;
-      height: 200px;
-      border-radius: 8px;
+      width: 54px; /* 40px button width + 14px gap (handled by spaceBetween) */
+      height: 46px; /* 40px button + 6px margin for label */
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
       -webkit-user-select: none;
       user-select: none;
     }
 
-    .swiper-slide:nth-child(1) { background-color: #ff6b6b; }
-    .swiper-slide:nth-child(2) { background-color: #4ecdc4; }
-    .swiper-slide:nth-child(3) { background-color: #45b7d1; }
-    .swiper-slide:nth-child(4) { background-color: #96ceb4; }
-    .swiper-slide:nth-child(5) { background-color: #ffeead; }
+    .category-button {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .category-button:nth-child(1) { background-color: #ff6b6b; }
+    .category-button:nth-child(2) { background-color: #4ecdc4; }
+    .category-button:nth-child(3) { background-color: #45b7d1; }
+    .category-button:nth-child(4) { background-color: #96ceb4; }
+    .category-button:nth-child(5) { background-color: #ffeead; }
+
+    .category-label {
+      margin-top: 6px;
+      font-size: 8px;
+      font-weight: 400;
+      text-align: center;
+      color: #ffffff;
+    }
 
     #placeholder-pagination {
       position: fixed;
@@ -94,11 +111,26 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
   <!-- Swiper.js container -->
   <div class="swiper" id="scrollSwiper">
     <div class="swiper-wrapper">
-      <div class="swiper-slide">Item 1</div>
-      <div class="swiper-slide">Item 2</div>
-      <div class="swiper-slide">Item 3</div>
-      <div class="swiper-slide">Item 4</div>
-      <div class="swiper-slide">Item 5</div>
+      <div class="swiper-slide">
+        <div class="category-button"></div>
+        <div class="category-label">Home</div>
+      </div>
+      <div class="swiper-slide">
+        <div class="category-button"></div>
+        <div class="category-label">Life</div>
+      </div>
+      <div class="swiper-slide">
+        <div class="category-button"></div>
+        <div class="category-label">Work</div>
+      </div>
+      <div class="swiper-slide">
+        <div class="category-button"></div>
+        <div class="category-label">School</div>
+      </div>
+      <div class="swiper-slide">
+        <div class="category-button"></div>
+        <div class="category-label">Extra</div>
+      </div>
     </div>
   </div>
 
@@ -112,7 +144,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       // Initialize Swiper
       const swiper = new Swiper('#scrollSwiper', {
         slidesPerView: 'auto',
-        spaceBetween: 16,
+        spaceBetween: 14,
         centeredSlides: false,
         slideToClickedSlide: true,
         grabCursor: true
