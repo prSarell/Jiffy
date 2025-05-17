@@ -1,10 +1,18 @@
-// Placeholder script with no functionality for now
-function setupPlaceholders() {
-  // No functionality needed for this minimal setup
+function setupScrollTest() {
+  const scrollContainer = document.getElementById("scroll-container");
+  const colors = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF"]; // Red, Green, Blue, Yellow, Magenta
+
+  // Generate 5 colored circles
+  colors.forEach(color => {
+    const circle = document.createElement("div");
+    circle.className = "scroll-circle";
+    circle.style.backgroundColor = color;
+    scrollContainer.appendChild(circle);
+  });
 }
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { setupPlaceholders };
+  module.exports = { setupScrollTest };
 } else {
-  window.setupPlaceholders = setupPlaceholders;
+  window.setupScrollTest = setupScrollTest;
 }
