@@ -45,18 +45,28 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       z-index: 30;
     }
 
-    .swiper {
-      width: 100%;
+    .swiper-touch-overlay {
       position: absolute;
       top: 50px; /* Below the header */
       bottom: 20px; /* Above the pagination dots */
+      left: 0;
+      right: 0;
+      z-index: 10;
+      touch-action: none; /* Prevent default touch behavior */
+    }
+
+    .swiper {
+      width: 100%;
+      height: 72px; /* 40px button height + 6px label margin + 8px label height + 16px padding */
       padding: 8px 12px;
       touch-action: pan-x pinch-zoom;
-      overflow: hidden;
+      position: absolute;
+      top: 50px; /* Align with the top of the overlay */
+      z-index: 20; /* Above the overlay */
     }
 
     .swiper-wrapper {
-      height: 72px; /* 40px button height + 6px label margin + 8px label height + 16px padding */
+      height: 72px;
     }
 
     .swiper-slide {
@@ -134,6 +144,9 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
     </div>
   </div>
 
+  <!-- Touch overlay to capture swipe events -->
+  <div class="swiper-touch-overlay" id="swiperTouchOverlay"></div>
+
   <!-- Placeholder for Pagination Dots -->
   <div id="placeholder-pagination"></div>
 
@@ -148,6 +161,54 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
         centeredSlides: false,
         slideToClickedSlide: true,
         grabCursor: true
+      });
+
+      // Capture touch events on the overlay and forward to Swiper
+      const touchOverlay = document.getElementById('swiperTouchOverlay');
+      let startX = 0;
+      let startY = 0;
+      let isSwiping = false;
+
+      touchOverlay.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].pageX;
+        startY = e.touches[0].pageY;
+        isSwiping = true;
+        swiper.allowTouchMove = true;
+      });
+
+      touchOverlay.addEventListener('touchmove', (e) => {
+        if (!isSwiping) return;
+        const deltaX = Math.abs(e.touches[0].pageX - startX);
+        const deltaY = Math.abs(e.touches[0].pageY - startY);
+        if (deltaY > deltaX) {
+          // Primarily vertical swipe, disable Swiper touch
+          swiper.allowTouchMove = false;
+          isSwiping = false;
+          return;
+        }
+        // Forward touch event to Swiper
+        const touchEvent = new TouchEvent('touchmove', {
+          touches: e.touches,
+          targetTouches: e.targetTouches,
+          changedTouches: e.changedTouches,
+          bubbles: true,
+          cancelable: true
+        });
+        swiper.el.dispatchEvent(touchEvent);
+      });
+
+      touchOverlay.addEventListener('touchend', (e) => {
+        if (!isSwiping) return;
+        isSwiping = false;
+        swiper.allowTouchMove = true;
+        const touchEvent = new TouchEvent('touchend', {
+          touches: e.touches,
+          targetTouches: e.targetTouches,
+          changedTouches: e.changedTouches,
+          bubbles: true,
+          cancelable: true
+        });
+        swiper.el.dispatchEvent(touchEvent);
       });
 
       // Add console logging for debugging
