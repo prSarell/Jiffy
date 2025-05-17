@@ -93,26 +93,22 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
         e.preventDefault();
       });
 
-      // Enhance touch scrolling with momentum
-      let isScrolling = false;
+      // Simplified touch handling to allow native horizontal scrolling
       let startX = 0;
-      let scrollLeft = 0;
+      let startY = 0;
 
       scrollContainer.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].pageX - scrollLeft;
-        isScrolling = true;
+        startX = e.touches[0].pageX;
+        startY = e.touches[0].pageY;
       });
 
       scrollContainer.addEventListener('touchmove', (e) => {
-        if (!isScrolling) return;
-        e.preventDefault();
-        const x = e.touches[0].pageX;
-        scrollLeft = x - startX;
-        scrollContainer.scrollLeft = scrollLeft;
-      });
-
-      scrollContainer.addEventListener('touchend', () => {
-        isScrolling = false;
+        const deltaX = Math.abs(e.touches[0].pageX - startX);
+        const deltaY = Math.abs(e.touches[0].pageY - startY);
+        // Only prevent default if the swipe is primarily vertical
+        if (deltaY > deltaX) {
+          e.preventDefault();
+        }
       });
 
       // Add console logging for debugging
