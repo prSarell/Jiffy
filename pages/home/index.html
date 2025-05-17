@@ -1,6 +1,6 @@
 <!-- 
 File: /jiffy/pages/home/index.html
-Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with Jiffy categories using Swiper.js.
+Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with colored squares using Swiper.js.
 -->
 
 <!DOCTYPE html>
@@ -45,62 +45,42 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       z-index: 30;
     }
 
-    .swiper-touch-overlay {
+    .swiper {
+      width: 100%;
       position: absolute;
       top: 50px; /* Below the header */
       bottom: 20px; /* Above the pagination dots */
-      left: 0;
-      right: 0;
-      z-index: 10;
-      touch-action: none; /* Prevent default touch behavior */
-    }
-
-    .swiper {
-      width: 100%;
-      height: 72px; /* 40px button height + 6px label margin + 8px label height + 16px padding */
-      padding: 8px 12px;
+      padding: 16px;
       touch-action: pan-x pinch-zoom;
-      position: absolute;
-      top: 50px; /* Align with the top of the overlay */
-      z-index: 20; /* Above the overlay */
+      overflow: hidden;
+      display: flex;
+      align-items: center; /* Center the slides vertically within the container */
     }
 
     .swiper-wrapper {
-      height: 72px;
+      display: flex;
+      align-items: center;
     }
 
     .swiper-slide {
-      width: 54px; /* 40px button width + 14px gap (handled by spaceBetween) */
-      height: 46px; /* 40px button + 6px margin for label */
+      width: 80%;
+      height: 200px;
+      border-radius: 8px;
       display: flex;
-      flex-direction: column;
       align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
       -webkit-user-select: none;
       user-select: none;
     }
 
-    .category-button {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .category-button:nth-child(1) { background-color: #ff6b6b; }
-    .category-button:nth-child(2) { background-color: #4ecdc4; }
-    .category-button:nth-child(3) { background-color: #45b7d1; }
-    .category-button:nth-child(4) { background-color: #96ceb4; }
-    .category-button:nth-child(5) { background-color: #ffeead; }
-
-    .category-label {
-      margin-top: 6px;
-      font-size: 8px;
-      font-weight: 400;
-      text-align: center;
-      color: #ffffff;
-    }
+    .swiper-slide:nth-child(1) { background-color: #ff6b6b; }
+    .swiper-slide:nth-child(2) { background-color: #4ecdc4; }
+    .swiper-slide:nth-child(3) { background-color: #45b7d1; }
+    .swiper-slide:nth-child(4) { background-color: #96ceb4; }
+    .swiper-slide:nth-child(5) { background-color: #ffeead; }
 
     #placeholder-pagination {
       position: fixed;
@@ -121,31 +101,13 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
   <!-- Swiper.js container -->
   <div class="swiper" id="scrollSwiper">
     <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Home</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Life</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Work</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">School</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Extra</div>
-      </div>
+      <div class="swiper-slide">Item 1</div>
+      <div class="swiper-slide">Item 2</div>
+      <div class="swiper-slide">Item 3</div>
+      <div class="swiper-slide">Item 4</div>
+      <div class="swiper-slide">Item 5</div>
     </div>
   </div>
-
-  <!-- Touch overlay to capture swipe events -->
-  <div class="swiper-touch-overlay" id="swiperTouchOverlay"></div>
 
   <!-- Placeholder for Pagination Dots -->
   <div id="placeholder-pagination"></div>
@@ -157,58 +119,10 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       // Initialize Swiper
       const swiper = new Swiper('#scrollSwiper', {
         slidesPerView: 'auto',
-        spaceBetween: 14,
+        spaceBetween: 16,
         centeredSlides: false,
         slideToClickedSlide: true,
         grabCursor: true
-      });
-
-      // Capture touch events on the overlay and forward to Swiper
-      const touchOverlay = document.getElementById('swiperTouchOverlay');
-      let startX = 0;
-      let startY = 0;
-      let isSwiping = false;
-
-      touchOverlay.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].pageX;
-        startY = e.touches[0].pageY;
-        isSwiping = true;
-        swiper.allowTouchMove = true;
-      });
-
-      touchOverlay.addEventListener('touchmove', (e) => {
-        if (!isSwiping) return;
-        const deltaX = Math.abs(e.touches[0].pageX - startX);
-        const deltaY = Math.abs(e.touches[0].pageY - startY);
-        if (deltaY > deltaX) {
-          // Primarily vertical swipe, disable Swiper touch
-          swiper.allowTouchMove = false;
-          isSwiping = false;
-          return;
-        }
-        // Forward touch event to Swiper
-        const touchEvent = new TouchEvent('touchmove', {
-          touches: e.touches,
-          targetTouches: e.targetTouches,
-          changedTouches: e.changedTouches,
-          bubbles: true,
-          cancelable: true
-        });
-        swiper.el.dispatchEvent(touchEvent);
-      });
-
-      touchOverlay.addEventListener('touchend', (e) => {
-        if (!isSwiping) return;
-        isSwiping = false;
-        swiper.allowTouchMove = true;
-        const touchEvent = new TouchEvent('touchend', {
-          touches: e.touches,
-          targetTouches: e.targetTouches,
-          changedTouches: e.changedTouches,
-          bubbles: true,
-          cancelable: true
-        });
-        swiper.el.dispatchEvent(touchEvent);
       });
 
       // Add console logging for debugging
