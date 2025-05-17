@@ -3,15 +3,24 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: #f0f0f0;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
 }
 
 .scroll-container {
   display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   overflow-x: auto;
+  overflow-y: hidden;
   scroll-snap-type: x mandatory;
   padding: 16px;
   gap: 16px;
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pinch-zoom;
+  width: 100%;
+  overscroll-behavior-x: contain;
 }
 
 .scroll-item {
@@ -33,12 +42,11 @@ body {
 .scroll-item:nth-child(4) { background-color: #96ceb4; }
 .scroll-item:nth-child(5) { background-color: #ffeead; }
 
-/* Hide scrollbar for cleaner look */
 .scroll-container::-webkit-scrollbar {
   display: none;
 }
 
 .scroll-container {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
