@@ -1,16 +1,21 @@
 <!-- 
 File: /jiffy/pages/home/index.html
-Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with colored circles.
+Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with colored items.
 -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <!-- iOS-specific meta tags for PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>jiffy - Horizontal Scroll Test</title>
+  <meta name="apple-mobile-web-app-title" content="Scroll Test">
+  <title>Horizontal Scroll Test App</title>
+  <!-- Link to manifest.json -->
+  <link rel="manifest" href="/jiffy/manifest.json">
+  <!-- Link to icons for iOS, aligned with manifest.json -->
   <link rel="apple-touch-icon" href="/jiffy/assets/icon-180.png">
   <link rel="apple-touch-icon-precomposed" href="/jiffy/assets/icon-180.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/jiffy/assets/icon-180.png">
@@ -20,43 +25,13 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
   <link rel="stylesheet" href="/jiffy/shared/styles/styles.css">
 </head>
 <body>
-  <!-- Container for Horizontal Scrolling Test -->
-  <div id="scroll-container">
-    <!-- Circles will be added dynamically by JavaScript -->
+  <div class="scroll-container" id="scrollContainer">
+    <div class="scroll-item">Item 1</div>
+    <div class="scroll-item">Item 2</div>
+    <div class="scroll-item">Item 3</div>
+    <div class="scroll-item">Item 4</div>
+    <div class="scroll-item">Item 5</div>
   </div>
-
-  <!-- Import eventHandlers.js -->
   <script src="/jiffy/shared/scripts/eventHandlers.js"></script>
-
-  <script>
-    try {
-      setupScrollTest();
-
-      console.log("jiffy: Page loaded at", new Date());
-      console.log("jiffy: Checking PWA setup...");
-      if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-        console.log("jiffy: Running in standalone mode");
-      } else {
-        console.error("jiffy: NOT running in standalone mode");
-      }
-      console.log("jiffy: Checking scroll container...");
-      const scrollContainer = document.getElementById("scroll-container");
-      const scrollCircles = document.querySelectorAll(".scroll-circle");
-      if (scrollContainer) {
-        console.log("jiffy: Scroll container found, bounding rect:", scrollContainer.getBoundingClientRect());
-      } else {
-        console.error("jiffy: Scroll container not found!");
-      }
-      if (scrollCircles.length > 0) {
-        scrollCircles.forEach((circle, index) => {
-          console.log(`jiffy: Scroll circle ${index + 1} found, bounding rect:`, circle.getBoundingClientRect());
-        });
-      } else {
-        console.error("jiffy: Scroll circles not found!");
-      }
-    } catch (error) {
-      console.error("jiffy: Error during initialization:", error);
-    }
-  </script>
 </body>
 </html>
