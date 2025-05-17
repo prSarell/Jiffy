@@ -45,6 +45,8 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       touch-action: pan-x pinch-zoom;
       width: 100%;
       overscroll-behavior-x: contain;
+      -webkit-user-select: none; /* Prevent text selection */
+      user-select: none;
     }
 
     .scroll-item {
@@ -58,6 +60,8 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       color: white;
       font-size: 24px;
       font-weight: bold;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     .scroll-item:nth-child(1) { background-color: #ff6b6b; }
@@ -87,33 +91,6 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const scrollContainer = document.getElementById('scrollContainer');
-
-      // Prevent pinch-to-zoom and double-tap zoom on iPhone
-      document.addEventListener('gesturestart', (e) => {
-        e.preventDefault();
-      });
-
-      // Restore original touch scrolling with momentum
-      let isScrolling = false;
-      let startX = 0;
-      let scrollLeft = 0;
-
-      scrollContainer.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].pageX - scrollLeft;
-        isScrolling = true;
-      });
-
-      scrollContainer.addEventListener('touchmove', (e) => {
-        if (!isScrolling) return;
-        e.preventDefault();
-        const x = e.touches[0].pageX;
-        scrollLeft = x - startX;
-        scrollContainer.scrollLeft = scrollLeft;
-      });
-
-      scrollContainer.addEventListener('touchend', () => {
-        isScrolling = false;
-      });
 
       // Add console logging for debugging
       console.log("jiffy: Page loaded at", new Date());
