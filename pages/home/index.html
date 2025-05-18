@@ -7,7 +7,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <!-- iOS-specific meta tags for PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -40,34 +40,44 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       top: 0;
       left: 0;
       width: 100%;
-      height: 110px;
+      height: 60px;
       background-color: #333;
       z-index: 30;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding-top: 20px;
     }
 
-    #burger-menu {
+    #select-button {
       position: absolute;
       left: 16px;
-      font-size: 24px;
+      font-size: 12px;
       color: #ffffff;
       cursor: pointer;
       padding: 8px;
     }
 
     #app-title {
-      font-size: 32px;
+      font-size: 16px;
       font-weight: bold;
       color: #ffffff;
       text-align: center;
     }
 
+    #burger-menu {
+      position: absolute;
+      right: 16px;
+      font-size: 24px;
+      color: #ffffff;
+      cursor: pointer;
+      padding: 8px;
+    }
+
     .swiper {
       width: 100%;
       position: absolute;
-      top: 110px;
+      top: 60px;
       bottom: 20px;
       padding: 16px;
       touch-action: pan-x pinch-zoom;
@@ -134,10 +144,11 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
   </style>
 </head>
 <body>
-  <!-- Header with Title and Burger Menu -->
+  <!-- Header with Select Button, Title, and Burger Menu -->
   <div id="title-bar">
-    <div id="burger-menu" onclick="console.log('Burger menu clicked')">☰</div>
+    <div id="select-button" onclick="console.log('Select button clicked')">select</div>
     <div id="app-title">Jiffy</div>
+    <div id="burger-menu" onclick="console.log('Burger menu clicked')">☰</div>
   </div>
 
   <!-- Swiper.js container -->
