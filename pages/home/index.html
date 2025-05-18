@@ -137,7 +137,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       height: 100%;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: center; /* Already centered horizontally */
       -webkit-user-select: none;
       user-select: none;
     }
@@ -149,7 +149,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
 
     /* Add margin-top to drop example categories down */
     .swiper-slide:nth-child(-n+4) .category-button {
-      margin-top: 24px; /* Slightly more than half the button width (40px / 2 = 20px + 4px) */
+      margin-top: 26px; /* Increased by 2px (5% of 40px height) from 24px */
     }
 
     /* Colored Squares (last 4 slides) */
