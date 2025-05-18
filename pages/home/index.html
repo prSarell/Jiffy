@@ -24,7 +24,80 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
   <link rel="apple-touch-icon-precomposed" sizes="512x512" href="/jiffy/assets/icon-512.png">
   <!-- Swiper.js CSS via CDN -->
   <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css" id="swiper-css">
-  <link rel="stylesheet" href="/jiffy/shared/styles/styles.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f0f0f0;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    #placeholder-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 110px;
+      background-color: green;
+      z-index: 30;
+    }
+
+    .swiper {
+      width: 100%;
+      position: absolute;
+      top: 110px;
+      bottom: 20px;
+      padding: 16px;
+      touch-action: pan-x pinch-zoom;
+      overflow: hidden;
+    }
+
+    .swiper-wrapper {
+      height: 100%;
+    }
+
+    .swiper-slide {
+      width: 80%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .category-square {
+      width: 100%;
+      height: 200px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .category-square:nth-child(1) { background-color: #ff6b6b; }
+    .category-square:nth-child(2) { background-color: #4ecdc4; }
+    .category-square:nth-child(3) { background-color: #45b7d1; }
+    .category-square:nth-child(4) { background-color: #96ceb4; }
+    .category-square:nth-child(5) { background-color: #ffeead; }
+
+    #placeholder-pagination {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 20px;
+      background-color: orange;
+      z-index: 40;
+      overflow: hidden;
+    }
+  </style>
 </head>
 <body>
   <!-- Placeholder for Header and Action Buttons -->
@@ -56,6 +129,53 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
 
   <!-- Swiper.js via CDN -->
   <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
-  <script src="/jiffy/shared/scripts/eventHandlers.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize Swiper
+      const swiper = new Swiper('#scrollSwiper', {
+        slidesPerView: 'auto',
+        spaceBetween: 16,
+        centeredSlides: false,
+        slideToClickedSlide: true,
+        grabCursor: true
+      });
+
+      // Add console logging for debugging
+      console.log("jiffy: Page loaded at", new Date());
+      console.log("jiffy: Checking PWA setup...");
+      if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+        console.log("jiffy: Running in standalone mode");
+      } else {
+        console.error("jiffy: NOT running in standalone mode");
+      }
+      console.log("jiffy: Checking swiper container...");
+      const swiperContainer = document.getElementById("scrollSwiper");
+      const swiperSlides = document.querySelectorAll(".swiper-slide");
+      const headerPlaceholder = document.getElementById("placeholder-header");
+      const paginationPlaceholder = document.getElementById("placeholder-pagination");
+      if (swiperContainer) {
+        console.log("jiffy: Swiper container found, bounding rect:", swiperContainer.getBoundingClientRect());
+      } else {
+        console.error("jiffy: Swiper container not found!");
+      }
+      if (swiperSlides.length > 0) {
+        swiperSlides.forEach((slide, index) => {
+          console.log(`jiffy: Swiper slide ${index + 1} found, bounding rect:`, slide.getBoundingClientRect());
+        });
+      } else {
+        console.error("jiffy: Swiper slides not found!");
+      }
+      if (headerPlaceholder) {
+        console.log("jiffy: Header placeholder found, bounding rect:", headerPlaceholder.getBoundingClientRect());
+      } else {
+        console.error("jiffy: Header placeholder not found!");
+      }
+      if (paginationPlaceholder) {
+        console.log("jiffy: Pagination placeholder found, bounding rect:", paginationPlaceholder.getBoundingClientRect());
+      } else {
+        console.error("jiffy: Pagination placeholder not found!");
+      }
+    });
+  </script>
 </body>
 </html>
