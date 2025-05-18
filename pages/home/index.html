@@ -43,10 +43,15 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       height: 110px;
       background-color: #333;
       z-index: 30;
+      padding-top: 35px; /* Restored to original value */
+    }
+
+    #header-content {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding-top: 20px; /* Reduced to move content closer to Dynamic Island */
+      position: relative;
+      margin-top: -15px; /* Shift content line closer to Dynamic Island */
     }
 
     #select-button {
@@ -61,7 +66,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
 
     #app-title {
       font-size: 19px;
-      font-weight: 400; /* Reduced to regular weight */
+      font-weight: 400;
       color: #ffffff;
       text-align: center;
     }
@@ -148,9 +153,11 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
 <body>
   <!-- Header with Select Button, Title, and Burger Menu -->
   <div id="title-bar">
-    <div id="select-button" onclick="console.log('Select button clicked')">select</div>
-    <div id="app-title">Jiffy</div>
-    <div id="burger-menu" onclick="console.log('Burger menu clicked')">☰</div>
+    <div id="header-content">
+      <div id="select-button" onclick="console.log('Select button clicked')">select</div>
+      <div id="app-title">Jiffy</div>
+      <div id="burger-menu" onclick="console.log('Burger menu clicked')">☰</div>
+    </div>
   </div>
 
   <!-- Swiper.js container -->
