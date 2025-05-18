@@ -40,27 +40,27 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       top: 0;
       left: 0;
       width: 100%;
-      height: 60px;
+      height: 110px; /* Restored to 110px to hold space for action buttons */
       background-color: #333;
       z-index: 30;
       display: flex;
-      align-items: center;
+      align-items: flex-start; /* Align content to the top */
       justify-content: center;
-      padding-top: 10px; /* Reduced to bring closer to Dynamic Island */
+      padding-top: 10px; /* Keep content line close to Dynamic Island */
     }
 
     #select-button {
       position: absolute;
-      left: 8px; /* Moved further left */
-      font-size: 10px; /* Reduced to match iPhone Home Screen labels */
-      font-weight: 400; /* Regular weight */
+      left: 8px;
+      font-size: 10px;
+      font-weight: 400;
       color: #ffffff;
       cursor: pointer;
       padding: 8px;
     }
 
     #app-title {
-      font-size: 19px; /* Increased by 20% from 16px */
+      font-size: 19px;
       font-weight: bold;
       color: #ffffff;
       text-align: center;
@@ -68,7 +68,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
 
     #burger-menu {
       position: absolute;
-      right: 8px; /* Moved further right */
+      right: 8px;
       font-size: 24px;
       color: #ffffff;
       cursor: pointer;
@@ -78,7 +78,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
     .swiper {
       width: 100%;
       position: absolute;
-      top: 60px;
+      top: 110px; /* Adjusted for restored header height */
       bottom: 20px;
       padding: 16px;
       touch-action: pan-x pinch-zoom;
