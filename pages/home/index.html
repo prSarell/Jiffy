@@ -1,6 +1,6 @@
 <!-- 
 File: /jiffy/pages/home/index.html
-Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with example categories and colored squares using Swiper.js.
+Purpose: Reintroducing Jiffy design and layout for example categories and action buttons, with a grid of categories in the horizontal scroll container using Swiper.js.
 -->
 
 <!DOCTYPE html>
@@ -130,31 +130,30 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
 
     .swiper-wrapper {
       height: 100%;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      align-content: center;
     }
 
     .swiper-slide {
-      width: 48px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      width: 192px; /* 4 categories × (40px button + 8px gap) = 4 × 48px */
+      height: 52px; /* 40px button + 4px gap + 8px label */
+      margin-bottom: 12px; /* Gap between rows */
+      display: grid;
+      grid-template-columns: repeat(4, 48px); /* 4 columns, each 48px (40px button + 8px gap) */
+      grid-gap: 0 8px; /* 8px gap between columns */
+      justify-content: center;
+      align-items: start;
       -webkit-user-select: none;
       user-select: none;
     }
 
-    /* Example Categories (first 4 slides) */
-    .swiper-slide:nth-child(-n+4) {
-      justify-content: flex-start;
-    }
-
-    /* Add margin-top to drop example categories down */
-    .swiper-slide:nth-child(-n+4) .category-button {
-      margin-top: 24px; /* Slightly more than half the button width (40px / 2 = 20px + 4px) */
-    }
-
-    /* Colored Squares (last 4 slides) */
-    .swiper-slide:nth-child(n+5) {
-      justify-content: center;
+    .category-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
     }
 
     .category-button {
@@ -171,6 +170,22 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
     .category-button:nth-child(2) { background-color: #4ecdc4; } /* Life */
     .category-button:nth-child(3) { background-color: #45b7d1; } /* Work */
     .category-button:nth-child(4) { background-color: #96ceb4; } /* School */
+    .category-button:nth-child(5) { background-color: #ffeead; } /* Health */
+    .category-button:nth-child(6) { background-color: #d4a5a5; } /* Fitness */
+    .category-button:nth-child(7) { background-color: #9b59b6; } /* Hobbies */
+    .category-button:nth-child(8) { background-color: #3498db; } /* Social */
+    .category-button:nth-child(9) { background-color: #e74c3c; } /* Family */
+    .category-button:nth-child(10) { background-color: #1abc9c; } /* Friends */
+    .category-button:nth-child(11) { background-color: #f1c40f; } /* Travel */
+    .category-button:nth-child(12) { background-color: #2ecc71; } /* Finance */
+    .category-button:nth-child(13) { background-color: #e67e22; } /* Study */
+    .category-button:nth-child(14) { background-color: #34495e; } /* Projects */
+    .category-button:nth-child(15) { background-color: #ff85a2; } /* Goals */
+    .category-button:nth-child(16) { background-color: #7f8c8d; } /* Errands */
+    .category-button:nth-child(17) { background-color: #9adbc5; } /* Chores */
+    .category-button:nth-child(18) { background-color: #f39c12; } /* Events */
+    .category-button:nth-child(19) { background-color: #bdc3c7; } /* Relax */
+    .category-button:nth-child(20) { background-color: #8e44ad; } /* Other */
 
     .category-label {
       margin-top: 4px;
@@ -179,23 +194,6 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       color: #ffffff;
       text-align: center;
     }
-
-    .category-square {
-      width: 100%;
-      height: 200px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    .category-square:nth-child(5) { background-color: #4ecdc4; } /* Item 2 */
-    .category-square:nth-child(6) { background-color: #45b7d1; } /* Item 3 */
-    .category-square:nth-child(7) { background-color: #96ceb4; } /* Item 4 */
-    .category-square:nth-child(8) { background-color: #ffeead; } /* Item 5 */
 
     .swiper-pagination {
       position: fixed;
@@ -251,35 +249,100 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
   <!-- Swiper.js container -->
   <div class="swiper" id="scrollSwiper">
     <div class="swiper-wrapper">
-      <!-- Example Categories -->
+      <!-- Row 1 -->
       <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Home</div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Home</div>
+        </div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Life</div>
+        </div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Work</div>
+        </div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">School</div>
+        </div>
       </div>
+      <!-- Row 2 -->
       <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Life</div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Health</div>
+        </div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Fitness</div>
+        </div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Hobbies</div>
+        </div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Social</div>
+        </div>
       </div>
+      <!-- Row 3 -->
       <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Work</div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Family</div>
+        </div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Friends</div>
+        </div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Travel</div>
+        </div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Finance</div>
+        </div>
       </div>
+      <!-- Row 4 -->
       <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">School</div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Study</div>
+        </div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Projects</div>
+        </div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Goals</div>
+        </div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Errands</div>
+        </div>
       </div>
-      <!-- Remaining Red Squares for Testing -->
+      <!-- Row 5 -->
       <div class="swiper-slide">
-        <div class="category-square">Item 2</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-square">Item 3</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-square">Item 4</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-square">Item 5</div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Chores</div>
+        </div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Events</div>
+        </div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Relax</div>
+        </div>
+        <div class="category-container">
+          <div class="category-button"></div>
+          <div class="category-label">Other</div>
+        </div>
       </div>
     </div>
     <!-- Swiper Pagination -->
@@ -293,10 +356,11 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       // Initialize Swiper with pagination
       const swiper = new Swiper('#scrollSwiper', {
         slidesPerView: 'auto',
-        spaceBetween: 8,
+        spaceBetween: 0, /* No horizontal gap between slides, handled by grid-gap */
         centeredSlides: false,
         slideToClickedSlide: true,
         grabCursor: true,
+        direction: 'vertical', /* Vertical scrolling for rows */
         pagination: {
           el: '.swiper-pagination',
           clickable: true
