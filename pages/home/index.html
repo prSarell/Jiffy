@@ -1,6 +1,6 @@
 <!-- 
 File: /jiffy/pages/home/index.html
-Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with colored squares using Swiper.js.
+Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with example categories and colored squares using Swiper.js.
 -->
 
 <!DOCTYPE html>
@@ -103,7 +103,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background-color: #96CEB4; /* Confirmed fill color */
+      background-color: #96CEB4;
       border: 2px solid #45B7D1;
       display: flex;
       align-items: center;
@@ -133,13 +133,38 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
     }
 
     .swiper-slide {
-      width: 80%;
+      width: 54px; /* 40px button width + 14px gap (handled by spaceBetween) */
       height: 100%;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       -webkit-user-select: none;
       user-select: none;
+    }
+
+    .category-button {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #96CEB4;
+      border: 2px solid #45B7D1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .category-button:nth-child(1) { background-color: #ff6b6b; } /* Home */
+    .category-button:nth-child(2) { background-color: #4ecdc4; } /* Life */
+    .category-button:nth-child(3) { background-color: #45b7d1; } /* Work */
+    .category-button:nth-child(4) { background-color: #96ceb4; } /* School */
+
+    .category-label {
+      margin-top: 4px;
+      font-size: 8px;
+      font-weight: 400;
+      color: #ffffff;
+      text-align: center;
     }
 
     .category-square {
@@ -154,11 +179,10 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       font-weight: bold;
     }
 
-    .category-square:nth-child(1) { background-color: #ff6b6b; }
-    .category-square:nth-child(2) { background-color: #4ecdc4; }
-    .category-square:nth-child(3) { background-color: #45b7d1; }
-    .category-square:nth-child(4) { background-color: #96ceb4; }
-    .category-square:nth-child(5) { background-color: #ffeead; }
+    .category-square:nth-child(5) { background-color: #4ecdc4; } /* Item 2 */
+    .category-square:nth-child(6) { background-color: #45b7d1; } /* Item 3 */
+    .category-square:nth-child(7) { background-color: #96ceb4; } /* Item 4 */
+    .category-square:nth-child(8) { background-color: #ffeead; } /* Item 5 */
 
     .swiper-pagination {
       position: fixed;
@@ -214,9 +238,24 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
   <!-- Swiper.js container -->
   <div class="swiper" id="scrollSwiper">
     <div class="swiper-wrapper">
+      <!-- Example Categories -->
       <div class="swiper-slide">
-        <div class="category-square">Item 1</div>
+        <div class="category-button"></div>
+        <div class="category-label">Home</div>
       </div>
+      <div class="swiper-slide">
+        <div class="category-button"></div>
+        <div class="category-label">Life</div>
+      </div>
+      <div class="swiper-slide">
+        <div class="category-button"></div>
+        <div class="category-label">Work</div>
+      </div>
+      <div class="swiper-slide">
+        <div class="category-button"></div>
+        <div class="category-label">School</div>
+      </div>
+      <!-- Remaining Red Squares for Testing -->
       <div class="swiper-slide">
         <div class="category-square">Item 2</div>
       </div>
