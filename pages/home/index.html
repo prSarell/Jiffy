@@ -44,9 +44,9 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       background-color: #333;
       z-index: 30;
       display: flex;
-      align-items: flex-start;
+      align-items: center; /* Center vertically within the padded space */
       justify-content: center;
-      padding-top: 30px; /* Increased to position content below Dynamic Island */
+      padding-top: 35px; /* Increased to move content 5% lower */
     }
 
     #select-button {
@@ -73,6 +73,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       color: #ffffff;
       cursor: pointer;
       padding: 8px;
+      line-height: 24px; /* Match font size to ensure vertical alignment */
     }
 
     .swiper {
