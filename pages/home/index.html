@@ -28,21 +28,40 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: #f0f0f0;
+      background-color: #000000;
       overflow: hidden;
       width: 100vw;
       height: 100vh;
       position: relative;
     }
 
-    #placeholder-header {
+    #title-bar {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 110px;
-      background-color: green;
+      background-color: #333;
       z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #burger-menu {
+      position: absolute;
+      left: 16px;
+      font-size: 24px;
+      color: #ffffff;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    #app-title {
+      font-size: 32px;
+      font-weight: bold;
+      color: #ffffff;
+      text-align: center;
     }
 
     .swiper {
@@ -87,21 +106,39 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
     .category-square:nth-child(4) { background-color: #96ceb4; }
     .category-square:nth-child(5) { background-color: #ffeead; }
 
-    #placeholder-pagination {
+    .swiper-pagination {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
       height: 20px;
-      background-color: orange;
       z-index: 40;
-      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: transparent;
+    }
+
+    .swiper-pagination-bullet {
+      width: 8px;
+      height: 8px;
+      background-color: #ffffff;
+      opacity: 0.5;
+      margin: 0 4px;
+    }
+
+    .swiper-pagination-bullet-active {
+      background-color: #ff6b6b;
+      opacity: 1;
     }
   </style>
 </head>
 <body>
-  <!-- Placeholder for Header and Action Buttons -->
-  <div id="placeholder-header"></div>
+  <!-- Header with Title and Burger Menu -->
+  <div id="title-bar">
+    <div id="burger-menu" onclick="console.log('Burger menu clicked')">☰</div>
+    <div id="app-title">Jiffy</div>
+  </div>
 
   <!-- Swiper.js container -->
   <div class="swiper" id="scrollSwiper">
@@ -122,22 +159,25 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
         <div class="category-square">Item 5</div>
       </div>
     </div>
+    <!-- Swiper Pagination -->
+    <div class="swiper-pagination"></div>
   </div>
-
-  <!-- Placeholder for Pagination Dots -->
-  <div id="placeholder-pagination"></div>
 
   <!-- Swiper.js via CDN -->
   <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Initialize Swiper
+      // Initialize Swiper with pagination
       const swiper = new Swiper('#scrollSwiper', {
         slidesPerView: 'auto',
         spaceBetween: 16,
         centeredSlides: false,
         slideToClickedSlide: true,
-        grabCursor: true
+        grabCursor: true,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
+        }
       });
 
       // Add console logging for debugging
@@ -151,8 +191,8 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       console.log("jiffy: Checking swiper container...");
       const swiperContainer = document.getElementById("scrollSwiper");
       const swiperSlides = document.querySelectorAll(".swiper-slide");
-      const headerPlaceholder = document.getElementById("placeholder-header");
-      const paginationPlaceholder = document.getElementById("placeholder-pagination");
+      const titleBar = document.getElementById("title-bar");
+      const pagination = document.querySelector(".swiper-pagination");
       if (swiperContainer) {
         console.log("jiffy: Swiper container found, bounding rect:", swiperContainer.getBoundingClientRect());
       } else {
@@ -165,15 +205,15 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       } else {
         console.error("jiffy: Swiper slides not found!");
       }
-      if (headerPlaceholder) {
-        console.log("jiffy: Header placeholder found, bounding rect:", headerPlaceholder.getBoundingClientRect());
+      if (titleBar) {
+        console.log("jiffy: Title bar found, bounding rect:", titleBar.getBoundingClientRect());
       } else {
-        console.error("jiffy: Header placeholder not found!");
+        console.error("jiffy: Title bar not found!");
       }
-      if (paginationPlaceholder) {
-        console.log("jiffy: Pagination placeholder found, bounding rect:", paginationPlaceholder.getBoundingClientRect());
+      if (pagination) {
+        console.log("jiffy: Pagination found, bounding rect:", pagination.getBoundingClientRect());
       } else {
-        console.error("jiffy: Pagination placeholder not found!");
+        console.error("jiffy: Pagination not found!");
       }
     });
   </script>
