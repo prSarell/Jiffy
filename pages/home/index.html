@@ -44,6 +44,9 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       background-color: #333;
       z-index: 30;
       padding-top: 35px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     #header-content {
@@ -51,7 +54,8 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       align-items: center;
       justify-content: center;
       position: relative;
-      margin-top: 9px; /* Adjusted to move content line down by its own height (24px from -15px) */
+      margin-top: 9px;
+      width: 100%;
     }
 
     #select-button {
@@ -79,6 +83,39 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       cursor: pointer;
       padding: 8px;
       line-height: 24px;
+    }
+
+    #action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .action-button {
+      width: 80px;
+      height: 32px;
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+    }
+
+    #prompts-button {
+      background-color: #45b7d1; /* Blue */
+    }
+
+    #rewards-button {
+      background-color: #96ceb4; /* Green */
+    }
+
+    #add-button {
+      background-color: #ff6b6b; /* Red */
     }
 
     .swiper {
@@ -151,12 +188,17 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
   </style>
 </head>
 <body>
-  <!-- Header with Select Button, Title, and Burger Menu -->
+  <!-- Header with Select Button, Title, Burger Menu, and Action Buttons -->
   <div id="title-bar">
     <div id="header-content">
       <div id="select-button" onclick="console.log('Select button clicked')">select</div>
       <div id="app-title">Jiffy</div>
       <div id="burger-menu" onclick="console.log('Burger menu clicked')">☰</div>
+    </div>
+    <div id="action-buttons">
+      <button id="prompts-button" class="action-button" onclick="console.log('Prompts button clicked')">Prompts</button>
+      <button id="rewards-button" class="action-button" onclick="console.log('Rewards button clicked')">Rewards</button>
+      <button id="add-button" class="action-button" onclick="console.log('Add button clicked')">Add</button>
     </div>
   </div>
 
