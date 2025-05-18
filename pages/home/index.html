@@ -144,12 +144,17 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
 
     /* Example Categories (first 4 slides) */
     .swiper-slide:nth-child(-n+4) {
-      justify-content: flex-start; /* Align to top for example categories */
+      justify-content: flex-start;
+    }
+
+    /* Add margin-top to drop example categories down */
+    .swiper-slide:nth-child(-n+4) .category-button {
+      margin-top: 24px; /* Slightly more than half the button width (40px / 2 = 20px + 4px) */
     }
 
     /* Colored Squares (last 4 slides) */
     .swiper-slide:nth-child(n+5) {
-      justify-content: center; /* Keep centered for colored squares */
+      justify-content: center;
     }
 
     .category-button {
