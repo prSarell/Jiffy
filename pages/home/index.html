@@ -88,20 +88,20 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
     #action-buttons {
       display: flex;
       justify-content: center;
-      gap: 16px; /* Increased spacing between buttons */
-      margin-top: 4px; /* Adjusted to fit larger buttons and labels */
+      gap: 8px; /* Restored original spacing */
+      margin-top: 8px;
     }
 
     .action-button-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px; /* Space between button and label */
+      gap: 4px;
     }
 
     .action-button {
-      width: 60px; /* Increased to match iPhone Home Screen app icon size */
-      height: 60px;
+      width: 40px; /* Restored original size */
+      height: 40px;
       border-radius: 50%;
       background-color: #96ceb4; /* Green fill */
       border: 2px solid #45b7d1; /* Blue outline */
@@ -112,8 +112,8 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
     }
 
     .action-button-label {
-      font-size: 10px; /* Match select button */
-      font-weight: 400; /* Match select button */
+      font-size: 8px; /* Restored original size */
+      font-weight: 400;
       color: #ffffff;
       text-align: center;
     }
@@ -277,7 +277,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
         console.error("jiffy: Swiper slides not found!");
       }
       if (titleBar) {
-        console.log("jiffy: Title bar found, bounding rect:", titleBar.getBoundingUnit rect());
+        console.log("jiffy: Title bar found, bounding rect:", titleBar.getBoundingClientRect());
       } else {
         console.error("jiffy: Title bar not found!");
       }
