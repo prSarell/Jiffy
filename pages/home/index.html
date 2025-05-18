@@ -40,13 +40,13 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       top: 0;
       left: 0;
       width: 100%;
-      height: 110px; /* Restored to 110px to hold space for action buttons */
+      height: 110px;
       background-color: #333;
       z-index: 30;
       display: flex;
-      align-items: flex-start; /* Align content to the top */
+      align-items: flex-start;
       justify-content: center;
-      padding-top: 10px; /* Keep content line close to Dynamic Island */
+      padding-top: 30px; /* Increased to position content below Dynamic Island */
     }
 
     #select-button {
@@ -78,7 +78,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
     .swiper {
       width: 100%;
       position: absolute;
-      top: 110px; /* Adjusted for restored header height */
+      top: 110px;
       bottom: 20px;
       padding: 16px;
       touch-action: pan-x pinch-zoom;
