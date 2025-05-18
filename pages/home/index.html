@@ -123,7 +123,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       position: absolute;
       top: 115px;
       bottom: 20px;
-      padding: 4px; /* Reduced to position categories closer to action buttons */
+      padding: 12px; /* Adjusted to create a 12px gap below action buttons */
       touch-action: pan-x pinch-zoom;
       overflow: hidden;
     }
@@ -133,7 +133,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
     }
 
     .swiper-slide {
-      width: 48px; /* 40px button width + 8px gap (handled by spaceBetween) */
+      width: 48px;
       height: 100%;
       display: flex;
       flex-direction: column;
@@ -147,7 +147,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      border: none; /* Removed outline */
+      border: none;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -279,7 +279,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       // Initialize Swiper with pagination
       const swiper = new Swiper('#scrollSwiper', {
         slidesPerView: 'auto',
-        spaceBetween: 8, /* Reduced to position categories closer together */
+        spaceBetween: 8,
         centeredSlides: false,
         slideToClickedSlide: true,
         grabCursor: true,
