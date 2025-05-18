@@ -88,23 +88,34 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
     #action-buttons {
       display: flex;
       justify-content: center;
-      gap: 8px;
-      margin-top: 8px;
+      gap: 16px; /* Increased spacing between buttons */
+      margin-top: 4px; /* Adjusted to fit larger buttons and labels */
+    }
+
+    .action-button-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px; /* Space between button and label */
     }
 
     .action-button {
-      width: 40px;
-      height: 40px;
+      width: 60px; /* Increased to match iPhone Home Screen app icon size */
+      height: 60px;
       border-radius: 50%;
       background-color: #96ceb4; /* Green fill */
       border: 2px solid #45b7d1; /* Blue outline */
-      color: #ffffff;
-      font-size: 12px;
-      font-weight: bold;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
+    }
+
+    .action-button-label {
+      font-size: 10px; /* Match select button */
+      font-weight: 400; /* Match select button */
+      color: #ffffff;
+      text-align: center;
     }
 
     .swiper {
@@ -185,9 +196,18 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       <div id="burger-menu" onclick="console.log('Burger menu clicked')">☰</div>
     </div>
     <div id="action-buttons">
-      <button id="prompts-button" class="action-button" onclick="console.log('Prompts button clicked')">Prompts</button>
-      <button id="rewards-button" class="action-button" onclick="console.log('Rewards button clicked')">Rewards</button>
-      <button id="add-button" class="action-button" onclick="console.log('Add button clicked')">Add</button>
+      <div class="action-button-container">
+        <button id="prompts-button" class="action-button" onclick="console.log('Prompts button clicked')"></button>
+        <div class="action-button-label">Prompts</div>
+      </div>
+      <div class="action-button-container">
+        <button id="rewards-button" class="action-button" onclick="console.log('Rewards button clicked')"></button>
+        <div class="action-button-label">Rewards</div>
+      </div>
+      <div class="action-button-container">
+        <button id="add-button" class="action-button" onclick="console.log('Add button clicked')"></button>
+        <div class="action-button-label">Add</div>
+      </div>
     </div>
   </div>
 
@@ -257,7 +277,7 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
         console.error("jiffy: Swiper slides not found!");
       }
       if (titleBar) {
-        console.log("jiffy: Title bar found, bounding rect:", titleBar.getBoundingClientRect());
+        console.log("jiffy: Title bar found, bounding rect:", titleBar.getBoundingUnit rect());
       } else {
         console.error("jiffy: Title bar not found!");
       }
