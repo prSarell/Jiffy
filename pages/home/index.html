@@ -134,6 +134,7 @@ Purpose: Reintroducing Jiffy design and layout for example categories and action
       flex-direction: column;
       flex-wrap: wrap;
       align-content: center;
+      margin-top: 20px; /* Drop the entire grid down by half a category width (40px / 2) */
     }
 
     .swiper-slide {
@@ -356,11 +357,11 @@ Purpose: Reintroducing Jiffy design and layout for example categories and action
       // Initialize Swiper with pagination
       const swiper = new Swiper('#scrollSwiper', {
         slidesPerView: 'auto',
-        spaceBetween: 0, /* No horizontal gap between slides, handled by grid-gap */
+        spaceBetween: 0,
         centeredSlides: false,
         slideToClickedSlide: true,
         grabCursor: true,
-        direction: 'vertical', /* Vertical scrolling for rows */
+        direction: 'vertical',
         pagination: {
           el: '.swiper-pagination',
           clickable: true
