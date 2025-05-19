@@ -124,7 +124,7 @@ Purpose: Reintroducing Jiffy design and layout for example categories and action
       top: 115px;
       bottom: 20px;
       padding: 12px;
-      touch-action: pan-y pinch-zoom; /* Changed to pan-y for vertical scrolling */
+      touch-action: pan-x pinch-zoom;
       overflow: hidden;
     }
 
@@ -132,13 +132,13 @@ Purpose: Reintroducing Jiffy design and layout for example categories and action
       height: 100%;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      /* Removed flex-wrap: wrap to restore swipe functionality */
+      flex-wrap: wrap;
+      align-content: center;
     }
 
     .swiper-slide {
       width: 192px; /* 4 categories × (40px button + 8px gap) = 4 × 48px */
-      height: 72px; /* 40px button + 4px gap + 8px label + 20px margin-top */
+      height: 52px; /* 40px button + 4px gap + 8px label */
       margin-bottom: 12px; /* Gap between rows */
       display: grid;
       grid-template-columns: repeat(4, 48px); /* 4 columns, each 48px (40px button + 8px gap) */
@@ -154,7 +154,6 @@ Purpose: Reintroducing Jiffy design and layout for example categories and action
       flex-direction: column;
       align-items: center;
       gap: 4px;
-      margin-top: 20px; /* Drop each category down by half a category width (40px / 2) */
     }
 
     .category-button {
@@ -357,11 +356,11 @@ Purpose: Reintroducing Jiffy design and layout for example categories and action
       // Initialize Swiper with pagination
       const swiper = new Swiper('#scrollSwiper', {
         slidesPerView: 'auto',
-        spaceBetween: 0,
+        spaceBetween: 0, /* No horizontal gap between slides, handled by grid-gap */
         centeredSlides: false,
         slideToClickedSlide: true,
         grabCursor: true,
-        direction: 'vertical',
+        direction: 'vertical', /* Vertical scrolling for rows */
         pagination: {
           el: '.swiper-pagination',
           clickable: true
