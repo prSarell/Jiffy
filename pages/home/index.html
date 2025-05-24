@@ -1,6 +1,6 @@
 <!-- 
 File: /jiffy/pages/home/index.html
-Purpose: Jiffy’s homepage with a horizontal scroll of round category buttons using Swiper.js, including header and action buttons, now with 20 categories for clutter testing.
+Purpose: Jiffy’s homepage with a 4x5 grid of 20 round category buttons using Swiper.js, including header and action buttons, all visible on one screen for clutter testing.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -134,39 +134,38 @@ Purpose: Jiffy’s homepage with a horizontal scroll of round category buttons u
     }
 
     .swiper-slide {
-      width: 48px;
-      height: 100%;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
+      width: 100%;
       -webkit-user-select: none;
       user-select: none;
     }
 
-    /* Example Categories (first 20 slides) */
-    .swiper-slide:nth-child(-n+20) {
-      justify-content: flex-start;
-    }
-
-    /* Add margin-top to drop example categories down */
-    .swiper-slide:nth-child(-n+20) .category-button {
-      margin-top: 24px; /* Slightly more than half the button width (40px / 2 = 20px + 4px) */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 8px;
+      width: 100%;
+      max-width: 100%;
     }
 
     .category-button {
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       border: none;
       display: flex;
       align-items: center;
       justify-content: center;
+      margin: 0 auto;
     }
 
     .category-button:nth-child(1) { background-color: #ff6b6b; } /* Home */
     .category-button:nth-child(2) { background-color: #4ecdc4; } /* Life */
-    .category-button:nth-child(3) { background-color: #45b7d1; } /* Work */
-    .category-button:nth-child(4) { background-color: #96ceb4; } /* School */
+    .category-button:nth-child(3) { background-color: #45b7d1; } /* School */
+    .category-button:nth-child(4) { background-color: #96ceb4; } /* Work */
     .category-button:nth-child(5) { background-color: #ffeead; } /* Dreams */
     .category-button:nth-child(6) { background-color: #ff6b6b; } /* Hobbies */
     .category-button:nth-child(7) { background-color: #4ecdc4; } /* Goals */
@@ -246,145 +245,59 @@ Purpose: Jiffy’s homepage with a horizontal scroll of round category buttons u
   <!-- Swiper.js container -->
   <div class="swiper" id="scrollSwiper">
     <div class="swiper-wrapper">
-      <!-- Categories -->
       <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Home</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Life</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">School</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Work</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Dreams</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Hobbies</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Goals</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Events</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Projects</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Ideas</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Plans</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Chores</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Errands</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Habits</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Routines</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Adventures</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Memories</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Skills</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Wishlist</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Inspiration</div>
+        <div class="category-grid">
+          <div class="category-button"></div>
+          <div class="category-label">Home</div>
+          <div class="category-button"></div>
+          <div class="category-label">Life</div>
+          <div class="category-button"></div>
+          <div class="category-label">School</div>
+          <div class="category-button"></div>
+          <div class="category-label">Work</div>
+          <div class="category-button"></div>
+          <div class="category-label">Dreams</div>
+          <div class="category-button"></div>
+          <div class="category-label">Hobbies</div>
+          <div class="category-button"></div>
+          <div class="category-label">Goals</div>
+          <div class="category-button"></div>
+          <div class="category-label">Events</div>
+          <div class="category-button"></div>
+          <div class="category-label">Projects</div>
+          <div class="category-button"></div>
+          <div class="category-label">Ideas</div>
+          <div class="category-button"></div>
+          <div class="category-label">Plans</div>
+          <div class="category-button"></div>
+          <div class="category-label">Chores</div>
+          <div class="category-button"></div>
+          <div class="category-label">Errands</div>
+          <div class="category-button"></div>
+          <div class="category-label">Habits</div>
+          <div class="category-button"></div>
+          <div class="category-label">Routines</div>
+          <div class="category-button"></div>
+          <div class="category-label">Adventures</div>
+          <div class="category-button"></div>
+          <div class="category-label">Memories</div>
+          <div class="category-button"></div>
+          <div class="category-label">Skills</div>
+          <div class="category-button"></div>
+          <div class="category-label">Wishlist</div>
+          <div class="category-button"></div>
+          <div class="category-label">Inspiration</div>
+        </div>
       </div>
     </div>
-    <!-- Swiper Pagination -->
     <div class="swiper-pagination"></div>
   </div>
 
   <!-- Swiper.js via CDN -->
   <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Initialize Swiper with pagination
-      const swiper = new Swiper('#scrollSwiper', {
-        slidesPerView: 'auto',
-        spaceBetween: 8,
-        centeredSlides: false,
-        slideToClickedSlide: true,
-        grabCursor: true,
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true
-        }
-      });
-
-      // Add console logging for debugging
-      console.log("jiffy: Page loaded at", new Date());
-      console.log("jiffy: Checking PWA setup...");
-      if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-        console.log("jiffy: Running in standalone mode");
-      } else {
-        console.error("jiffy: NOT running in standalone mode");
-      }
-      console.log("jiffy: Checking swiper container...");
-      const swiperContainer = document.getElementById("scrollSwiper");
-      const swiperSlides = document.querySelectorAll(".swiper-slide");
-      const titleBar = document.getElementById("title-bar");
-      const pagination = document.querySelector(".swiper-pagination");
-      if (swiperContainer) {
-        console.log("jiffy: Swiper container found, bounding rect:", swiperContainer.getBoundingClientRect());
-      } else {
-        console.error("jiffy: Swiper container not found!");
-      }
-      if (swiperSlides.length > 0) {
-        swiperSlides.forEach((slide, index) => {
-          console.log(`jiffy: Swiper slide ${index + 1} found, bounding rect:`, slide.getBoundingClientRect());
-        });
-      } else {
-        console.error("jiffy: Swiper slides not found!");
-      }
-      if (titleBar) {
-        console.log("jiffy: Title bar found, bounding rect:", titleBar.getBoundingClientRect());
-      } else {
-        console.error("jiffy: Title bar not found!");
-      }
-      if (pagination) {
-        console.log("jiffy: Pagination found, bounding rect:", pagination.getBoundingClientRect());
-      } else {
-        console.error("jiffy: Pagination not found!");
-      }
-    });
-  </script>
+  <script src="/shared/scripts/categoryManagement.js"></script>
+  <script src="/shared/scripts/eventHandlers.js"></script>
+  <script src="/shared/scripts/popupManager.js"></script>
+  <script src="/main.js"></script>
 </body>
 </html>
