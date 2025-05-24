@@ -32,11 +32,7 @@ function getCategoryCount() {
 // Initialize with default categories if none exist
 if (categories.length === 0) {
   const defaultCategories = [
-    "Home", "Life", "School", "Work",
-    "Dreams", "Hobbies", "Goals", "Events",
-    "Projects", "Ideas", "Plans", "Chores",
-    "Errands", "Habits", "Routines", "Adventures",
-    "Memories", "Skills", "Wishlist", "Inspiration"
+    "Home", "Life", "School", "Work"
   ];
   defaultCategories.forEach(category => addCategory(category));
 }
