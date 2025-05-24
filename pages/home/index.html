@@ -1,6 +1,6 @@
-l<!-- 
+<!-- 
 File: /jiffy/pages/home/index.html
-Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with example categories and colored squares using Swiper.js.
+Purpose: Jiffy’s homepage with a horizontal scroll of round category buttons using Swiper.js, including header and action buttons, now with 8 categories to assess clutter on one screen.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -141,19 +141,14 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       user-select: none;
     }
 
-    /* Example Categories (first 4 slides) */
-    .swiper-slide:nth-child(-n+4) {
+    /* Example Categories (first 8 slides) */
+    .swiper-slide:nth-child(-n+8) {
       justify-content: flex-start;
     }
 
     /* Add margin-top to drop example categories down */
-    .swiper-slide:nth-child(-n+4) .category-button {
+    .swiper-slide:nth-child(-n+8) .category-button {
       margin-top: 24px; /* Slightly more than half the button width (40px / 2 = 20px + 4px) */
-    }
-
-    /* Colored Squares (last 4 slides) */
-    .swiper-slide:nth-child(n+5) {
-      justify-content: center;
     }
 
     .category-button {
@@ -170,6 +165,10 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
     .category-button:nth-child(2) { background-color: #4ecdc4; } /* Life */
     .category-button:nth-child(3) { background-color: #45b7d1; } /* Work */
     .category-button:nth-child(4) { background-color: #96ceb4; } /* School */
+    .category-button:nth-child(5) { background-color: #ff6b6b; } /* Play */
+    .category-button:nth-child(6) { background-color: #4ecdc4; } /* Study */
+    .category-button:nth-child(7) { background-color: #45b7d1; } /* Rest */
+    .category-button:nth-child(8) { background-color: #96ceb4; } /* Fun */
 
     .category-label {
       margin-top: 4px;
@@ -266,6 +265,22 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
       <div class="swiper-slide">
         <div class="category-button"></div>
         <div class="category-label">School</div>
+      </div>
+      <div class="swiper-slide">
+        <div class="category-button"></div>
+        <div class="category-label">Play</div>
+      </div>
+      <div class="swiper-slide">
+        <div class="category-button"></div>
+        <div class="category-label">Study</div>
+      </div>
+      <div class="swiper-slide">
+        <div class="category-button"></div>
+        <div class="category-label">Rest</div>
+      </div>
+      <div class="swiper-slide">
+        <div class="category-button"></div>
+        <div class="category-label">Fun</div>
       </div>
       <!-- Remaining Red Squares for Testing -->
       <div class="swiper-slide">
