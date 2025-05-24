@@ -1,8 +1,7 @@
 <!-- 
 File: /jiffy/pages/home/index.html
-Purpose: A minimal version of jiffy’s home page to test horizontal scrolling with example categories and colored squares using Swiper.js.
+Purpose: Jiffy’s homepage with a 4x5 grid of 20 categories using Swiper.js, including header and action buttons.
 -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,19 +10,21 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
   <!-- iOS-specific meta tags for PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Scroll Test">
-  <title>Horizontal Scroll Test App</title>
+  <meta name="apple-mobile-web-app-title" content="Jiffy">
+  <title>Jiffy Homepage</title>
   <!-- Link to manifest.json -->
-  <link rel="manifest" href="/jiffy/manifest.json">
-  <!-- Link to icons for iOS, aligned with manifest.json -->
-  <link rel="apple-touch-icon" href="/jiffy/assets/icon-180.png">
-  <link rel="apple-touch-icon-precomposed" href="/jiffy/assets/icon-180.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/jiffy/assets/icon-180.png">
-  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/jiffy/assets/icon-180.png">
-  <link rel="apple-touch-icon" sizes="512x512" href="/jiffy/assets/icon-512.png">
-  <link rel="apple-touch-icon-precomposed" sizes="512x512" href="/jiffy/assets/icon-512.png">
+  <link rel="manifest" href="/manifest.json">
+  <!-- Link to icons for iOS -->
+  <link rel="apple-touch-icon" href="/assets/icon-180.png">
+  <link rel="apple-touch-icon-precomposed" href="/assets/icon-180.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon-180.png">
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/assets/icon-180.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/assets/icon-512.png">
+  <link rel="apple-touch-icon-precomposed" sizes="512x512" href="/assets/icon-512.png">
   <!-- Swiper.js CSS via CDN -->
   <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css" id="swiper-css">
+  <!-- Link to styles -->
+  <link rel="stylesheet" href="/shared/styles.css">
   <style>
     body {
       margin: 0;
@@ -133,69 +134,33 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
     }
 
     .swiper-slide {
-      width: 48px;
-      height: 100%;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
+      width: 100%;
       -webkit-user-select: none;
       user-select: none;
     }
 
-    /* Example Categories (first 4 slides) */
-    .swiper-slide:nth-child(-n+4) {
-      justify-content: flex-start;
-    }
-
-    /* Add margin-top to drop example categories down */
-    .swiper-slide:nth-child(-n+4) .category-button {
-      margin-top: 24px; /* Slightly more than half the button width (40px / 2 = 20px + 4px) */
-    }
-
-    /* Colored Squares (last 4 slides) */
-    .swiper-slide:nth-child(n+5) {
-      justify-content: center;
-    }
-
-    .category-button {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .category-button:nth-child(1) { background-color: #ff6b6b; } /* Home */
-    .category-button:nth-child(2) { background-color: #4ecdc4; } /* Life */
-    .category-button:nth-child(3) { background-color: #45b7d1; } /* Work */
-    .category-button:nth-child(4) { background-color: #96ceb4; } /* School */
-
-    .category-label {
-      margin-top: 4px;
-      font-size: 8px;
-      font-weight: 400;
-      color: #ffffff;
-      text-align: center;
-    }
-
-    .category-square {
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 15px;
       width: 100%;
-      height: 200px;
+      max-width: 1000px;
+    }
+
+    .category-item {
+      width: 100%;
+      height: 100px;
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
+      color: #333;
+      font-size: 16px;
     }
-
-    .category-square:nth-child(5) { background-color: #4ecdc4; } /* Item 2 */
-    .category-square:nth-child(6) { background-color: #45b7d1; } /* Item 3 */
-    .category-square:nth-child(7) { background-color: #96ceb4; } /* Item 4 */
-    .category-square:nth-child(8) { background-color: #ffeead; } /* Item 5 */
 
     .swiper-pagination {
       position: fixed;
@@ -251,94 +216,39 @@ Purpose: A minimal version of jiffy’s home page to test horizontal scrolling w
   <!-- Swiper.js container -->
   <div class="swiper" id="scrollSwiper">
     <div class="swiper-wrapper">
-      <!-- Example Categories -->
       <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Home</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Life</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">Work</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-button"></div>
-        <div class="category-label">School</div>
-      </div>
-      <!-- Remaining Red Squares for Testing -->
-      <div class="swiper-slide">
-        <div class="category-square">Item 2</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-square">Item 3</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-square">Item 4</div>
-      </div>
-      <div class="swiper-slide">
-        <div class="category-square">Item 5</div>
+        <div class="category-grid">
+          <div class="category-item">Home</div>
+          <div class="category-item">Life</div>
+          <div class="category-item">School</div>
+          <div class="category-item">Work</div>
+          <div class="category-item">Dreams</div>
+          <div class="category-item">Hobbies</div>
+          <div class="category-item">Goals</div>
+          <div class="category-item">Events</div>
+          <div class="category-item">Projects</div>
+          <div class="category-item">Ideas</div>
+          <div class="category-item">Plans</div>
+          <div class="category-item">Chores</div>
+          <div class="category-item">Errands</div>
+          <div class="category-item">Habits</div>
+          <div class="category-item">Routines</div>
+          <div class="category-item">Adventures</div>
+          <div class="category-item">Memories</div>
+          <div class="category-item">Skills</div>
+          <div class="category-item">Wishlist</div>
+          <div class="category-item">Inspiration</div>
+        </div>
       </div>
     </div>
-    <!-- Swiper Pagination -->
     <div class="swiper-pagination"></div>
   </div>
 
   <!-- Swiper.js via CDN -->
   <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Initialize Swiper with pagination
-      const swiper = new Swiper('#scrollSwiper', {
-        slidesPerView: 'auto',
-        spaceBetween: 8,
-        centeredSlides: false,
-        slideToClickedSlide: true,
-        grabCursor: true,
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true
-        }
-      });
-
-      // Add console logging for debugging
-      console.log("jiffy: Page loaded at", new Date());
-      console.log("jiffy: Checking PWA setup...");
-      if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-        console.log("jiffy: Running in standalone mode");
-      } else {
-        console.error("jiffy: NOT running in standalone mode");
-      }
-      console.log("jiffy: Checking swiper container...");
-      const swiperContainer = document.getElementById("scrollSwiper");
-      const swiperSlides = document.querySelectorAll(".swiper-slide");
-      const titleBar = document.getElementById("title-bar");
-      const pagination = document.querySelector(".swiper-pagination");
-      if (swiperContainer) {
-        console.log("jiffy: Swiper container found, bounding rect:", swiperContainer.getBoundingClientRect());
-      } else {
-        console.error("jiffy: Swiper container not found!");
-      }
-      if (swiperSlides.length > 0) {
-        swiperSlides.forEach((slide, index) => {
-          console.log(`jiffy: Swiper slide ${index + 1} found, bounding rect:`, slide.getBoundingClientRect());
-        });
-      } else {
-        console.error("jiffy: Swiper slides not found!");
-      }
-      if (titleBar) {
-        console.log("jiffy: Title bar found, bounding rect:", titleBar.getBoundingClientRect());
-      } else {
-        console.error("jiffy: Title bar not found!");
-      }
-      if (pagination) {
-        console.log("jiffy: Pagination found, bounding rect:", pagination.getBoundingClientRect());
-      } else {
-        console.error("jiffy: Pagination not found!");
-      }
-    });
-  </script>
+  <script src="/shared/scripts/categoryManagement.js"></script>
+  <script src="/shared/scripts/eventHandlers.js"></script>
+  <script src="/shared/scripts/popupManager.js"></script>
+  <script src="/main.js"></script>
 </body>
 </html>
