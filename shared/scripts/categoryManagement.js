@@ -1,4 +1,3 @@
-// shared/scripts/categoryManagement.js
 import { getColor } from './colorManagement.js';
 
 const defaultCategories = [
@@ -14,11 +13,13 @@ export function loadCategories(categoryRow) {
   let storedData = JSON.parse(localStorage.getItem('categoryData'));
   let categories = defaultCategories;
 
-  // Check if stored data exists and matches the current version
-  if (storedData && storedData.version === STORAGE_VERSION) {
+  // Check if stored data is valid and matches the current version
+  console.log('loadCategories: Stored data from localStorage:', storedData);
+  if (storedData && storedData.version === STORAGE_VERSION && Array.isArray(storedData.categories) && storedData.categories.length > 0) {
     categories = storedData.categories;
   } else {
-    // Reset to default categories if version mismatches or no data
+    // Use default categories and reset localStorage
+    console.log('loadCategories: Using default categories due to invalid or empty stored data');
     storedData = { version: STORAGE_VERSION, categories: defaultCategories };
     localStorage.setItem('categoryData', JSON.stringify(storedData));
   }
@@ -26,14 +27,15 @@ export function loadCategories(categoryRow) {
   console.log('Categories loaded from localStorage or defaults:', categories);
 
   categoryRow.innerHTML = ''; // Clear the category row
-  categories.forEach(category => {
+  categories.forEach((category, index) => {
     if (!category.name || typeof category.name !== 'string' || category.name.trim() === '') {
       console.error(`Invalid category name: "${category.name}"`);
       return;
     }
     const categoryDiv = document.createElement('div');
     categoryDiv.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
-    const dynamicColor = getColor(category.name);
+    const dynamicColor = getColor(category.name, index); // Pass index as position
+    console.log(`loadCategories: Assigning color ${dynamicColor} to category ${category.name} at index ${index}`);
     categoryDiv.innerHTML = `
       <button style="width: 40px; height: 40px; border-radius: 50%; background-color: ${dynamicColor}; cursor: pointer; border: none; position: relative;">
         <span class="category-specific-button" style="display: none;">
