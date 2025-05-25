@@ -41,7 +41,7 @@
       border-radius: 50%;
       background-color: #FFFFFF;
     }
-    .popup-button[data-action="confirm"] {
+    .popup-button[data-action="yes"], .popup-button[data-action="confirm"] {
       background-color: #333333;
       color: #FFFFFF;
       border: none;
@@ -51,10 +51,10 @@
       cursor: pointer;
       transition: background-color 0.3s;
     }
-    .popup-button[data-action="confirm"]:hover {
+    .popup-button[data-action="yes"]:hover, .popup-button[data-action="confirm"]:hover {
       background-color: #444444;
     }
-    .popup-button[data-action="cancel"] {
+    .popup-button[data-action="no"], .popup-button[data-action="cancel"] {
       background-color: #1A1A1A;
       color: #FFFFFF;
       border: 1px solid #333333;
@@ -63,7 +63,7 @@
       cursor: pointer;
       transition: background-color 0.3s;
     }
-    .popup-button[data-action="cancel"]:hover {
+    .popup-button[data-action="no"]:hover, .popup-button[data-action="cancel"]:hover {
       background-color: #2A2A2A;
     }
   </style>
@@ -79,15 +79,15 @@
   <div style="display: flex; flex-direction: column; align-items: center; margin-top: 30px;">
     <div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 20px;">
       <div style="display: flex; flex-direction: column; align-items: center;">
-        <button class="action-button" data-action="show-rewards" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #004598; background-color: #BBF5BB; cursor: pointer; background-image: url('/jiffy/assets/prompts.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"></button>
+        <button class="action-button" data-action="show-rewards" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #004598; background-color: #BBF5BB; cursor: pointer;"></button>
         <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">Prompts</span>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center;">
-        <button class="action-button" data-action="show-rewards" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #004598; background-color: #BBF5BB; cursor: pointer; background-image: url('/jiffy/assets/rewards.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"></button>
+        <button class="action-button" data-action="show-rewards" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #004598; background-color: #BBF5BB; cursor: pointer;"></button>
         <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">Rewards</span>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center;">
-        <button class="action-button" data-action="add" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #004598; background-color: #BBF5BB; cursor: pointer; background-image: url('/jiffy/assets/add.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"></button>
+        <button class="action-button" data-action="add" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #004598; background-color: #BBF5BB; cursor: pointer;"></button>
         <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">Add</span>
       </div>
     </div>
@@ -114,8 +114,8 @@
     <div style="background-color: #000000; padding: 20px; border-radius: 8px; text-align: center; width: 80%; max-width: 300px; border: 1px solid #333333;">
       <h2 id="edit-color-popup-title" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; margin: 0 0 10px; color: #FFFFFF;">Edit Color</h2>
       <input id="color-input" type="color" style="width: 100%; padding: 5px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 4px;">
-      <button class="popup-button" data-action="confirm">Confirm</button>
-      <button class="popup-button" data-action="cancel">Cancel</button>
+      <button class="popup-button" data-action="yes">Yes</button>
+      <button class="popup-button" data-action="no">No</button>
     </div>
   </div>
   <script type="module" src="/jiffy/shared/scripts/main.js"></script>
