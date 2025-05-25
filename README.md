@@ -3,7 +3,7 @@ Executive function assistant.
 
 # Jiffy
 
-Jiffy is an executive function assistant web app designed to help users manage categories for tasks and activities. It allows users to add and delete categories, with persistence using localStorage and dynamic colors for visual distinction.
+ROLL BACK MARKER. ROLLED BACK TO 10th MAY. Jiffy is an executive function assistant web app designed to help users manage categories for tasks and activities. It allows users to add and delete categories, with persistence using localStorage and dynamic colors for visual distinction.
 
 ## Features
 - Add and delete categories with a simple UI.
