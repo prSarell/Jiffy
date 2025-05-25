@@ -121,6 +121,7 @@ function initializeApp() {
     input.value = currentColor; // Set the color picker to the current color
     editingCategoryDiv = categoryDiv; // Store the category being edited
     editColorPopup.style.display = 'flex';
+    input.click(); // Auto-open the color picker
   }
 
   function closeEditColorPopup() {
@@ -172,7 +173,7 @@ function initializeApp() {
           closePopup();
         }
       } else if (popupButton.closest('#edit-color-popup')) { // Edit color popup buttons
-        if (action === 'confirm') {
+        if (action === 'yes') {
           const input = document.getElementById('color-input');
           if (!input || !editingCategoryDiv) {
             console.error('click: Color input or editing category not found:', { input, editingCategoryDiv });
@@ -187,8 +188,8 @@ function initializeApp() {
             button.style.backgroundColor = newColor; // Update the button color in the DOM
           }
           closeEditColorPopup();
-        } else if (action === 'cancel') {
-          closeEditColorPopup();
+        } else if (action === 'no') {
+          closeEditColorPopup(); // Cancel without requiring color selection
         }
       }
       return;
