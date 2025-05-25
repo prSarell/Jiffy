@@ -1,4 +1,3 @@
-// shared/scripts/colorManagement.js
 // Base colors for each line (distinct colors)
 const lineBaseColors = [
   '#1E3A8A', // Blue (used by first line: Home, Life, Work, School)
@@ -68,9 +67,18 @@ export function getColor(categoryName, position) {
 
   // Assign a base color to the line if it doesn't have one (or if the line is empty)
   if (!lineBaseColorAssignments[lineNumber] || lineCategoryCounts[lineNumber] === 0) {
-    // Randomly select a base color from lineBaseColors
-    const randomIndex = Math.floor(Math.random() * lineBaseColors.length);
-    const newBaseColor = lineBaseColors[randomIndex];
+    // Get the previous line's base color (if it exists)
+    const prevLineNumber = lineNumber - 1;
+    const prevBaseColor = lineBaseColorAssignments[prevLineNumber];
+    
+    // Filter out the previous line's base color (if starting a new line)
+    const availableColors = positionInLine === 0 && prevBaseColor 
+      ? lineBaseColors.filter(color => color !== prevBaseColor) 
+      : lineBaseColors;
+
+    // Randomly select a base color from available colors
+    const randomIndex = Math.floor(Math.random() * availableColors.length);
+    const newBaseColor = availableColors[randomIndex];
     lineBaseColorAssignments[lineNumber] = newBaseColor;
   }
 
