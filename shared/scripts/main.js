@@ -1,4 +1,3 @@
-// shared/scripts/main.js
 import { getColor, setColor, removeCategory } from './colorManagement.js';
 import { loadCategories, saveCategories } from './categoryManagement.js';
 
@@ -44,6 +43,17 @@ function initializeApp() {
   if (popup.style.display !== 'none') popup.style.display = 'none';
   if (deletePopup.style.display !== 'none') deletePopup.style.display = 'none';
   if (editColorPopup.style.display !== 'none') editColorPopup.style.display = 'none';
+
+  // Add direct event listener for Add button
+  const addButton = document.querySelector('.action-button[data-action="add"]');
+  if (addButton) {
+    addButton.addEventListener('click', () => {
+      console.log('Add button clicked!');
+      showAddPopup();
+    });
+  } else {
+    console.error('Add button not found');
+  }
 
   let selectMode = false;
   const selectedCategories = new Set();
