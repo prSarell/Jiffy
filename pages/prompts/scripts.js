@@ -1,5 +1,5 @@
 // Path: /jiffy/pages/prompts/scripts.js
-// Purpose: Initializes the Prompts page, manages prompt display, and handles adding, editing, and removing prompts via popups and buttons, saving to localStorage.
+// Purpose: Initializes the Prompts page, manages prompt display, and handles adding, editing, and removing prompts with weight options via popups and buttons, saving to localStorage.
 
 import { addPrompt, getPrompts, updatePrompt, removePrompt } from './promptManagement.js';
 
@@ -33,13 +33,15 @@ function initializePromptsPage() {
     console.log('loadPrompts: Loading prompts');
     const prompts = getPrompts();
     promptList.innerHTML = '';
+    // Sort: weighted prompts first
+    prompts.sort((a, b) => (b.weighted ? 1 : 0) - (a.weighted ? 1 : 0));
     prompts.forEach(prompt => {
       if (!prompt.id || !prompt.text) {
         console.error('loadPrompts: Invalid prompt:', prompt);
         return;
       }
       const promptItem = document.createElement('div');
-      promptItem.className = 'prompt-item';
+      promptItem.className = `prompt-item${prompt.weighted ? ' weighted' : ''}`;
       promptItem.dataset.promptId = prompt.id;
       promptItem.innerHTML = `
         <span>${prompt.text}</span>
@@ -63,11 +65,13 @@ function initializePromptsPage() {
   function showAddPromptPopup() {
     console.log('showAddPromptPopup: Opening add prompt popup');
     const input = document.getElementById('prompt-input');
-    if (!input) {
-      console.error('showAddPromptPopup: Prompt input not found');
+    const weightInput = document.getElementById('prompt-weight');
+    if (!input || !weightInput) {
+      console.error('showAddPromptPopup: Prompt inputs not found');
       return;
     }
     input.value = '';
+    weightInput.checked = false;
     addPromptPopup.style.display = 'flex';
     input.focus();
   }
@@ -92,11 +96,13 @@ function initializePromptsPage() {
     }
     console.log('showEditPromptPopup: Opening edit prompt popup for:', prompt);
     const input = document.getElementById('edit-prompt-input');
-    if (!input) {
-      console.error('showEditPromptPopup: Edit prompt input not found');
+    const weightInput = document.getElementById('edit-prompt-weight');
+    if (!input || !weightInput) {
+      console.error('showEditPromptPopup: Edit prompt inputs not found');
       return;
     }
     input.value = prompt.text;
+    weightInput.checked = prompt.weighted || false;
     editingPromptId = prompt.id;
     editPromptPopup.style.display = 'flex';
     input.focus();
@@ -137,8 +143,9 @@ function initializePromptsPage() {
     if (action === 'confirm') {
       if (popupButton.closest('#add-prompt-popup')) {
         const input = document.getElementById('prompt-input');
-        if (!input) {
-          console.error('click: Prompt input not found');
+        const weightInput = document.getElementById('prompt-weight');
+        if (!input || !weightInput) {
+          console.error('click: Prompt inputs not found');
           return;
         }
         const promptText = input.value.trim();
@@ -146,7 +153,8 @@ function initializePromptsPage() {
           const prompt = {
             id: Date.now(),
             text: promptText,
-            done: false
+            done: false,
+            weighted: weightInput.checked
           };
           addPrompt(prompt);
           loadPrompts();
@@ -156,13 +164,14 @@ function initializePromptsPage() {
         }
       } else if (popupButton.closest('#edit-prompt-popup') && editPromptPopup) {
         const input = document.getElementById('edit-prompt-input');
-        if (!input) {
-          console.error('click: Edit prompt input not found');
+        const weightInput = document.getElementById('edit-prompt-weight');
+        if (!input || !weightInput) {
+          console.error('click: Edit prompt inputs not found');
           return;
         }
         const promptText = input.value.trim();
         if (promptText && editingPromptId !== null) {
-          updatePrompt(editingPromptId, promptText);
+          updatePrompt(editingPromptId, promptText, weightInput.checked);
           loadPrompts();
           closeEditPromptPopup();
         } else {
