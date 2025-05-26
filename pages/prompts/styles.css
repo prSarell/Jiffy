@@ -1,32 +1,34 @@
 /* 
 Path: /jiffy/pages/prompts/styles.css
-Purpose: Styles the Prompts page, including the prompt list and add prompt popup, to match the iPhone Notes app aesthetic with Jiffy's black background and white text.
+Purpose: Styles the Prompts page, including the prompt list, add/edit prompt popups, to match the iPhone Notes app aesthetic with Jiffy's black background and white text.
 */
 .prompt-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 80%;
-  max-width: 300px;
+  gap: 12px;
+  width: 90%; /* Wider for better readability */
+  max-width: 320px;
   margin-top: 20px;
 }
 .prompt-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 12px;
   background-color: #1A1A1A;
-  border-radius: 4px;
+  border-radius: 6px;
   border: 1px solid #333333;
   word-wrap: break-word;
+  cursor: pointer;
 }
 .prompt-item span {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 12px;
+  font-size: 15px; /* Larger for ADHD-friendly readability */
   color: #FFFFFF;
   flex: 1;
 }
-#add-prompt-popup {
+#add-prompt-popup,
+#edit-prompt-popup {
   z-index: 1000;
   display: none;
   position: fixed;
@@ -34,33 +36,57 @@ Purpose: Styles the Prompts page, including the prompt list and add prompt popup
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.8); /* Darker backdrop */
   justify-content: center;
   align-items: center;
 }
 .popup-content {
   background-color: #000000;
-  padding: 20px;
-  border-radius: 8px;
+  padding: 24px; /* More padding for comfort */
+  border-radius: 10px;
   text-align: center;
-  width: 80%;
-  max-width: 300px;
+  width: 85%;
+  max-width: 340px;
   border: 1px solid #333333;
+}
+.popup-content h2 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 18px; /* Larger title */
+  margin: 0 0 12px;
+  color: #FFFFFF;
+}
+.popup-content input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #333333;
+  border-radius: 6px;
+  background-color: #1A1A1A;
+  color: #FFFFFF;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 15px;
 }
 .popup-button {
   background-color: #333333;
   color: #FFFFFF;
   border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  margin-right: 5px;
+  padding: 8px 16px; /* Larger buttons */
+  border-radius: 6px;
+  margin-right: 8px;
   cursor: pointer;
   transition: background-color 0.3s;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 12px;
+  font-size: 14px;
 }
 .popup-button:hover {
   background-color: #444444;
+}
+.popup-button[data-action="confirm"] {
+  background-color: #BBF5BB;
+  color: #000000;
+}
+.popup-button[data-action="confirm"]:hover {
+  background-color: #A3D9A3;
 }
 .popup-button[data-action="cancel"] {
   background-color: #1A1A1A;
