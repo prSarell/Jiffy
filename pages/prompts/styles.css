@@ -1,6 +1,6 @@
 /* 
 Path: /jiffy/pages/prompts/styles.css
-Purpose: Styles the Prompts page, including the prompt list, add/edit/delete prompt popups, and weighted prompts, to match the iPhone Notes app aesthetic with Jiffy's black background and white text.
+Purpose: Styles the Prompts page, including the prompt list, add/edit/delete prompt popups, weighted prompts, and time-sensitive prompts.
 */
 .prompt-list {
   display: flex;
@@ -20,9 +20,10 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
   border: 1px solid #333333;
   word-wrap: break-word;
   cursor: pointer;
+  visibility: visible;
 }
 .prompt-item.weighted {
-  background-color: #A3D9A3; /* Subtler green */
+  background-color: #A3D9A3;
   color: #000000;
   font-weight: 600;
   order: -1;
@@ -63,7 +64,7 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
 .weight-checkbox {
   margin-right: 8px;
   transform: scale(1.2);
-  vertical-align: middle; /* Better alignment */
+  vertical-align: middle;
 }
 #add-prompt-popup,
 #edit-prompt-popup {
@@ -94,7 +95,8 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
   margin: 0 0 12px;
   color: #FFFFFF;
 }
-.popup-content input[type="text"] {
+.popup-content input[type="text"],
+.popup-content input[type="datetime-local"] {
   width: 100%;
   padding: 8px;
   margin-bottom: 12px;
@@ -109,7 +111,7 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 12px; /* Consistent spacing */
+  margin-bottom: 12px;
 }
 .popup-content input[type="checkbox"] {
   transform: scale(1.2);
