@@ -1,6 +1,6 @@
 <!-- 
 Path: /jiffy/pages/prompts/index.html
-Purpose: Defines the Prompts page UI, displaying a header with "Back," "Prompts," and "+" buttons to add prompts, a list of user-created prompts with delete options, and popups for adding/editing prompts, styled like the iPhone Notes app with Jiffy's black background and white text.
+Purpose: Defines the Prompts page UI, displaying a header with "Back," "Prompts," and "+" buttons to add prompts, a list of user-created prompts with delete and weight options, and popups for adding/editing prompts, styled like the iPhone Notes app with Jiffy's black background and white text.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -27,6 +27,10 @@ Purpose: Defines the Prompts page UI, displaying a header with "Back," "Prompts,
     <div class="popup-content">
       <h2>Add Prompt</h2>
       <input id="prompt-input" type="text" placeholder="Enter prompt">
+      <div>
+        <input id="prompt-weight" type="checkbox" class="weight-checkbox">
+        <label for="prompt-weight">Mark as important</label>
+      </div>
       <button class="popup-button" data-action="confirm">Confirm</button>
       <button class="popup-button" data-action="cancel">Cancel</button>
     </div>
@@ -35,6 +39,10 @@ Purpose: Defines the Prompts page UI, displaying a header with "Back," "Prompts,
     <div class="popup-content">
       <h2>Edit Prompt</h2>
       <input id="edit-prompt-input" type="text" placeholder="Edit prompt">
+      <div>
+        <input id="edit-prompt-weight" type="checkbox" class="weight-checkbox">
+        <label for="edit-prompt-weight">Mark as important</label>
+      </div>
       <button class="popup-button" data-action="confirm">Confirm</button>
       <button class="popup-button" data-action="cancel">Cancel</button>
     </div>
