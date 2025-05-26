@@ -15,15 +15,16 @@ function initializePromptsPage() {
   const addPromptPopup = document.getElementById('add-prompt-popup');
   const editPromptPopup = document.getElementById('edit-prompt-popup');
 
-  if (!promptList || !addPromptButton || !addPromptPopup || !editPromptPopup) {
-    console.error('initializePromptsPage: Required DOM elements not found:', { promptList, addPromptButton, addPromptPopup, editPromptPopup });
+  if (!promptList || !addPromptButton || !addPromptPopup) {
+    console.error('initializePromptsPage: Required DOM elements not found:', { promptList, addPromptButton, addPromptPopup });
     return;
-  } else {
-    console.log('initializePromptsPage: Add prompt button found:', addPromptButton);
+  }
+  if (!editPromptPopup) {
+    console.warn('initializePromptsPage: Edit prompt popup not found, editing disabled');
   }
 
   if (addPromptPopup.style.display !== 'none') addPromptPopup.style.display = 'none';
-  if (editPromptPopup.style.display !== 'none') editPromptPopup.style.display = 'none';
+  if (editPromptPopup && editPromptPopup.style.display !== 'none') editPromptPopup.style.display = 'none';
 
   let editingPromptId = null;
 
@@ -43,7 +44,9 @@ function initializePromptsPage() {
       promptItem.innerHTML = `
         <span>${prompt.text}</span>
       `;
-      promptItem.addEventListener('click', () => showEditPromptPopup(prompt));
+      if (editPromptPopup) {
+        promptItem.addEventListener('click', () => showEditPromptPopup(prompt));
+      }
       promptList.appendChild(promptItem);
     });
     console.log(`loadPrompts: Loaded ${prompts.length} prompts`);
@@ -76,6 +79,10 @@ function initializePromptsPage() {
 
   // Show edit prompt popup
   function showEditPromptPopup(prompt) {
+    if (!editPromptPopup) {
+      console.warn('showEditPromptPopup: Edit prompt popup not available');
+      return;
+    }
     console.log('showEditPromptPopup: Opening edit prompt popup for:', prompt);
     const input = document.getElementById('edit-prompt-input');
     if (!input) {
@@ -90,6 +97,10 @@ function initializePromptsPage() {
 
   // Close edit prompt popup
   function closeEditPromptPopup() {
+    if (!editPromptPopup) {
+      console.warn('closeEditPromptPopup: Edit prompt popup not available');
+      return;
+    }
     console.log('closeEditPromptPopup: Closing edit prompt popup');
     const input = document.getElementById('edit-prompt-input');
     if (!input) {
@@ -136,7 +147,7 @@ function initializePromptsPage() {
         } else {
           alert('Please enter a prompt!');
         }
-      } else if (popupButton.closest('#edit-prompt-popup')) {
+      } else if (popupButton.closest('#edit-prompt-popup') && editPromptPopup) {
         const input = document.getElementById('edit-prompt-input');
         if (!input) {
           console.error('click: Edit prompt input not found');
@@ -154,7 +165,7 @@ function initializePromptsPage() {
     } else if (action === 'cancel') {
       if (popupButton.closest('#add-prompt-popup')) {
         closeAddPromptPopup();
-      } else if (popupButton.closest('#edit-prompt-popup')) {
+      } else if (popupButton.closest('#edit-prompt-popup') && editPromptPopup) {
         closeEditPromptPopup();
       }
     }
