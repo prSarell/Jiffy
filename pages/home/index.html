@@ -1,12 +1,15 @@
 <!-- 
 Path: /jiffy/pages/home/index.html
-Purpose: Defines the homepage UI, displaying a header, action buttons for Prompts, Rewards, and Add, and a list of user-created categories, styled with Jiffy's black background and white text.
+Purpose: Defines the homepage UI, displaying a header, action buttons for Prompts, Rewards, and Add, and a list of user-created categories.
 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Jiffy">
   <title>Jiffy - Home</title>
   <link rel="stylesheet" href="/jiffy/shared/styles.css">
   <link rel="manifest" href="/jiffy/manifest.json">
@@ -125,5 +128,12 @@ Purpose: Defines the homepage UI, displaying a header, action buttons for Prompt
     </div>
   </div>
   <script type="module" src="/jiffy/shared/scripts/main.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/jiffy/sw.js')
+        .then(reg => console.log('Service Worker registered:', reg))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    }
+  </script>
 </body>
 </html>
