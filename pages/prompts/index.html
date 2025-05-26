@@ -59,7 +59,7 @@ Purpose: Defines the Prompts page UI, displaying a header with "Back," "Prompts,
   <script type="module" src="/jiffy/pages/prompts/scripts.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/jiffy/sw.js')
+      navigator.serviceWorker.register('/jiffy/service-workers/sw.js')
         .then(reg => console.log('Service Worker registered:', reg))
         .catch(err => console.error('Service Worker registration failed:', err));
     }
