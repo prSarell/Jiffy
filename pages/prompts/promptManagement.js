@@ -1,5 +1,5 @@
 // Path: /jiffy/pages/prompts/promptManagement.js
-// Purpose: Manages storage, retrieval, and updating of user-created prompts in localStorage for the Prompts page.
+// Purpose: Manages storage, retrieval, updating, and removal of user-created prompts in localStorage for the Prompts page.
 
 let prompts = JSON.parse(localStorage.getItem('prompts')) || [];
 
@@ -19,5 +19,11 @@ export function updatePrompt(id, text) {
   prompts = prompts.map(prompt => 
     prompt.id === id ? { ...prompt, text } : prompt
   );
+  localStorage.setItem('prompts', JSON.stringify(prompts));
+}
+
+export function removePrompt(id) {
+  console.log('removePrompt: Removing prompt ID:', id);
+  prompts = prompts.filter(prompt => prompt.id !== id);
   localStorage.setItem('prompts', JSON.stringify(prompts));
 }
