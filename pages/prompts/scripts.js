@@ -1,7 +1,7 @@
 // Path: /jiffy/pages/prompts/scripts.js
-// Purpose: Initializes the Prompts page, manages prompt display, and handles adding new prompts via a popup, saving to localStorage.
+// Purpose: Initializes the Prompts page, manages prompt display, and handles adding/editing prompts via popups, saving to localStorage.
 
-import { addPrompt, getPrompts } from './promptManagement.js';
+import { addPrompt, getPrompts, updatePrompt } from './promptManagement.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOMContentLoaded: Initializing prompts page');
@@ -13,21 +13,25 @@ function initializePromptsPage() {
   const promptList = document.querySelector('.prompt-list');
   const addPromptButton = document.getElementById('add-prompt-button');
   const addPromptPopup = document.getElementById('add-prompt-popup');
+  const editPromptPopup = document.getElementById('edit-prompt-popup');
 
-  if (!promptList || !addPromptButton || !addPromptPopup) {
-    console.error('initializePromptsPage: Required DOM elements not found:', { promptList, addPromptButton, addPromptPopup });
+  if (!promptList || !addPromptButton || !addPromptPopup || !editPromptPopup) {
+    console.error('initializePromptsPage: Required DOM elements not found:', { promptList, addPromptButton, addPromptPopup, editPromptPopup });
     return;
   } else {
     console.log('initializePromptsPage: Add prompt button found:', addPromptButton);
   }
 
   if (addPromptPopup.style.display !== 'none') addPromptPopup.style.display = 'none';
+  if (editPromptPopup.style.display !== 'none') editPromptPopup.style.display = 'none';
+
+  let editingPromptId = null;
 
   // Load prompts
   function loadPrompts() {
     console.log('loadPrompts: Loading prompts');
     const prompts = getPrompts();
-    promptList.innerHTML = ''; // Clear the list
+    promptList.innerHTML = '';
     prompts.forEach(prompt => {
       if (!prompt.id || !prompt.text) {
         console.error('loadPrompts: Invalid prompt:', prompt);
@@ -35,9 +39,11 @@ function initializePromptsPage() {
       }
       const promptItem = document.createElement('div');
       promptItem.className = 'prompt-item';
+      promptItem.dataset.promptId = prompt.id;
       promptItem.innerHTML = `
         <span>${prompt.text}</span>
       `;
+      promptItem.addEventListener('click', () => showEditPromptPopup(prompt));
       promptList.appendChild(promptItem);
     });
     console.log(`loadPrompts: Loaded ${prompts.length} prompts`);
@@ -53,7 +59,7 @@ function initializePromptsPage() {
     }
     input.value = '';
     addPromptPopup.style.display = 'flex';
-    input.focus(); // Focus input for user cue
+    input.focus();
   }
 
   // Close add prompt popup
@@ -68,6 +74,33 @@ function initializePromptsPage() {
     addPromptPopup.style.display = 'none';
   }
 
+  // Show edit prompt popup
+  function showEditPromptPopup(prompt) {
+    console.log('showEditPromptPopup: Opening edit prompt popup for:', prompt);
+    const input = document.getElementById('edit-prompt-input');
+    if (!input) {
+      console.error('showEditPromptPopup: Edit prompt input not found');
+      return;
+    }
+    input.value = prompt.text;
+    editingPromptId = prompt.id;
+    editPromptPopup.style.display = 'flex';
+    input.focus();
+  }
+
+  // Close edit prompt popup
+  function closeEditPromptPopup() {
+    console.log('closeEditPromptPopup: Closing edit prompt popup');
+    const input = document.getElementById('edit-prompt-input');
+    if (!input) {
+      console.error('closeEditPromptPopup: Edit prompt input not found');
+      return;
+    }
+    input.value = '';
+    editingPromptId = null;
+    editPromptPopup.style.display = 'none';
+  }
+
   // Add event listener for add prompt button
   addPromptButton.addEventListener('click', (event) => {
     console.log('addPromptButton: Add prompt button clicked');
@@ -77,12 +110,14 @@ function initializePromptsPage() {
   });
 
   // Add event listener for popup buttons
-  addPromptPopup.addEventListener('click', (event) => {
+  document.addEventListener('click', (event) => {
     const popupButton = event.target.closest('.popup-button');
-    if (popupButton) {
-      const action = popupButton.getAttribute('data-action');
-      console.log(`click: Popup button clicked with action: ${action}`);
-      if (action === 'confirm') {
+    if (!popupButton) return;
+    const action = popupButton.getAttribute('data-action');
+    console.log(`click: Popup button clicked with action: ${action}`);
+
+    if (action === 'confirm') {
+      if (popupButton.closest('#add-prompt-popup')) {
         const input = document.getElementById('prompt-input');
         if (!input) {
           console.error('click: Prompt input not found');
@@ -101,8 +136,26 @@ function initializePromptsPage() {
         } else {
           alert('Please enter a prompt!');
         }
-      } else if (action === 'cancel') {
+      } else if (popupButton.closest('#edit-prompt-popup')) {
+        const input = document.getElementById('edit-prompt-input');
+        if (!input) {
+          console.error('click: Edit prompt input not found');
+          return;
+        }
+        const promptText = input.value.trim();
+        if (promptText && editingPromptId !== null) {
+          updatePrompt(editingPromptId, promptText);
+          loadPrompts();
+          closeEditPromptPopup();
+        } else {
+          alert('Please enter a prompt!');
+        }
+      }
+    } else if (action === 'cancel') {
+      if (popupButton.closest('#add-prompt-popup')) {
         closeAddPromptPopup();
+      } else if (popupButton.closest('#edit-prompt-popup')) {
+        closeEditPromptPopup();
       }
     }
   });
