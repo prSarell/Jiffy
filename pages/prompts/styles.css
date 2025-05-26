@@ -5,27 +5,27 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
 .prompt-list {
   display: flex;
   flex-direction: column;
-  gap: 12px; /* Increased gap for readability */
-  width: 90%;
-  max-width: 320px;
+  gap: 12px;
+  width: 100%; /* Full width for left alignment */
   margin-top: 20px;
+  margin-left: 16px; /* Small left margin for padding */
 }
 .prompt-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0; /* Minimal padding */
+  padding: 8px 0;
   word-wrap: break-word;
   cursor: pointer;
 }
 .prompt-item.weighted {
-  color: #B3E5B3; /* Softer green for text */
+  color: #B3E5B3;
   font-weight: 600;
   order: -1;
 }
 .prompt-item span {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 15px;
+  font-size: 12px; /* 20% smaller than 15px */
   color: #FFFFFF;
   flex: 1;
   margin-right: 8px;
@@ -40,7 +40,7 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
   position: absolute;
   left: 0;
   color: #FFFFFF;
-  font-size: 12px; /* Smaller bullet */
+  font-size: 10px; /* Smaller bullet for new font size */
 }
 .prompt-item.weighted span::before {
   color: #B3E5B3;
@@ -49,7 +49,7 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
   background: none;
   border: none;
   color: #FF3333;
-  font-size: 18px;
+  font-size: 16px; /* Slightly smaller for balance */
   cursor: pointer;
   padding: 0;
 }
