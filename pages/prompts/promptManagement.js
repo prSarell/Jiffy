@@ -1,4 +1,4 @@
-// Path: /jiffy/pages/prompts/promptManagement.js
+// ri. Path: /jiffy/pages/prompts/promptManagement.js
 // Purpose: Manages storage, retrieval, updating, and removal of user-created prompts in localStorage for the Prompts page.
 
 let prompts = JSON.parse(localStorage.getItem('prompts')) || [];
