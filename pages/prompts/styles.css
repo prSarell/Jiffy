@@ -22,10 +22,10 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
   cursor: pointer;
 }
 .prompt-item.weighted {
-  background-color: #BBF5BB;
+  background-color: #A3D9A3; /* Subtler green */
   color: #000000;
   font-weight: 600;
-  order: -1; /* Moves weighted prompts to top */
+  order: -1;
 }
 .prompt-item span {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -62,7 +62,8 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
 }
 .weight-checkbox {
   margin-right: 8px;
-  transform: scale(1.2); /* Slightly larger checkbox */
+  transform: scale(1.2);
+  vertical-align: middle; /* Better alignment */
 }
 #add-prompt-popup,
 #edit-prompt-popup {
@@ -104,15 +105,22 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 15px;
 }
+.popup-content .checkbox-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px; /* Consistent spacing */
+}
 .popup-content input[type="checkbox"] {
   transform: scale(1.2);
-  margin: 8px 0;
+  margin: 0;
 }
 .popup-content label {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 14px;
   color: #FFFFFF;
   margin-left: 8px;
+  vertical-align: middle;
 }
 .popup-button {
   background-color: #333333;
