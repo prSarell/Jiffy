@@ -6,9 +6,10 @@ Purpose: Defines the Prompts page UI, displaying a header with "Back," "Prompts,
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"> <!-- Prevents gradient -->
-  <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Full-screen PWA -->
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> <!-- Transparent status bar -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Jiffy">
   <title>Jiffy - Prompts</title>
   <link rel="stylesheet" href="/jiffy/pages/prompts/styles.css">
   <link rel="manifest" href="/jiffy/manifest.json">
@@ -56,5 +57,12 @@ Purpose: Defines the Prompts page UI, displaying a header with "Back," "Prompts,
     </div>
   </div>
   <script type="module" src="/jiffy/pages/prompts/scripts.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/jiffy/sw.js')
+        .then(reg => console.log('Service Worker registered:', reg))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    }
+  </script>
 </body>
 </html>
