@@ -3,6 +3,11 @@
 
 import { addPrompt, getPrompts } from './promptManagement.js';
 
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOMContentLoaded: Initializing prompts page');
+  initializePromptsPage();
+});
+
 function initializePromptsPage() {
   console.log('initializePromptsPage: Starting initialization');
   const promptList = document.querySelector('.prompt-list');
@@ -66,12 +71,13 @@ function initializePromptsPage() {
   // Add event listener for add prompt button
   addPromptButton.addEventListener('click', (event) => {
     console.log('addPromptButton: Add prompt button clicked');
-    event.preventDefault(); // Prevent any default behavior
+    event.stopPropagation(); // Prevent bubbling
+    event.preventDefault(); // Prevent default
     showAddPromptPopup();
   });
 
   // Add event listener for popup buttons
-  document.addEventListener('click', (event) => {
+  addPromptPopup.addEventListener('click', (event) => {
     const popupButton = event.target.closest('.popup-button');
     if (popupButton) {
       const action = popupButton.getAttribute('data-action');
@@ -104,9 +110,3 @@ function initializePromptsPage() {
   // Initial load
   loadPrompts();
 }
-
-// Initialize when page loads
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOMContentLoaded: Initializing prompts page');
-  initializePromptsPage();
-});
