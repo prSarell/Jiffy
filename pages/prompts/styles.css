@@ -7,15 +7,17 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
   flex-direction: column;
   gap: 12px;
   width: 100%;
-  margin-top: 20px;
-  margin-left: 0; /* No left margin for screen edge alignment */
-  justify-content: flex-start; /* Explicit left alignment */
+  margin: 0; /* Remove all margins */
+  padding: 0; /* Remove padding */
+  justify-content: flex-start;
+  text-align: left; /* Force left alignment */
 }
 .prompt-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
+  margin: 0; /* Ensure no item margins */
   word-wrap: break-word;
   cursor: pointer;
 }
@@ -30,7 +32,7 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
   color: #FFFFFF;
   flex: 1;
   margin-right: 8px;
-  padding-left: 8px; /* Reduced for closer edge alignment */
+  padding-left: 4px; /* Minimal padding for bullet */
   position: relative;
 }
 .prompt-item.weighted span {
