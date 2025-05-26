@@ -1,26 +1,16 @@
 {
   "name": "Jiffy",
   "short_name": "Jiffy",
-  "start_url": "/jiffy/pages/home/",
-  "display": "standalone",
-  "background_color": "#000000",
+  "description": "Executive function assistsnt",
+  "start_url": "/jiffy/pages/prompts/index.html",
+  "display": "standalone", /* App-like, no browser UI */
+  "background_color": "#000000", /* Matches page background */
   "theme_color": "#000000",
   "icons": [
     {
       "src": "/jiffy/assets/icon.png",
       "sizes": "192x192",
       "type": "image/png"
-    },
-    {
-      "src": "/jiffy/assets/icon.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    },
-    {
-      "src": "/jiffy/assets/icon.png",
-      "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "apple-touch-icon"
     }
   ]
 }
