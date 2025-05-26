@@ -33,7 +33,6 @@ function initializePromptsPage() {
     console.log('loadPrompts: Loading prompts');
     const prompts = getPrompts();
     promptList.innerHTML = '';
-    // Sort: weighted prompts first
     prompts.sort((a, b) => (b.weighted ? 1 : 0) - (a.weighted ? 1 : 0));
     prompts.forEach(prompt => {
       if (!prompt.id || !prompt.text) {
