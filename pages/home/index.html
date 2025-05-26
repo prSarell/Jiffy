@@ -130,7 +130,7 @@ Purpose: Defines the homepage UI, displaying a header, action buttons for Prompt
   <script type="module" src="/jiffy/shared/scripts/main.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/jiffy/sw.js')
+      navigator.serviceWorker.register('/jiffy/service-workers/sw.js')
         .then(reg => console.log('Service Worker registered:', reg))
         .catch(err => console.error('Service Worker registration failed:', err));
     }
