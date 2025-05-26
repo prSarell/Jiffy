@@ -71,8 +71,8 @@ function initializePromptsPage() {
   // Add event listener for add prompt button
   addPromptButton.addEventListener('click', (event) => {
     console.log('addPromptButton: Add prompt button clicked');
-    event.stopPropagation(); // Prevent bubbling
-    event.preventDefault(); // Prevent default
+    event.stopPropagation();
+    event.preventDefault();
     showAddPromptPopup();
   });
 
@@ -91,7 +91,7 @@ function initializePromptsPage() {
         const promptText = input.value.trim();
         if (promptText) {
           const prompt = {
-            id: Date.now(), // Simple unique ID
+            id: Date.now(),
             text: promptText,
             done: false
           };
