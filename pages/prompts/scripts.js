@@ -12,6 +12,8 @@ function initializePromptsPage() {
   if (!promptList || !addPromptButton || !addPromptPopup) {
     console.error('initializePromptsPage: Required DOM elements not found:', { promptList, addPromptButton, addPromptPopup });
     return;
+  } else {
+    console.log('initializePromptsPage: Add prompt button found:', addPromptButton);
   }
 
   if (addPromptPopup.style.display !== 'none') addPromptPopup.style.display = 'none';
@@ -46,6 +48,7 @@ function initializePromptsPage() {
     }
     input.value = '';
     addPromptPopup.style.display = 'flex';
+    input.focus(); // Focus input for user cue
   }
 
   // Close add prompt popup
@@ -60,12 +63,14 @@ function initializePromptsPage() {
     addPromptPopup.style.display = 'none';
   }
 
-  // Add event listeners
-  addPromptButton.addEventListener('click', () => {
+  // Add event listener for add prompt button
+  addPromptButton.addEventListener('click', (event) => {
     console.log('addPromptButton: Add prompt button clicked');
+    event.preventDefault(); // Prevent any default behavior
     showAddPromptPopup();
   });
 
+  // Add event listener for popup buttons
   document.addEventListener('click', (event) => {
     const popupButton = event.target.closest('.popup-button');
     if (popupButton) {
