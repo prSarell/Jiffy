@@ -1,7 +1,7 @@
 // Path: /jiffy/pages/prompts/scripts.js
-// Purpose: Initializes the Prompts page, manages prompt display, and handles adding/editing prompts via popups, saving to localStorage.
+// Purpose: Initializes the Prompts page, manages prompt display, and handles adding, editing, and removing prompts via popups and buttons, saving to localStorage.
 
-import { addPrompt, getPrompts, updatePrompt } from './promptManagement.js';
+import { addPrompt, getPrompts, updatePrompt, removePrompt } from './promptManagement.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOMContentLoaded: Initializing prompts page');
@@ -43,10 +43,17 @@ function initializePromptsPage() {
       promptItem.dataset.promptId = prompt.id;
       promptItem.innerHTML = `
         <span>${prompt.text}</span>
+        <button class="delete-button" data-prompt-id="${prompt.id}">🗑️</button>
       `;
       if (editPromptPopup) {
-        promptItem.addEventListener('click', () => showEditPromptPopup(prompt));
+        promptItem.querySelector('span').addEventListener('click', () => showEditPromptPopup(prompt));
       }
+      promptItem.querySelector('.delete-button').addEventListener('click', (event) => {
+        event.stopPropagation();
+        console.log('deletePrompt: Deleting prompt ID:', prompt.id);
+        removePrompt(prompt.id);
+        loadPrompts();
+      });
       promptList.appendChild(promptItem);
     });
     console.log(`loadPrompts: Loaded ${prompts.length} prompts`);
