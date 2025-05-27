@@ -45,8 +45,8 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
 .delete-button {
   background: none;
   border: none;
-  color: #FFFFFF;
-  font-size: 15px;
+  color: #FFFFFF; /* White icon */
+  font-size: 15px; /* Matches 15px text */
   line-height: 1;
   cursor: pointer;
   padding: 0;
@@ -54,7 +54,7 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
   order: -1; /* Places trash can before text */
 }
 .delete-button::before {
-  content: '🗑️'; /* Trash can icon */
+  content: '🗑️'; /* Single trash can icon */
 }
 .delete-button:hover {
   color: #CCCCCC;
