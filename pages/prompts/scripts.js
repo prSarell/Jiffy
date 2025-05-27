@@ -49,8 +49,9 @@ function initializePromptsPage() {
       promptItem.dataset.promptId = prompt.id;
       const timeDisplay = prompt.dueTime ? new Date(prompt.dueTime).toLocaleString() : '';
       promptItem.innerHTML = `
-        <span>${prompt.text}${timeDisplay ? ` (Due: ${timeDisplay})` : ''}</span>
         <button class="delete-button" data-prompt-id="${prompt.id}">🗑️</button>
+        <span>${prompt.text}${timeDisplay ? ` (Due: ${timeDisplay})` : ''}</span>
+        <input type="checkbox" class="weight-checkbox" data-prompt-id="${prompt.id}" ${prompt.weighted ? 'checked' : ''}>
       `;
       if (editPromptPopup) {
         promptItem.querySelector('span').addEventListener('click', () => showEditPromptPopup(prompt));
@@ -59,6 +60,11 @@ function initializePromptsPage() {
         event.stopPropagation();
         console.log('deletePrompt: Deleting prompt ID:', prompt.id);
         removePrompt(prompt.id);
+        loadPrompts();
+      });
+      promptItem.querySelector('.weight-checkbox').addEventListener('change', (event) => {
+        console.log('weightCheckbox: Toggling weight for prompt ID:', prompt.id);
+        updatePrompt(prompt.id, prompt.text, event.target.checked, prompt.dueTime);
         loadPrompts();
       });
       promptList.appendChild(promptItem);
@@ -70,14 +76,12 @@ function initializePromptsPage() {
   function showAddPromptPopup() {
     console.log('showAddPromptPopup: Opening add prompt popup');
     const input = document.getElementById('prompt-input');
-    const weightInput = document.getElementById('prompt-weight');
     const timeInput = document.getElementById('prompt-time');
-    if (!input || !weightInput || !timeInput) {
+    if (!input || !timeInput) {
       console.error('showAddPromptPopup: Prompt inputs not found');
       return;
     }
     input.value = '';
-    weightInput.checked = false;
     timeInput.value = '';
     addPromptPopup.style.display = 'flex';
     input.focus();
@@ -103,14 +107,12 @@ function initializePromptsPage() {
     }
     console.log('showEditPromptPopup: Opening edit prompt popup for:', prompt);
     const input = document.getElementById('edit-prompt-input');
-    const weightInput = document.getElementById('edit-prompt-weight');
     const timeInput = document.getElementById('edit-prompt-time');
-    if (!input || !weightInput || !timeInput) {
+    if (!input || !timeInput) {
       console.error('showEditPromptPopup: Edit prompt inputs not found');
       return;
     }
     input.value = prompt.text;
-    weightInput.checked = prompt.weighted || false;
     timeInput.value = prompt.dueTime ? new Date(prompt.dueTime).toISOString().slice(0, 16) : '';
     editingPromptId = prompt.id;
     editPromptPopup.style.display = 'flex';
@@ -152,9 +154,8 @@ function initializePromptsPage() {
     if (action === 'confirm') {
       if (popupButton.closest('#add-prompt-popup')) {
         const input = document.getElementById('prompt-input');
-        const weightInput = document.getElementById('prompt-weight');
         const timeInput = document.getElementById('prompt-time');
-        if (!input || !weightInput || !timeInput) {
+        if (!input || !timeInput) {
           console.error('click: Prompt inputs not found');
           return;
         }
@@ -164,7 +165,7 @@ function initializePromptsPage() {
             id: Date.now(),
             text: promptText,
             done: false,
-            weighted: weightInput.checked,
+            weighted: false, /* Default to false */
             dueTime: timeInput.value ? new Date(timeInput.value).toISOString() : null
           };
           addPrompt(prompt);
@@ -175,15 +176,15 @@ function initializePromptsPage() {
         }
       } else if (popupButton.closest('#edit-prompt-popup') && editPromptPopup) {
         const input = document.getElementById('edit-prompt-input');
-        const weightInput = document.getElementById('edit-prompt-weight');
         const timeInput = document.getElementById('edit-prompt-time');
-        if (!input || !weightInput || !timeInput) {
+        if (!input || !timeInput) {
           console.error('click: Edit prompt inputs not found');
           return;
         }
         const promptText = input.value.trim();
         if (promptText && editingPromptId !== null) {
-          updatePrompt(editingPromptId, promptText, weightInput.checked, timeInput.value ? new Date(timeInput.value).toISOString() : null);
+          const prompt = getPrompts().find(p => p.id === editingPromptId);
+          updatePrompt(editingPromptId, promptText, prompt.weighted, timeInput.value ? new Date(timeInput.value).toISOString() : null);
           loadPrompts();
           closeEditPromptPopup();
         } else {
