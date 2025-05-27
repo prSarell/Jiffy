@@ -6,7 +6,7 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
   width: 100%;
   margin: 0;
   padding: 0;
-  display: block; /* Override any flex centering */
+  display: block;
   text-align: left;
 }
 .prompt-list {
@@ -35,7 +35,7 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
 }
 .prompt-item span {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 13px;
+  font-size: 15px; /* Reverted to 15px */
   color: #FFFFFF;
   flex: 1;
   margin-right: 8px;
@@ -58,13 +58,18 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
 .delete-button {
   background: none;
   border: none;
-  color: #FF3333;
-  font-size: 16px;
+  color: #FFFFFF; /* White for simplicity */
+  font-size: 15px; /* Matches 15px capital letter */
+  line-height: 1; /* Ensures no extra height */
   cursor: pointer;
   padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+.delete-button::before {
+  content: '×'; /* Simple Unicode cross */
 }
 .delete-button:hover {
-  color: #FF5555;
+  color: #CCCCCC; /* Light grey on hover */
 }
 .weight-checkbox {
   margin-right: 8px;
