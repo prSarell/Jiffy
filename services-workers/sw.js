@@ -1,5 +1,5 @@
 // Path: /jiffy/service-workers/sw.js
-// Purpose: Service worker to cache assets for offline access, improve loading, and handle push notifications for app-like behavior.
+// Purpose: Service worker to cache assets for offline access, improve loading, and handle push notifications.
 
 const CACHE_NAME = 'jiffy-cache-v1';
 const urlsToCache = [
@@ -15,7 +15,7 @@ const urlsToCache = [
 ];
 
 self.addEventListener('install', event => {
-  console.log('Service worker installed');
+  console.log('Service Worker: Installed');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
@@ -27,13 +27,14 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('activate', event => {
-  console.log('Service worker activated');
+  console.log('Service Worker: Activated');
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (!cacheWhitelist.includes(cacheName)) {
+            console.log('Service Worker: Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -43,17 +44,24 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+  console.log('Service Worker: Fetching:', event.request.url);
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        return response || fetch(event.request).catch(() => {
-          console.log('Fetch failed, serving fallback');
+        if (response) {
+          console.log('Service Worker: Cache hit for:', event.request.url);
+          return response;
+        }
+        console.log('Service Worker: Cache miss, fetching:', event.request.url);
+        return fetch(event.request).catch(() => {
+          console.log('Service Worker: Fetch failed for:', event.request.url);
         });
       })
   );
 });
 
 self.addEventListener('push', event => {
+  console.log('Service Worker: Push event received');
   const data = event.data.json();
   self.registration.showNotification(data.title, {
     body: data.body,
