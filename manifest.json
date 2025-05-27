@@ -3,6 +3,7 @@
   "short_name": "Jiffy",
   "description": "A simple task management app",
   "start_url": "/jiffy/pages/home/index.html",
+  "scope": "/jiffy/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
