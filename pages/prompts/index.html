@@ -16,4 +16,53 @@ Purpose: Defines the Prompts page UI, displaying a header with "Back," "Prompts,
   <link rel="apple-touch-icon" href="/jiffy/assets/icon.png">
 </head>
 <body style="background-color: #000000; color: #FFFFFF; height: 100vh; margin: 0; padding: 0;">
-  <div style="display: flex; justify-content
+  <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 20px 20px 0 20px; box-sizing: border-box;">
+    <a href="/jiffy/pages/home/index.html" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; color: #FFFFFF; text-decoration: none; cursor: pointer;">Back</a>
+    <h1 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 20px; text-align: center; margin: 0; font-weight: normal;">Prompts</h1>
+    <div id="add-prompt-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 18px; font-weight: 300; cursor: pointer; padding: 4px 8px;">+</div>
+  </div>
+  <div class="prompt-list-wrapper">
+    <div class="prompt-list">
+      <!-- Prompts will be added dynamically -->
+    </div>
+  </div>
+  <div id="add-prompt-popup">
+    <div class="popup-content">
+      <h2>Add Prompt</h2>
+      <input id="prompt-input" type="text" placeholder="Enter prompt">
+      <input id="prompt-time" type="datetime-local" placeholder="Set due date/time">
+      <div class="checkbox-container">
+        <input id="prompt-weight" type="checkbox" class="weight-checkbox">
+        <label for="prompt-weight">Mark as important</label>
+      </div>
+      <div class="button-container">
+        <button class="popup-button" data-action="confirm">Confirm</button>
+        <button class="popup-button" data-action="cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <div id="edit-prompt-popup">
+    <div class="popup-content">
+      <h2>Edit Prompt</h2>
+      <input id="edit-prompt-input" type="text" placeholder="Edit prompt">
+      <input id="edit-prompt-time" type="datetime-local" placeholder="Set due date/time">
+      <div class="checkbox-container">
+        <input id="edit-prompt-weight" type="checkbox" class="weight-checkbox">
+        <label for="edit-prompt-weight">Mark as important</label>
+      </div>
+      <div class="button-container">
+        <button class="popup-button" data-action="confirm">Confirm</button>
+        <button class="popup-button" data-action="cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="/jiffy/pages/prompts/scripts.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/jiffy/service-workers/sw.js')
+        .then(reg => console.log('Service Worker registered:', reg))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    }
+  </script>
+</body>
+</html>
