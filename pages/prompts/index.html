@@ -1,6 +1,6 @@
 <!-- 
 Path: /jiffy/pages/prompts/index.html
-Purpose: Defines the Prompts page UI, displaying a header with "Back," "Prompts," and "+" buttons to add prompts, a list of user-created prompts with delete and weight options, and popups for adding/editing prompts with time settings.
+Purpose: Defines the Prompts page UI, displaying a header with "Back," "Prompts," and "+" buttons to add prompts, a list of user-created prompts with delete and importance options, and popups for adding/editing prompts with time settings.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +8,7 @@ Purpose: Defines the Prompts page UI, displaying a header with "Back," "Prompts,
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default"> <!-- Try default to force standalone -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Jiffy">
   <title>Jiffy - Prompts</title>
   <link rel="stylesheet" href="/jiffy/pages/prompts/styles.css">
@@ -31,10 +31,6 @@ Purpose: Defines the Prompts page UI, displaying a header with "Back," "Prompts,
       <h2>Add Prompt</h2>
       <input id="prompt-input" type="text" placeholder="Enter prompt">
       <input id="prompt-time" type="datetime-local" placeholder="Set due date/time">
-      <div class="checkbox-container">
-        <input id="prompt-weight" type="checkbox" class="weight-checkbox">
-        <label for="prompt-weight">Mark as important</label>
-      </div>
       <div class="button-container">
         <button class="popup-button" data-action="confirm">Confirm</button>
         <button class="popup-button" data-action="cancel">Cancel</button>
@@ -46,10 +42,6 @@ Purpose: Defines the Prompts page UI, displaying a header with "Back," "Prompts,
       <h2>Edit Prompt</h2>
       <input id="edit-prompt-input" type="text" placeholder="Edit prompt">
       <input id="edit-prompt-time" type="datetime-local" placeholder="Set due date/time">
-      <div class="checkbox-container">
-        <input id="edit-prompt-weight" type="checkbox" class="weight-checkbox">
-        <label for="edit-prompt-weight">Mark as important</label>
-      </div>
       <div class="button-container">
         <button class="popup-button" data-action="confirm">Confirm</button>
         <button class="popup-button" data-action="cancel">Cancel</button>
