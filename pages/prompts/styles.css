@@ -2,22 +2,29 @@
 Path: /jiffy/pages/prompts/styles.css
 Purpose: Styles the Prompts page, including the prompt list, add/edit/delete prompt popups, weighted prompts, and time-sensitive prompts.
 */
+.prompt-list-wrapper {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: block; /* Override any flex centering */
+  text-align: left;
+}
 .prompt-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
   width: 100%;
-  margin: 0; /* Remove all margins */
-  padding: 0; /* Remove padding */
+  margin: 20px 0 0 0;
+  padding: 0;
   justify-content: flex-start;
-  text-align: left; /* Force left alignment */
+  text-align: left;
 }
 .prompt-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
-  margin: 0; /* Ensure no item margins */
+  margin: 0;
   word-wrap: break-word;
   cursor: pointer;
 }
@@ -32,7 +39,7 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
   color: #FFFFFF;
   flex: 1;
   margin-right: 8px;
-  padding-left: 4px; /* Minimal padding for bullet */
+  padding-left: 4px;
   position: relative;
 }
 .prompt-item.weighted span {
@@ -66,7 +73,7 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
 }
 #add-prompt-popup,
 #edit-prompt-popup {
-  z-index: 1000;
+  z-index: 2;
   display: none;
   position: fixed;
   top: 0;
