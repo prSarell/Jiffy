@@ -38,6 +38,7 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
   color: #FFFFFF;
   flex: 1;
   margin-left: 24px; /* Space for trash can */
+  margin-right: 8px; /* Space for checkbox */
 }
 .prompt-item.weighted span {
   color: #B3E5B3;
@@ -45,24 +46,24 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
 .delete-button {
   background: none;
   border: none;
-  color: #FFFFFF; /* White icon */
-  font-size: 15px; /* Matches 15px text */
+  color: #FFFFFF;
+  font-size: 15px;
   line-height: 1;
   cursor: pointer;
   padding: 0;
-  margin-right: 8px; /* Space between trash can and text */
-  order: -1; /* Places trash can before text */
+  margin-right: 8px;
+  order: -1; /* Trash can before text */
 }
 .delete-button::before {
-  content: '🗑️'; /* Single trash can icon */
+  content: '🗑️';
 }
 .delete-button:hover {
   color: #CCCCCC;
 }
 .weight-checkbox {
-  margin-right: 8px;
   transform: scale(1.2);
-  vertical-align: middle;
+  cursor: pointer;
+  order: 1; /* Checkbox after text, screen right */
 }
 #add-prompt-popup,
 #edit-prompt-popup {
@@ -104,23 +105,6 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
   color: #FFFFFF;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 15px;
-}
-.popup-content .checkbox-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 16px;
-}
-.popup-content input[type="checkbox"] {
-  transform: scale(1.2);
-  margin: 0;
-}
-.popup-content label {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 15px;
-  color: #FFFFFF;
-  margin-left: 8px;
-  vertical-align: middle;
 }
 .popup-content .button-container {
   display: flex;
