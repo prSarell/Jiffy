@@ -56,7 +56,7 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 .delete-button::before {
-  content: '⌧'; /* Simple trash can silhouette */
+  content: '⌧'; /* Simple silhouette */
 }
 .delete-button:hover {
   color: #CCCCCC;
