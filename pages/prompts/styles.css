@@ -37,7 +37,7 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
   font-size: 15px;
   color: #FFFFFF;
   flex: 1;
-  margin-left: 24px; /* Space for trash can */
+  margin-left: 24px; /* Space for delete button */
   margin-right: 8px; /* Space for checkbox */
 }
 .prompt-item.weighted span {
@@ -46,13 +46,17 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
 .delete-button {
   background: none;
   border: none;
-  color: #FFFFFF; /* White icon */
+  color: #FFFFFF; /* White silhouette */
   font-size: 15px; /* Matches 15px text */
   line-height: 1;
   cursor: pointer;
   padding: 0;
-  margin-right: 8px; /* Space between trash can and text */
-  order: -1; /* Trash can before text */
+  margin-right: 8px; /* Space between icon and text */
+  order: -1; /* Icon before text */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+.delete-button::before {
+  content: '⌧'; /* Simple trash can silhouette */
 }
 .delete-button:hover {
   color: #CCCCCC;
