@@ -1,6 +1,6 @@
 <!-- 
 Path: /jiffy/pages/prompts/index.html
-Purpose: Defines the Prompts page UI, with a header, cycle duration input, prompt list with weight icons, and popups for adding/editing prompts.
+Purpose: Defines the Prompts page UI, with a header, single MM:SS cycle duration input, prompt list with weight icons, and popups for adding/editing prompts.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -22,10 +22,7 @@ Purpose: Defines the Prompts page UI, with a header, cycle duration input, promp
     <div id="add-prompt-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 18px; font-weight: 300; cursor: pointer; padding: 4px 8px;">+</div>
   </div>
   <div style="width: 100%; padding: 10px 20px; box-sizing: border-box; text-align: center;">
-    <label style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 12px; color: #FFFFFF;">Cycle Duration (seconds):</label>
-    <input id="cycle-duration-regular" type="number" min="1" value="4" style="width: 60px; padding: 4px; margin: 0 5px; border: 1px solid #333333; border-radius: 4px; background-color: #1A1A1A; color: #FFFFFF; font-size: 12px;">
-    <label style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 12px; color: #FFFFFF;">Weighted:</label>
-    <input id="cycle-duration-weighted" type="number" min="1" value="6" style="width: 60px; padding: 4px; margin: 0 5px; border: 1px solid #333333; border-radius: 4px; background-color: #1A1A1A; color: #FFFFFF; font-size: 12px;">
+    <input id="cycle-duration" type="text" value="00:08" placeholder="MM:SS" style="width: 60px; padding: 4px; border: 1px solid #333333; border-radius: 4px; background-color: #1A1A1A; color: #FFFFFF; font-size: 12px; text-align: center;">
   </div>
   <div class="prompt-list-wrapper">
     <div class="prompt-list">
