@@ -1,6 +1,6 @@
 /* 
 Path: /jiffy/pages/prompts/styles.css
-Purpose: Styles the Prompts page, including the prompt list, add/edit prompt popups, weighted prompts, and time-sensitive prompts.
+Purpose: Styles the Prompts page, including the prompt list, cycle duration inputs, add/edit prompt popups, weighted prompts, and time-sensitive prompts.
 */
 .prompt-list-wrapper {
   width: 100%;
@@ -26,7 +26,7 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit prompt pop
   margin: 0;
   word-wrap: break-word;
   cursor: pointer;
-  position: relative; /* For absolute positioning of weight-icon */
+  position: relative;
 }
 .prompt-item.weighted {
   color: #B3E5B3;
@@ -48,7 +48,7 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit prompt pop
   color: #FFFFFF;
   cursor: pointer;
   position: absolute;
-  right: 16px; /* Aligns with + button */
+  right: 16px;
 }
 .weight-icon.weighted {
   color: #B3E5B3;
