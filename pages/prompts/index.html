@@ -1,6 +1,6 @@
 <!-- 
 Path: /jiffy/pages/prompts/index.html
-Purpose: Defines the Prompts page UI, with a header, single MM:SS cycle duration input, prompt list with weight icons, and popups for adding/editing prompts.
+Purpose: Defines the Prompts page UI, with a header and MM:SS cycle duration input shifted down 10px, prompt list with weight icons, and popups for adding/editing prompts.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -16,12 +16,12 @@ Purpose: Defines the Prompts page UI, with a header, single MM:SS cycle duration
   <link rel="apple-touch-icon" href="/jiffy/assets/icon.png">
 </head>
 <body style="background-color: #000000; color: #FFFFFF; height: 100vh; margin: 0; padding: 0;">
-  <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 20px 20px 0 20px; box-sizing: border-box;">
+  <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 20px 20px 0 20px; box-sizing: border-box; margin-top: 10px;">
     <a href="/jiffy/pages/home/index.html" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 18px; color: #FFFFFF; text-decoration: none; cursor: pointer;">←</a>
     <h1 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 20px; text-align: center; margin: 0; font-weight: normal;">Prompts</h1>
     <div id="add-prompt-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 18px; font-weight: 300; cursor: pointer; padding: 4px 8px;">+</div>
   </div>
-  <div style="width: 100%; padding: 10px 20px; box-sizing: border-box; text-align: center;">
+  <div style="width: 100%; padding: 0 20px 10px 20px; box-sizing: border-box; text-align: center;">
     <input id="cycle-duration" type="text" value="00:08" placeholder="MM:SS" style="width: 60px; padding: 4px; border: 1px solid #333333; border-radius: 4px; background-color: #1A1A1A; color: #FFFFFF; font-size: 12px; text-align: center;">
   </div>
   <div class="prompt-list-wrapper">
