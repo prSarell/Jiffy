@@ -1,5 +1,5 @@
 // Path: /jiffy/pages/prompts/scripts.js
-// Purpose: Initializes the Prompts page, manages prompt display, and handles adding, editing, and importance toggling of prompts via popups and weight icons, saving to localStorage.
+// Purpose: Initializes the Prompts page, manages prompt display, cycle duration settings, and handles adding, editing, and importance toggling of prompts via popups and weight icons, saving to localStorage.
 
 import { addPrompt, getPrompts, updatePrompt } from './promptManagement.js';
 
@@ -14,6 +14,8 @@ function initializePromptsPage() {
   const addPromptButton = document.getElementById('add-prompt-button');
   const addPromptPopup = document.getElementById('add-prompt-popup');
   const editPromptPopup = document.getElementById('edit-prompt-popup');
+  const cycleDurationRegularInput = document.getElementById('cycle-duration-regular');
+  const cycleDurationWeightedInput = document.getElementById('cycle-duration-weighted');
 
   if (!promptList || !addPromptButton || !addPromptPopup) {
     console.error('initializePromptsPage: Required DOM elements not found:', { promptList, addPromptButton, addPromptPopup });
@@ -22,9 +24,42 @@ function initializePromptsPage() {
   if (!editPromptPopup) {
     console.warn('initializePromptsPage: Edit prompt popup not found, editing disabled');
   }
+  if (!cycleDurationRegularInput || !cycleDurationWeightedInput) {
+    console.warn('initializePromptsPage: Cycle duration inputs not found');
+  }
 
   if (addPromptPopup.style.display !== 'none') addPromptPopup.style.display = 'none';
   if (editPromptPopup && editPromptPopup.style.display !== 'none') editPromptPopup.style.display = 'none';
+
+  // Initialize cycle duration from localStorage
+  if (cycleDurationRegularInput) {
+    cycleDurationRegularInput.value = localStorage.getItem('cycleDurationRegular') || '4';
+    cycleDurationRegularInput.addEventListener('change', () => {
+      const value = parseInt(cycleDurationRegularInput.value);
+      if (value >= 1) {
+        localStorage.setItem('cycleDurationRegular', value);
+        console.log('Cycle duration regular updated:', value);
+      } else {
+        cycleDurationRegularInput.value = '1';
+        localStorage.setItem('cycleDurationRegular', '1');
+        console.warn('Cycle duration regular set to minimum: 1');
+      }
+    });
+  }
+  if (cycleDurationWeightedInput) {
+    cycleDurationWeightedInput.value = localStorage.getItem('cycleDurationWeighted') || '6';
+    cycleDurationWeightedInput.addEventListener('change', () => {
+      const value = parseInt(cycleDurationWeightedInput.value);
+      if (value >= 1) {
+        localStorage.setItem('cycleDurationWeighted', value);
+        console.log('Cycle duration weighted updated:', value);
+      } else {
+        cycleDurationWeightedInput.value = '1';
+        localStorage.setItem('cycleDurationWeighted', '1');
+        console.warn('Cycle duration weighted set to minimum: 1');
+      }
+    });
+  }
 
   let editingPromptId = null;
 
