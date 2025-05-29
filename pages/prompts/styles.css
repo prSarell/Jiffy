@@ -1,6 +1,6 @@
 /* 
 Path: /jiffy/pages/prompts/styles.css
-Purpose: Styles the Prompts page, including the prompt list, add/edit/delete prompt popups, weighted prompts, and time-sensitive prompts.
+Purpose: Styles the Prompts page, including the prompt list, add/edit prompt popups, weighted prompts, and time-sensitive prompts.
 */
 .prompt-list-wrapper {
   width: 100%;
@@ -12,7 +12,7 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
 .prompt-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
   width: 100%;
   margin: 20px 0 0 0;
   padding: 0;
@@ -37,34 +37,15 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit/delete pro
   font-size: 15px;
   color: #FFFFFF;
   flex: 1;
-  margin-left: 24px; /* Space for delete button */
   margin-right: 8px; /* Space for checkbox */
 }
 .prompt-item.weighted span {
   color: #B3E5B3;
 }
-.delete-button {
-  background: none;
-  border: none;
-  color: #FFFFFF; /* White silhouette */
-  font-size: 15px; /* Matches 15px text */
-  line-height: 1;
-  cursor: pointer;
-  padding: 0;
-  margin-right: 8px; /* Space between icon and text */
-  order: -1; /* Icon before text */
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-.delete-button::before {
-  content: '⌧'; /* Simple silhouette */
-}
-.delete-button:hover {
-  color: #CCCCCC;
-}
 .weight-checkbox {
   transform: scale(1.2);
   cursor: pointer;
-  order: 1; /* Checkbox after text, screen right */
+  order: 1; /* Checkbox screen right */
 }
 #add-prompt-popup,
 #edit-prompt-popup {
