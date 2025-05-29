@@ -1,7 +1,7 @@
 // Path: /jiffy/pages/prompts/scripts.js
-// Purpose: Initializes the Prompts page, manages prompt display, and handles adding, editing, and removing prompts with weight and time options via popups and buttons, saving to localStorage.
+// Purpose: Initializes the Prompts page, manages prompt display, and handles adding, editing, and importance toggling of prompts via popups and checkboxes, saving to localStorage.
 
-import { addPrompt, getPrompts, updatePrompt, removePrompt } from './promptManagement.js';
+import { addPrompt, getPrompts, updatePrompt } from './promptManagement.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOMContentLoaded: Initializing prompts page');
@@ -49,19 +49,12 @@ function initializePromptsPage() {
       promptItem.dataset.promptId = prompt.id;
       const timeDisplay = prompt.dueTime ? new Date(prompt.dueTime).toLocaleString() : '';
       promptItem.innerHTML = `
-        <button class="delete-button" data-prompt-id="${prompt.id}">🗑️</button>
         <span>${prompt.text}${timeDisplay ? ` (Due: ${timeDisplay})` : ''}</span>
         <input type="checkbox" class="weight-checkbox" data-prompt-id="${prompt.id}" ${prompt.weighted ? 'checked' : ''}>
       `;
       if (editPromptPopup) {
         promptItem.querySelector('span').addEventListener('click', () => showEditPromptPopup(prompt));
       }
-      promptItem.querySelector('.delete-button').addEventListener('click', (event) => {
-        event.stopPropagation();
-        console.log('deletePrompt: Deleting prompt ID:', prompt.id);
-        removePrompt(prompt.id);
-        loadPrompts();
-      });
       promptItem.querySelector('.weight-checkbox').addEventListener('change', (event) => {
         console.log('weightCheckbox: Toggling weight for prompt ID:', prompt.id);
         updatePrompt(prompt.id, prompt.text, event.target.checked, prompt.dueTime);
@@ -165,7 +158,7 @@ function initializePromptsPage() {
             id: Date.now(),
             text: promptText,
             done: false,
-            weighted: false, /* Default to false */
+            weighted: false,
             dueTime: timeInput.value ? new Date(timeInput.value).toISOString() : null
           };
           addPrompt(prompt);
