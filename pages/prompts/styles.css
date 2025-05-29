@@ -26,6 +26,7 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit prompt pop
   margin: 0;
   word-wrap: break-word;
   cursor: pointer;
+  position: relative; /* For absolute positioning of weight-icon */
 }
 .prompt-item.weighted {
   color: #B3E5B3;
@@ -37,7 +38,6 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit prompt pop
   font-size: 15px;
   color: #FFFFFF;
   flex: 1;
-  margin-right: 8px; /* Space for weight icon */
 }
 .prompt-item.weighted span {
   color: #B3E5B3;
@@ -47,7 +47,8 @@ Purpose: Styles the Prompts page, including the prompt list, add/edit prompt pop
   font-size: 15px;
   color: #FFFFFF;
   cursor: pointer;
-  order: 1; /* Icon screen right */
+  position: absolute;
+  right: 16px; /* Aligns with + button */
 }
 .weight-icon.weighted {
   color: #B3E5B3;
