@@ -14,8 +14,7 @@ function initializePromptsPage() {
   const addPromptButton = document.getElementById('add-prompt-button');
   const addPromptPopup = document.getElementById('add-prompt-popup');
   const editPromptPopup = document.getElementById('edit-prompt-popup');
-  const cycleDurationRegularInput = document.getElementById('cycle-duration-regular');
-  const cycleDurationWeightedInput = document.getElementById('cycle-duration-weighted');
+  const cycleDurationInput = document.getElementById('cycle-duration');
 
   if (!promptList || !addPromptButton || !addPromptPopup) {
     console.error('initializePromptsPage: Required DOM elements not found:', { promptList, addPromptButton, addPromptPopup });
@@ -24,39 +23,37 @@ function initializePromptsPage() {
   if (!editPromptPopup) {
     console.warn('initializePromptsPage: Edit prompt popup not found, editing disabled');
   }
-  if (!cycleDurationRegularInput || !cycleDurationWeightedInput) {
-    console.warn('initializePromptsPage: Cycle duration inputs not found');
+  if (!cycleDurationInput) {
+    console.warn('initializePromptsPage: Cycle duration input not found');
   }
 
   if (addPromptPopup.style.display !== 'none') addPromptPopup.style.display = 'none';
   if (editPromptPopup && editPromptPopup.style.display !== 'none') editPromptPopup.style.display = 'none';
 
   // Initialize cycle duration from localStorage
-  if (cycleDurationRegularInput) {
-    cycleDurationRegularInput.value = localStorage.getItem('cycleDurationRegular') || '4';
-    cycleDurationRegularInput.addEventListener('change', () => {
-      const value = parseInt(cycleDurationRegularInput.value);
-      if (value >= 1) {
-        localStorage.setItem('cycleDurationRegular', value);
-        console.log('Cycle duration regular updated:', value);
+  if (cycleDurationInput) {
+    cycleDurationInput.value = localStorage.getItem('cycleDurationMMSS') || '00:08';
+    cycleDurationInput.addEventListener('change', () => {
+      const value = cycleDurationInput.value;
+      const regex = /^([0-5][0-9]):([0-5][0-9])$/;
+      if (regex.test(value)) {
+        const [minutes, seconds] = value.split(':').map(Number);
+        const totalSeconds = minutes * 60 + seconds;
+        if (totalSeconds >= 1) {
+          localStorage.setItem('cycleDuration', totalSeconds * 1000); // Store in milliseconds
+          localStorage.setItem('cycleDurationMMSS', value); // Store MM:SS for display
+          console.log('Cycle duration updated:', totalSeconds, 'seconds');
+        } else {
+          cycleDurationInput.value = '00:01';
+          localStorage.setItem('cycleDuration', '1000');
+          localStorage.setItem('cycleDurationMMSS', '00:01');
+          console.warn('Cycle duration set to minimum: 1 second');
+        }
       } else {
-        cycleDurationRegularInput.value = '1';
-        localStorage.setItem('cycleDurationRegular', '1');
-        console.warn('Cycle duration regular set to minimum: 1');
-      }
-    });
-  }
-  if (cycleDurationWeightedInput) {
-    cycleDurationWeightedInput.value = localStorage.getItem('cycleDurationWeighted') || '6';
-    cycleDurationWeightedInput.addEventListener('change', () => {
-      const value = parseInt(cycleDurationWeightedInput.value);
-      if (value >= 1) {
-        localStorage.setItem('cycleDurationWeighted', value);
-        console.log('Cycle duration weighted updated:', value);
-      } else {
-        cycleDurationWeightedInput.value = '1';
-        localStorage.setItem('cycleDurationWeighted', '1');
-        console.warn('Cycle duration weighted set to minimum: 1');
+        cycleDurationInput.value = '00:08';
+        localStorage.setItem('cycleDuration', '8000');
+        localStorage.setItem('cycleDurationMMSS', '00:08');
+        console.warn('Invalid MM:SS format, reset to default: 8 seconds');
       }
     });
   }
