@@ -1,6 +1,6 @@
 <!-- 
 Path: /jiffy/pages/home/index.html
-Purpose: Defines the homepage UI, displaying a header, three action buttons, and a category list shifted down 5px.
+Purpose: Defines the homepage UI, displaying a header, three action buttons with labels closer to them, and a category list shifted down 5px.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +18,7 @@ Purpose: Defines the homepage UI, displaying a header, three action buttons, and
     .category-row {
       display: flex !important;
       visibility: visible !important;
-      margin-top: 5px; /* Shift down 5px */
+      margin-top: 5px;
     }
     .category-row div {
       transition: opacity 0.3s ease;
@@ -90,15 +90,15 @@ Purpose: Defines the homepage UI, displaying a header, three action buttons, and
         <a href="/jiffy/pages/prompts/index.html">
           <button class="action-button" data-action="show-prompts" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #004598; background-color: #BBF5BB; cursor: pointer;"></button>
         </a>
-        <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">Prompts</span>
+        <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 3px;">Prompts</span>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center;">
         <button class="action-button" data-action="show-rewards" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #004598; background-color: #BBF5BB; cursor: pointer;"></button>
-        <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">Rewards</span>
+        <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 3px;">Rewards</span>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center;">
         <button class="action-button" data-action="add" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #004598; background-color: #BBF5BB; cursor: pointer;"></button>
-        <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">Add</span>
+        <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 3px;">Add</span>
       </div>
     </div>
     <div style="display: flex; flex-wrap: wrap; justify-content: flex-start; align-items: center; gap: 20px; width: 240px;" class="category-row">
