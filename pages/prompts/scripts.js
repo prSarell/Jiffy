@@ -1,5 +1,5 @@
 // Path: /jiffy/pages/prompts/scripts.js
-// Purpose: Initializes the Prompts page, manages prompt display, and handles adding, editing, and importance toggling of prompts via popups and checkboxes, saving to localStorage.
+// Purpose: Initializes the Prompts page, manages prompt display, and handles adding, editing, and importance toggling of prompts via popups and weight icons, saving to localStorage.
 
 import { addPrompt, getPrompts, updatePrompt } from './promptManagement.js';
 
@@ -50,14 +50,14 @@ function initializePromptsPage() {
       const timeDisplay = prompt.dueTime ? new Date(prompt.dueTime).toLocaleString() : '';
       promptItem.innerHTML = `
         <span>${prompt.text}${timeDisplay ? ` (Due: ${timeDisplay})` : ''}</span>
-        <input type="checkbox" class="weight-checkbox" data-prompt-id="${prompt.id}" ${prompt.weighted ? 'checked' : ''}>
+        <span class="weight-icon${prompt.weighted ? ' weighted' : ''}" data-prompt-id="${prompt.id}">${prompt.weighted ? '★' : '☆'}</span>
       `;
       if (editPromptPopup) {
-        promptItem.querySelector('span').addEventListener('click', () => showEditPromptPopup(prompt));
+        promptItem.querySelector('span:not(.weight-icon)').addEventListener('click', () => showEditPromptPopup(prompt));
       }
-      promptItem.querySelector('.weight-checkbox').addEventListener('change', (event) => {
-        console.log('weightCheckbox: Toggling weight for prompt ID:', prompt.id);
-        updatePrompt(prompt.id, prompt.text, event.target.checked, prompt.dueTime);
+      promptItem.querySelector('.weight-icon').addEventListener('click', (event) => {
+        console.log('weightIcon: Toggling weight for prompt ID:', prompt.id);
+        updatePrompt(prompt.id, prompt.text, !prompt.weighted, prompt.dueTime);
         loadPrompts();
       });
       promptList.appendChild(promptItem);
