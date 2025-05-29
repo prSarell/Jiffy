@@ -1,6 +1,6 @@
 <!-- 
 Path: /jiffy/pages/home/index.html
-Purpose: Displays a header with burger menu, center-justified cycling user prompts with user-defined durations, three action buttons, and a category list.
+Purpose: Displays a header with burger menu, center-justified cycling user prompts with user-defined duration, three action buttons, and a category list.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -202,9 +202,7 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
           promptCycle.textContent = prompt.text + (prompt.dueTime ? ` (Due: ${new Date(prompt.dueTime).toLocaleString()})` : '');
           promptCycle.className = `prompt-cycle${prompt.weighted ? ' weighted' : ''}`;
           console.log('Home page: Displaying prompt:', prompt.text, 'Weighted:', prompt.weighted);
-          const displayTime = prompt.weighted ? 
-            (parseInt(localStorage.getItem('cycleDurationWeighted')) || 6000) : 
-            (parseInt(localStorage.getItem('cycleDurationRegular')) || 4000);
+          const displayTime = parseInt(localStorage.getItem('cycleDuration')) || 8000; // Default 8s
           index++;
           setTimeout(showNextPrompt, displayTime);
         }
