@@ -1,7 +1,7 @@
 // Path: /jiffy/pages/prompts/scripts.js
-// Purpose: Initializes the Prompts page, manages prompt display, cycle duration settings, and handles adding, editing, and importance toggling of prompts via popups and weight icons, saving to localStorage.
+// Purpose: Initializes the Prompts page, manages prompt display, cycle duration settings, swipe-to-delete, and handles adding, editing, and importance toggling of prompts via popups and weight icons, saving to localStorage.
 
-import { addPrompt, getPrompts, updatePrompt } from './promptManagement.js';
+import { addPrompt, getPrompts, updatePrompt, removePrompt } from './promptManagement.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOMContentLoaded: Initializing prompts page');
@@ -83,6 +83,7 @@ function initializePromptsPage() {
       promptItem.innerHTML = `
         <span>${prompt.text}${timeDisplay ? ` (Due: ${timeDisplay})` : ''}</span>
         <span class="weight-icon${prompt.weighted ? ' weighted' : ''}" data-prompt-id="${prompt.id}">${prompt.weighted ? '★' : '☆'}</span>
+        <button class="delete-button" data-prompt-id="${prompt.id}">Delete</button>
       `;
       if (editPromptPopup) {
         promptItem.querySelector('span:not(.weight-icon)').addEventListener('click', () => showEditPromptPopup(prompt));
@@ -92,6 +93,45 @@ function initializePromptsPage() {
         updatePrompt(prompt.id, prompt.text, !prompt.weighted, prompt.dueTime);
         loadPrompts();
       });
+      promptItem.querySelector('.delete-button').addEventListener('click', (event) => {
+        event.stopPropagation();
+        console.log('deletePrompt: Deleting prompt ID:', prompt.id);
+        removePrompt(prompt.id);
+        loadPrompts();
+      });
+
+      // Swipe-to-delete
+      let startX = 0;
+      let currentX = 0;
+      let isSwiping = false;
+
+      promptItem.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        isSwiping = true;
+        promptItem.style.transition = 'none';
+      });
+
+      promptItem.addEventListener('touchmove', (e) => {
+        if (!isSwiping) return;
+        currentX = e.touches[0].clientX;
+        const diffX = currentX - startX;
+        if (diffX <= 0 && diffX >= -60) { // Right-to-left swipe, max 60px
+          promptItem.style.transform = `translateX(${diffX}px)`;
+        }
+      });
+
+      promptItem.addEventListener('touchend', () => {
+        isSwiping = false;
+        promptItem.style.transition = 'transform 0.3s ease';
+        if (currentX - startX < -30) { // Swipe threshold
+          promptItem.style.transform = 'translateX(-60px)';
+          promptItem.classList.add('swiped');
+        } else {
+          promptItem.style.transform = 'translateX(0)';
+          promptItem.classList.remove('swiped');
+        }
+      });
+
       promptList.appendChild(promptItem);
     });
     console.log(`loadPrompts: Loaded ${prompts.length} prompts, list HTML:`, promptList.innerHTML);
@@ -224,6 +264,34 @@ function initializePromptsPage() {
       }
     }
   });
+
+  // Initialize cycle duration from localStorage
+  if (cycleDurationInput) {
+    cycleDurationInput.value = localStorage.getItem('cycleDurationMMSS') || '00:08';
+    cycleDurationInput.addEventListener('change', () => {
+      const value = cycleDurationInput.value;
+      const regex = /^([0-5][0-9]):([0-5][0-9])$/;
+      if (regex.test(value)) {
+        const [minutes, seconds] = value.split(':').map(Number);
+        const totalSeconds = minutes * 60 + seconds;
+        if (totalSeconds >= 1) {
+          localStorage.setItem('cycleDuration', totalSeconds * 1000);
+          localStorage.setItem('cycleDurationMMSS', value);
+          console.log('Cycle duration updated:', totalSeconds, 'seconds');
+        } else {
+          cycleDurationInput.value = '00:01';
+          localStorage.setItem('cycleDuration', '1000');
+          localStorage.setItem('cycleDurationMMSS', '00:01');
+          console.warn('Cycle duration set to minimum: 1 second');
+        }
+      } else {
+        cycleDurationInput.value = '00:08';
+        localStorage.setItem('cycleDuration', '8000');
+        localStorage.setItem('cycleDurationMMSS', '00:08');
+        console.warn('Invalid MM:SS format, reset to default: 8 seconds');
+      }
+    });
+  }
 
   // Initial load
   loadPrompts();
