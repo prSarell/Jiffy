@@ -1,6 +1,6 @@
 /* 
 Path: /jiffy/pages/prompts/styles.css
-Purpose: Styles the Prompts page, including the prompt list, cycle duration input, add/edit prompt popups, weighted prompts, and time-sensitive prompts.
+Purpose: Styles the Prompts page, including the prompt list with swipe-to-delete, cycle duration input, add/edit prompt popups, weighted prompts, and time-sensitive prompts.
 */
 .prompt-list-wrapper {
   width: 100%;
@@ -27,6 +27,9 @@ Purpose: Styles the Prompts page, including the prompt list, cycle duration inpu
   word-wrap: break-word;
   cursor: pointer;
   position: relative;
+  overflow: hidden;
+  transform: translateX(0);
+  transition: transform 0.3s ease;
 }
 .prompt-item.weighted {
   color: #B3E5B3;
@@ -52,6 +55,26 @@ Purpose: Styles the Prompts page, including the prompt list, cycle duration inpu
 }
 .weight-icon.weighted {
   color: #B3E5B3;
+}
+.delete-button {
+  position: absolute;
+  right: -60px;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  background-color: #FF4444;
+  color: #FFFFFF;
+  border: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: right 0.3s ease;
+}
+.prompt-item.swiped .delete-button {
+  right: 0;
 }
 #add-prompt-popup,
 #edit-prompt-popup {
