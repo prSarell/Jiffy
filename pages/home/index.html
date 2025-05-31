@@ -1,6 +1,6 @@
 <!-- 
 Path: /jiffy/pages/home/index.html
-Purpose: Displays a header with burger menu, center-justified cycling user prompts with user-defined duration, three action buttons, and a category list.
+Purpose: Displays a header with burger menu, center-justified cycling user prompts with time/day/date frequency, three action buttons, and a category row with dynamic buttons, moved up 10px.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -19,6 +19,11 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
       display: flex !important;
       visibility: visible !important;
       margin-top: 5px;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 20px;
+      width: 240px;
     }
     .category-row div {
       transition: opacity 0.3s ease;
@@ -101,8 +106,8 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
     <h1 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 20px; text-align: center; margin: 0; font-weight: normal;">Jiffy</h1>
     <div id="burger-menu" style="font-size: 24px; font-weight: 300; line-height: 1; cursor: pointer;">☰</div>
   </div>
-  <div id="prompt-cycle" class="prompt-cycle">Loading prompts...</div>
-  <div style="display: flex; flex-direction: column; align-items: center; margin-top: 30px;">
+  <div id="prompt-cycle" class="prompt-cycle"></div>
+  <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;"> <!-- Changed from 30px -->
     <div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 5px;">
       <div style="display: flex; flex-direction: column; align-items: center;">
         <a href="/jiffy/pages/prompts/index.html">
@@ -184,25 +189,89 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
         }
         return array;
       }
+      function isPromptActive(prompt, now) {
+        if (!prompt.dayOnly && !prompt.triggerDay && !prompt.triggerTime && !prompt.triggerDate) {
+          return true; // General prompt
+        }
+        const dayMap = { 'Sunday': 0, 'Monday': 1, 'Tuesday': 2, 'Wednesday': 3, 'Thursday': 4, 'Friday': 5, 'Saturday': 6 };
+        if (prompt.dayOnly && prompt.triggerDay) {
+          return now.getDay() === dayMap[prompt.triggerDay];
+        }
+        if (prompt.triggerTime) {
+          const [hours, minutes] = prompt.triggerTime.split(':').map(Number);
+          const start = new Date(now);
+          start.setHours(hours - 1, minutes, 0, 0);
+          const end = new Date(now);
+          end.setHours(hours + 1, minutes, 0, 0);
+          const matchesDay = !prompt.triggerDay || now.getDay() === dayMap[prompt.triggerDay];
+          return matchesDay && now >= start && now <= end;
+        }
+        if (prompt.triggerDate) {
+          const [month, day] = prompt.triggerDate.split('-').map(Number);
+          const currentYear = now.getFullYear();
+          const start = new Date(currentYear, month - 1, day - 30); // 1 month before
+          const normal = new Date(currentYear, month - 1, day - 3); // 3 days before
+          const end = new Date(currentYear, month - 1, day, 23, 59, 59, 999);
+          const isActivePeriod = now >= start && now <= end;
+          const matchesDay = !prompt.triggerDay || now.getDay() === dayMap[prompt.triggerDay];
+          return isActivePeriod && matchesDay;
+        }
+        return false;
+      }
       function cyclePrompts() {
         const prompts = getPrompts();
         if (prompts.length === 0) {
-          promptCycle.textContent = 'No prompts available';
+          promptCycle.textContent = '';
           console.log('Home page: No prompts to cycle');
           return;
         }
-        const shuffledPrompts = shuffle([...prompts]);
+        const now = new Date();
+        let activePrompts = prompts.filter(p => isPromptActive(p, now));
+        if (activePrompts.length === 0) {
+          promptCycle.textContent = '';
+          console.log('Home page: No active prompts to cycle');
+          return;
+        }
+        // Boost time/date prompts
+        let cyclePrompts = [];
+        activePrompts.forEach(prompt => {
+          cyclePrompts.push(prompt);
+          if ((prompt.triggerTime || prompt.triggerDate) && !prompt.dayOnly) {
+            cyclePrompts.push(prompt); // 2x boost
+          }
+        });
+        // Date-specific low frequency (3/day)
+        const datePrompts = activePrompts.filter(p => p.triggerDate && !p.dayOnly);
+        datePrompts.forEach(prompt => {
+          const [month, day] = prompt.triggerDate.split('-').map(Number);
+          const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          const normalStart = new Date(now.getFullYear(), month - 1, day - 3);
+          if (nowDate < normalStart) {
+            // Limit to ~3/day by reducing frequency
+            if (Math.random() < 0.125) { // ~3 times in 24 hours (24*60/8s=10800 cycles/day)
+              cyclePrompts.push(prompt);
+            }
+          }
+        });
+        if (cyclePrompts.length === 0) {
+          promptCycle.textContent = '';
+          console.log('Home page: No cycle prompts after filtering');
+          return;
+        }
+        const shuffledPrompts = shuffle([...cyclePrompts]);
         let index = 0;
         function showNextPrompt() {
           if (index >= shuffledPrompts.length) {
             index = 0;
-            shuffle(shuffledPrompts);
+            cyclePrompts();
+            return;
           }
           const prompt = shuffledPrompts[index];
           promptCycle.textContent = prompt.text + (prompt.dueTime ? ` (Due: ${new Date(prompt.dueTime).toLocaleString()})` : '');
           promptCycle.className = `prompt-cycle${prompt.weighted ? ' weighted' : ''}`;
           console.log('Home page: Displaying prompt:', prompt.text, 'Weighted:', prompt.weighted);
-          const displayTime = parseInt(localStorage.getItem('cycleDuration')) || 8000; // Default 8s
+          const baseTime = parseInt(localStorage.getItem('cycleDuration')) || 8000;
+          const displayTime = prompt.weighted ? baseTime + 2000 : baseTime;
           index++;
           setTimeout(showNextPrompt, displayTime);
         }
