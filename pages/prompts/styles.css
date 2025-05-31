@@ -1,6 +1,6 @@
 /* 
 Path: /jiffy/pages/prompts/styles.css
-Purpose: Styles the Prompts page, including the prompt list with swipe-to-delete, cycle duration input, add/edit prompt popups, weighted prompts, and time-sensitive prompts.
+Purpose: Styles the Prompts page, including the prompt list with un-bolded 14px text, cycle duration input, add/edit prompt popups, weighted prompts, and time-sensitive prompts.
 */
 .prompt-list-wrapper {
   width: 100%;
@@ -33,12 +33,12 @@ Purpose: Styles the Prompts page, including the prompt list with swipe-to-delete
 }
 .prompt-item.weighted {
   color: #B3E5B3;
-  font-weight: 600;
   order: -1;
 }
 .prompt-item span {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 15px;
+  font-size: 14px; /* Changed from 15px */
+  font-weight: normal; /* Un-bolded */
   color: #FFFFFF;
   flex: 1;
 }
@@ -47,7 +47,7 @@ Purpose: Styles the Prompts page, including the prompt list with swipe-to-delete
 }
 .weight-icon {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 15px;
+  font-size: 14px; /* Match prompt text */
   color: #FFFFFF;
   cursor: pointer;
   position: absolute;
@@ -66,7 +66,7 @@ Purpose: Styles the Prompts page, including the prompt list with swipe-to-delete
   color: #FFFFFF;
   border: none;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 15px;
+  font-size: 14px; /* Match prompt text */
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -115,7 +115,7 @@ Purpose: Styles the Prompts page, including the prompt list with swipe-to-delete
   background-color: #1A1A1A;
   color: #FFFFFF;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 15px;
+  font-size: 14px; /* Match prompt text */
 }
 .popup-content .button-container {
   display: flex;
@@ -131,7 +131,7 @@ Purpose: Styles the Prompts page, including the prompt list with swipe-to-delete
   cursor: pointer;
   transition: background-color 0.3s;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 15px;
+  font-size: 14px; /* Match prompt text */
 }
 .popup-button:hover {
   background-color: #444444;
