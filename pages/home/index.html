@@ -1,13 +1,13 @@
 <!-- 
 Path: /jiffy/pages/home/index.html
-Purpose: Displays a header with banner menu, center-justified cycling user prompts with time/day/date frequency, three action buttons with Rewards linked, and a category row with dynamic buttons that save to localStorage with unique colors, moved up 10px.
+Purpose: Displays a header with burger menu, center-justified cycling user prompts with time/day/date frequency, three action buttons with Rewards linked, and a category row with dynamic buttons that save to localStorage with unique colors, moved up 10px.
 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes"> <!-- Updated meta tag -->
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Jiffy">
   <title>Jiffy - Home</title>
@@ -91,7 +91,7 @@ Purpose: Displays a header with banner menu, center-justified cycling user promp
       <span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>
     </div>
     <h1 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 20px; text-align: center; margin: 0; font-weight: normal;">Jiffy</h1>
-    <div id="banner-menu" style="font-size: 24px; font-weight: 300; line-height: 1; cursor: pointer;">☰</div>
+    <div id="burger-menu" style="font-size: 24px; font-weight: 300; line-height: 1; cursor: pointer;">☰</div>
   </div>
   <div id="prompt-cycle" class="prompt-cycle"></div>
   <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
@@ -151,7 +151,7 @@ Purpose: Displays a header with banner menu, center-justified cycling user promp
     document.addEventListener('DOMContentLoaded', () => {
       console.log('Home page: Initializing prompt cycling and categories');
       const promptCycle = document.getElementById('prompt-cycle');
-      const bannerMenu = document.getElementById('banner-menu');
+      const burgerMenu = document.getElementById('burger-menu');
       const addButton = document.querySelector('.action-button[data-action="add"]');
       const popup = document.getElementById('popup');
       const selectButton = document.getElementById('select-button');
@@ -159,35 +159,41 @@ Purpose: Displays a header with banner menu, center-justified cycling user promp
       const editColorPopup = document.getElementById('edit-color-popup');
       const categoryRow = document.querySelector('.category-row');
 
-      if (bannerMenu) {
-        console.log('Home page: Banner menu found:', bannerMenu.textContent);
+      if (burgerMenu) {
+        console.log('Home page: Burger menu found:', burgerMenu.textContent);
       } else {
-        console.error('Home page: Banner menu not found');
+        console.error('Home page: Burger menu not found');
       }
       if (!promptCycle || !addButton || !popup || !selectButton || !deletePopup || !editColorPopup || !categoryRow) {
         console.error('Home page: Required elements not found:', { promptCycle, addButton, popup, selectButton, deletePopup, editColorPopup, categoryRow });
         return;
       }
 
-      const colorPalette = ['#FFD700', '#87CEEB', '#98FB98', '#FFA07A', '#FF69B4', '#BA55D3', '#20B2AA', '#F4A460', '#9370DB', '#FF6347'];
+      const colorPalette = ['#87CEEB', '#6495ED', '#4682B4', '#4169E1', '#FFA07A', '#FF69B4', '#BA55D3', '#20B2AA', '#F4A460', '#9370DB'];
 
       function getCategories() {
         try {
           const categories = JSON.parse(localStorage.getItem('categories'));
           if (!categories || categories.length === 0) {
             return [
-              { name: 'General', color: '#FFD700' },
-              { name: 'Work', color: '#87CEEB' },
-              { name: 'Home', color: '#98FB98' }
+              { name: 'Home', color: '#87CEEB' },
+              { name: 'Life', color: '#6495ED' },
+              { name: 'Work', color: '#4682B4' },
+              { name: 'School', color: '#4169E1' }
             ];
           }
-          return categories;
+          // Ensure all categories have colors
+          return categories.map((cat, index) => ({
+            name: cat.name,
+            color: cat.color || colorPalette[index % colorPalette.length]
+          }));
         } catch (e) {
           console.error('getCategories: Failed to parse categories:', e);
           return [
-            { name: 'General', color: '#FFD700' },
-            { name: 'Work', color: '#87CEEB' },
-            { name: 'Home', color: '#98FB98' }
+            { name: 'Home', color: '#87CEEB' },
+            { name: 'Life', color: '#6495ED' },
+            { name: 'Work', color: '#4682B4' },
+            { name: 'School', color: '#4169E1' }
           ];
         }
       }
@@ -220,7 +226,7 @@ Purpose: Displays a header with banner menu, center-justified cycling user promp
 
           const label = document.createElement('span');
           label.textContent = category.name;
-          label.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          label.style.fontFamily = '-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif';
           label.style.fontSize = '8px';
           label.style.marginTop = '3px';
           buttonContainer.appendChild(label);
@@ -328,6 +334,7 @@ Purpose: Displays a header with banner menu, center-justified cycling user promp
           return [];
         }
       }
+
       function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -335,6 +342,7 @@ Purpose: Displays a header with banner menu, center-justified cycling user promp
         }
         return array;
       }
+
       function isPromptActive(prompt, now) {
         if (!prompt.dayOnly && !prompt.triggerDay && !prompt.triggerTime && !prompt.triggerDate) {
           return true; // General prompt
@@ -364,6 +372,7 @@ Purpose: Displays a header with banner menu, center-justified cycling user promp
         }
         return false;
       }
+
       function cyclePrompts() {
         const prompts = getPrompts();
         if (prompts.length === 0) {
@@ -423,6 +432,7 @@ Purpose: Displays a header with banner menu, center-justified cycling user promp
         }
         showNextPrompt();
       }
+
       renderCategories();
       cyclePrompts();
     });
