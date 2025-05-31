@@ -36,10 +36,35 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
       height: 40px;
       border-radius: 50%;
       cursor: pointer;
-      border: none; /* No border for modern look */
+      border: none;
+      position: relative;
     }
-    .category-button.selectable {
-      background-color: #FF4444 !important; /* Highlight for delete mode */
+    .category-specific-button {
+      display: none;
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #FFFFFF;
+      border-radius: 50%;
+      background-color: #000000;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+    .category-specific-button .inner-circle {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #FFFFFF;
+    }
+    .category-specific-button.selected .inner-circle {
+      display: block;
     }
     .popup-button[data-action="yes"], .popup-button[data-action="confirm"] {
       background-color: #333333;
@@ -156,6 +181,7 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
       const popup = document.getElementById('popup');
       const selectButton = document.getElementById('select-button');
       const deletePopup = document.getElementById('delete-popup');
+      const editColorPopup = document.getElementById('edit-color-popup');
       const categoryRow = document.querySelector('.category-row');
 
       if (burgerMenu) {
@@ -163,8 +189,8 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
       } else {
         console.error('Home page: Burger menu not found');
       }
-      if (!promptCycle || !addButton || !popup || !selectButton || !deletePopup || !categoryRow) {
-        console.error('Home page: Required elements not found:', { promptCycle, addButton, popup, selectButton, deletePopup, categoryRow });
+      if (!promptCycle || !addButton || !popup || !selectButton || !deletePopup || !editColorPopup || !categoryRow) {
+        console.error('Home page: Required elements not found:', { promptCycle, addButton, popup, selectButton, deletePopup, editColorPopup, categoryRow });
         return;
       }
 
@@ -174,12 +200,14 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
         try {
           const categories = JSON.parse(localStorage.getItem('categories'));
           if (!categories || categories.length === 0) {
-            return [
+            const defaultCategories = [
               { name: 'Home', color: '#87CEEB' },
               { name: 'Life', color: '#6495ED' },
               { name: 'Work', color: '#4682B4' },
               { name: 'School', color: '#4169E1' }
             ];
+            localStorage.setItem('categories', JSON.stringify(defaultCategories));
+            return defaultCategories;
           }
           // Ensure all categories have colors
           return categories.map((cat, index) => ({
@@ -188,12 +216,14 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
           }));
         } catch (e) {
           console.error('getCategories: Failed to parse categories:', e);
-          return [
+          const defaultCategories = [
             { name: 'Home', color: '#87CEEB' },
             { name: 'Life', color: '#6495ED' },
             { name: 'Work', color: '#4682B4' },
             { name: 'School', color: '#4169E1' }
           ];
+          localStorage.setItem('categories', JSON.stringify(defaultCategories));
+          return defaultCategories;
         }
       }
 
@@ -225,6 +255,10 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
           const button = document.createElement('a');
           button.href = `/jiffy/pages/categories/template/index.html?category=${encodeURIComponent(category.name)}`;
           button.innerHTML = `<button class="category-button" style="background-color: ${category.color};"></button>`;
+          const selectCircle = document.createElement('div');
+          selectCircle.className = 'category-specific-button';
+          selectCircle.innerHTML = '<div class="inner-circle"></div>';
+          button.firstChild.appendChild(selectCircle);
           buttonContainer.appendChild(button);
 
           const label = document.createElement('span');
@@ -266,13 +300,16 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
       selectButton.addEventListener('click', () => {
         isSelectMode = !isSelectMode;
         console.log('selectButton: Select mode toggled:', isSelectMode);
-        const buttons = categoryRow.querySelectorAll('.category-button');
+        const buttons = categoryRow.querySelectorAll('.category-specific-button');
         buttons.forEach(button => {
-          button.classList.toggle('selectable', isSelectMode);
+          button.style.display = isSelectMode ? 'block' : 'none';
           button.onclick = isSelectMode ? (e) => {
             e.preventDefault();
-            const category = button.parentElement.dataset.category;
-            showDeleteCategoryPopup(category);
+            button.classList.toggle('selected');
+            const category = button.closest('[data-category]').dataset.category;
+            if (button.classList.contains('selected')) {
+              showDeleteCategoryPopup(category);
+            }
           } : null;
         });
         selectButton.textContent = isSelectMode ? 'Done' : 'Select';
@@ -309,6 +346,10 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
       document.getElementById('delete-popup-cancel').addEventListener('click', () => {
         deletePopup.style.display = 'none';
         deletePopup.dataset.category = '';
+        const selectedButton = categoryRow.querySelector('.category-specific-button.selected');
+        if (selectedButton) {
+          selectedButton.classList.remove('selected');
+        }
       });
 
       document.getElementById('delete-popup-delete').addEventListener('click', () => {
