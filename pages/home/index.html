@@ -1,6 +1,6 @@
 <!-- 
 Path: /jiffy/pages/home/index.html
-Purpose: Displays a header with burger menu, center-justified cycling user prompts with time/day/date frequency, three action buttons with Rewards linked, and a category row with dynamic buttons that save to localStorage, moved up 10px.
+Purpose: Displays a header with banner menu, center-justified cycling user prompts with time/day/date frequency, three action buttons with Rewards linked, and a category row with dynamic buttons that save to localStorage with unique colors, moved up 10px.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -35,12 +35,11 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background-color: #BBF5BB;
       cursor: pointer;
       border: none; /* No border for modern look */
     }
     .category-button.selectable {
-      background-color: #FF4444; /* Highlight for delete mode */
+      background-color: #FF4444 !important; /* Highlight for delete mode */
     }
     .popup-button[data-action="yes"], .popup-button[data-action="confirm"] {
       background-color: #333333;
@@ -92,7 +91,7 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
       <span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>
     </div>
     <h1 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 20px; text-align: center; margin: 0; font-weight: normal;">Jiffy</h1>
-    <div id="burger-menu" style="font-size: 24px; font-weight: 300; line-height: 1; cursor: pointer;">☰</div>
+    <div id="banner-menu" style="font-size: 24px; font-weight: 300; line-height: 1; cursor: pointer;">☰</div>
   </div>
   <div id="prompt-cycle" class="prompt-cycle"></div>
   <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
@@ -107,7 +106,7 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
         <a href="/jiffy/pages/rewards/index.html">
           <button class="action-button" data-action="show-rewards" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #004598; background-color: #BBF5BB; cursor: pointer;"></button>
         </a>
-        <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 3px;">Rewards</span>
+        <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 3px;">Records</span>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center;">
         <button class="action-button" data-action="add" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #004598; background-color: #BBF5BB; cursor: pointer;"></button>
@@ -137,7 +136,7 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
     <div style="background-color: #000000; padding: 20px; border-radius: 8px; text-align: center; width: 80%; max-width: 300px; border: 1px solid #333333;">
       <h2 id="edit-color-popup-title" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; margin: 0 0 10px; color: #FFFFFF;">Edit Color</h2>
       <input id="color-input" type="color" style="width: 100%; padding: 5px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 4px;">
-      <button class="popup-button" data-action="yes">Yes</button>
+      <button class="popup-button" data-action="confirm">Confirm</button>
       <button class="popup-button" data-action="cancel">Cancel</button>
     </div>
   </div>
@@ -152,36 +151,56 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
     document.addEventListener('DOMContentLoaded', () => {
       console.log('Home page: Initializing prompt cycling and categories');
       const promptCycle = document.getElementById('prompt-cycle');
-      const burgerMenu = document.getElementById('burger-menu');
+      const bannerMenu = document.getElementById('banner-menu');
       const addButton = document.querySelector('.action-button[data-action="add"]');
       const popup = document.getElementById('popup');
       const selectButton = document.getElementById('select-button');
       const deletePopup = document.getElementById('delete-popup');
+      const editColorPopup = document.getElementById('edit-color-popup');
       const categoryRow = document.querySelector('.category-row');
 
-      if (burgerMenu) {
-        console.log('Home page: Burger menu found with content:', burgerMenu.textContent);
+      if (bannerMenu) {
+        console.log('Home page: Banner menu found:', bannerMenu.textContent);
       } else {
-        console.error('Home page: Burger menu element not found');
+        console.error('Home page: Banner menu not found');
       }
-      if (!promptCycle || !addButton || !popup || !selectButton || !deletePopup || !categoryRow) {
-        console.error('Home page: Required elements not found:', { promptCycle, addButton, popup, selectButton, deletePopup, categoryRow });
+      if (!promptCycle || !addButton || !popup || !selectButton || !deletePopup || !editColorPopup || !categoryRow) {
+        console.error('Home page: Required elements not found:', { promptCycle, addButton, popup, selectButton, deletePopup, editColorPopup, categoryRow });
         return;
       }
 
+      const colorPalette = ['#FFD700', '#87CEEB', '#98FB98', '#FFA07A', '#FF69B4', '#BA55D3', '#20B2AA', '#F4A460', '#9370DB', '#FF6347'];
+
       function getCategories() {
         try {
-          const categories = JSON.parse(localStorage.getItem('categories')) || ['General', 'Work', 'Home'];
+          const categories = JSON.parse(localStorage.getItem('categories'));
+          if (!categories || categories.length === 0) {
+            return [
+              { name: 'General', color: '#FFD700' },
+              { name: 'Work', color: '#87CEEB' },
+              { name: 'Home', color: '#98FB98' }
+            ];
+          }
           return categories;
         } catch (e) {
           console.error('getCategories: Failed to parse categories:', e);
-          return ['General', 'Work', 'Home'];
+          return [
+            { name: 'General', color: '#FFD700' },
+            { name: 'Work', color: '#87CEEB' },
+            { name: 'Home', color: '#98FB98' }
+          ];
         }
       }
 
       function saveCategories(categories) {
         localStorage.setItem('categories', JSON.stringify(categories));
         console.log('saveCategories: Saved categories:', categories);
+      }
+
+      function getNextColor(existingCategories) {
+        const usedColors = existingCategories.map(c => c.color);
+        const availableColor = colorPalette.find(color => !usedColors.includes(color)) || colorPalette[existingCategories.length % colorPalette.length];
+        return availableColor;
       }
 
       function renderCategories() {
@@ -192,15 +211,15 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
           buttonContainer.style.display = 'flex';
           buttonContainer.style.flexDirection = 'column';
           buttonContainer.style.alignItems = 'center';
-          buttonContainer.dataset.category = category;
+          buttonContainer.dataset.category = category.name;
 
           const button = document.createElement('a');
-          button.href = `/jiffy/pages/categories/template/index.html?category=${encodeURIComponent(category)}`;
-          button.innerHTML = `<button class="category-button"></button>`;
+          button.href = `/jiffy/pages/categories/template/index.html?category=${encodeURIComponent(category.name)}`;
+          button.innerHTML = `<button class="category-button" style="background-color: ${category.color};"></button>`;
           buttonContainer.appendChild(button);
 
           const label = document.createElement('span');
-          label.textContent = category;
+          label.textContent = category.name;
           label.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
           label.style.fontSize = '8px';
           label.style.marginTop = '3px';
@@ -263,8 +282,9 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
           const categoryName = input.value.trim();
           if (categoryName) {
             const categories = getCategories();
-            if (!categories.includes(categoryName)) {
-              categories.push(categoryName);
+            if (!categories.some(c => c.name === categoryName)) {
+              const newColor = getNextColor(categories);
+              categories.push({ name: categoryName, color: newColor });
               saveCategories(categories);
               renderCategories();
               closeAddCategoryPopup();
@@ -288,7 +308,7 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
         const category = deletePopup.dataset.category;
         if (category) {
           const categories = getCategories();
-          const updatedCategories = categories.filter(c => c !== category);
+          const updatedCategories = categories.filter(c => c.name !== category);
           saveCategories(updatedCategories);
           renderCategories();
           deletePopup.style.display = 'none';
