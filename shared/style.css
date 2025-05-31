@@ -9,6 +9,30 @@ Purpose: Shared styles for Jiffy app, including category button styling.
   cursor: pointer;
   border: none; /* No border for modern look */
 }
-.category-button.selectable {
-  background-color: #FF4444 !important; /* Highlight for delete mode */
+.category-specific-button {
+  display: none;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+  background-color: #000000;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.category-specific-button .inner-circle {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+}
+.category-specific-button.selected .inner-circle {
+  display: block;
 }
