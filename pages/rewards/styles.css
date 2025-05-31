@@ -1,1 +1,153 @@
-
+/* 
+Path: /jiffy/pages/rewards/styles.css
+Purpose: Styles the Rewards page, including the reward list with un-bolded 14px text and 8px left margin, add/edit reward popups, weighted rewards, and swipe-to-delete.
+*/
+.reward-list-wrapper {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: block;
+  text-align: left;
+}
+.reward-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin: 20px 0 0 0;
+  padding: 0;
+  justify-content: flex-start;
+  text-align: left;
+}
+.reward-item {
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+  margin: 0;
+  word-wrap: break-word;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+}
+.reward-item.weighted {
+  color: #B3E5B3;
+  order: -1;
+}
+.reward-item span {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  color: #FFFFFF;
+  flex: 1;
+  margin-left: 8px;
+}
+.reward-item.weighted span {
+  color: #B3E5B3;
+}
+.weight-icon {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  color: #FFFFFF;
+  cursor: pointer;
+  position: absolute;
+  right: 16px;
+}
+.weight-icon.weighted {
+  color: #B3E5B3;
+}
+.delete-button {
+  position: absolute;
+  right: -60px;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  background-color: #FF4444;
+  color: #FFFFFF;
+  border: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: right 0.3s ease;
+}
+.reward-item.swiped .delete-button {
+  right: 0;
+}
+#add-reward-popup,
+#edit-reward-popup {
+  z-index: 2;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+}
+.popup-content {
+  background-color: #000000;
+  padding: 28px;
+  border-radius: 12px;
+  text-align: center;
+  width: 85%;
+  max-width: 340px;
+  border: 1px solid #333333;
+}
+.popup-content h2 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: #FFFFFF;
+}
+.popup-content input[type="text"],
+.popup-content input[type="datetime-local"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #333333;
+  border-radius: 6px;
+  background-color: #1A1A1A;
+  color: #FFFFFF;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+}
+.popup-content .button-container {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+.popup-button {
+  background-color: #333333;
+  color: #FFFFFF;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+}
+.popup-button:hover {
+  background-color: #444444;
+}
+.popup-button[data-action="confirm"] {
+  background-color: #BBF5BB;
+  color: #000000;
+}
+.popup-button[data-action="confirm"]:hover {
+  background-color: #A3D9A3;
+}
+.popup-button[data-action="cancel"] {
+  background-color: #1A1A1A;
+  border: 1px solid #333333;
+}
+.popup-button[data-action="cancel"]:hover {
+  background-color: #2A2A2A;
+}
