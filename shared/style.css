@@ -1,14 +1,14 @@
-html, body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: #000000;
-  color: #FFFFFF;
-  margin: 0;
-  padding: 0;
-  height: 100vh;
+/* 
+Path: /jiffy/shared/styles.css
+Purpose: Shared styles for Jiffy app, including category button styling.
+*/
+.category-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none; /* No border for modern look */
 }
-h1 {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 20px; /* Match inline style in pages/home/index.html */
-  color: #FFFFFF;
-  text-align: center;
+.category-button.selectable {
+  background-color: #FF4444 !important; /* Highlight for delete mode */
 }
