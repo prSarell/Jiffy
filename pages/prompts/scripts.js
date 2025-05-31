@@ -40,8 +40,8 @@ function initializePromptsPage() {
         const [minutes, seconds] = value.split(':').map(Number);
         const totalSeconds = minutes * 60 + seconds;
         if (totalSeconds >= 1) {
-          localStorage.setItem('cycleDuration', totalSeconds * 1000); // Store in milliseconds
-          localStorage.setItem('cycleDurationMMSS', value); // Store MM:SS for display
+          localStorage.setItem('cycleDuration', totalSeconds * 1000);
+          localStorage.setItem('cycleDurationMMSS', value);
           console.log('Cycle duration updated:', totalSeconds, 'seconds');
         } else {
           cycleDurationInput.value = '00:01';
@@ -81,14 +81,18 @@ function initializePromptsPage() {
       promptItem.dataset.promptId = prompt.id;
       const timeDisplay = prompt.dueTime ? new Date(prompt.dueTime).toLocaleString() : '';
       promptItem.innerHTML = `
-        <span>${prompt.text}${timeDisplay ? ` (Due: ${timeDisplay})` : ''}</span>
+        <span class="prompt-text">${prompt.text}${timeDisplay ? ` (Due: ${timeDisplay})` : ''}</span>
         <span class="weight-icon${prompt.weighted ? ' weighted' : ''}" data-prompt-id="${prompt.id}">${prompt.weighted ? '★' : '☆'}</span>
         <button class="delete-button" data-prompt-id="${prompt.id}">Delete</button>
       `;
       if (editPromptPopup) {
-        promptItem.querySelector('span:not(.weight-icon)').addEventListener('click', () => showEditPromptPopup(prompt));
+        promptItem.querySelector('.prompt-text').addEventListener('click', (event) => {
+          event.stopPropagation();
+          showEditPromptPopup(prompt);
+        });
       }
       promptItem.querySelector('.weight-icon').addEventListener('click', (event) => {
+        event.stopPropagation();
         console.log('weightIcon: Toggling weight for prompt ID:', prompt.id);
         updatePrompt(prompt.id, prompt.text, !prompt.weighted, prompt.dueTime);
         loadPrompts();
@@ -106,6 +110,7 @@ function initializePromptsPage() {
       let isSwiping = false;
 
       promptItem.addEventListener('touchstart', (e) => {
+        if (e.target.classList.contains('weight-icon') || e.target.classList.contains('delete-button')) return;
         startX = e.touches[0].clientX;
         isSwiping = true;
         promptItem.style.transition = 'none';
@@ -115,7 +120,7 @@ function initializePromptsPage() {
         if (!isSwiping) return;
         currentX = e.touches[0].clientX;
         const diffX = currentX - startX;
-        if (diffX <= 0 && diffX >= -60) { // Right-to-left swipe, max 60px
+        if (diffX <= 0 && diffX >= -60) {
           promptItem.style.transform = `translateX(${diffX}px)`;
         }
       });
@@ -123,7 +128,7 @@ function initializePromptsPage() {
       promptItem.addEventListener('touchend', () => {
         isSwiping = false;
         promptItem.style.transition = 'transform 0.3s ease';
-        if (currentX - startX < -30) { // Swipe threshold
+        if (currentX - startX < -30) {
           promptItem.style.transform = 'translateX(-60px)';
           promptItem.classList.add('swiped');
         } else {
@@ -264,34 +269,6 @@ function initializePromptsPage() {
       }
     }
   });
-
-  // Initialize cycle duration from localStorage
-  if (cycleDurationInput) {
-    cycleDurationInput.value = localStorage.getItem('cycleDurationMMSS') || '00:08';
-    cycleDurationInput.addEventListener('change', () => {
-      const value = cycleDurationInput.value;
-      const regex = /^([0-5][0-9]):([0-5][0-9])$/;
-      if (regex.test(value)) {
-        const [minutes, seconds] = value.split(':').map(Number);
-        const totalSeconds = minutes * 60 + seconds;
-        if (totalSeconds >= 1) {
-          localStorage.setItem('cycleDuration', totalSeconds * 1000);
-          localStorage.setItem('cycleDurationMMSS', value);
-          console.log('Cycle duration updated:', totalSeconds, 'seconds');
-        } else {
-          cycleDurationInput.value = '00:01';
-          localStorage.setItem('cycleDuration', '1000');
-          localStorage.setItem('cycleDurationMMSS', '00:01');
-          console.warn('Cycle duration set to minimum: 1 second');
-        }
-      } else {
-        cycleDurationInput.value = '00:08';
-        localStorage.setItem('cycleDuration', '8000');
-        localStorage.setItem('cycleDurationMMSS', '00:08');
-        console.warn('Invalid MM:SS format, reset to default: 8 seconds');
-      }
-    });
-  }
 
   // Initial load
   loadPrompts();
