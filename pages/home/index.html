@@ -156,7 +156,6 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
       const popup = document.getElementById('popup');
       const selectButton = document.getElementById('select-button');
       const deletePopup = document.getElementById('delete-popup');
-      const editColorPopup = document.getElementById('edit-color-popup');
       const categoryRow = document.querySelector('.category-row');
 
       if (burgerMenu) {
@@ -164,8 +163,8 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
       } else {
         console.error('Home page: Burger menu not found');
       }
-      if (!promptCycle || !addButton || !popup || !selectButton || !deletePopup || !editColorPopup || !categoryRow) {
-        console.error('Home page: Required elements not found:', { promptCycle, addButton, popup, selectButton, deletePopup, editColorPopup, categoryRow });
+      if (!promptCycle || !addButton || !popup || !selectButton || !deletePopup || !categoryRow) {
+        console.error('Home page: Required elements not found:', { promptCycle, addButton, popup, selectButton, deletePopup, categoryRow });
         return;
       }
 
@@ -199,8 +198,12 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
       }
 
       function saveCategories(categories) {
-        localStorage.setItem('categories', JSON.stringify(categories));
-        console.log('saveCategories: Saved categories:', categories);
+        try {
+          localStorage.setItem('categories', JSON.stringify(categories));
+          console.log('saveCategories: Saved categories:', categories);
+        } catch (e) {
+          console.error('saveCategories: Failed to save categories:', e);
+        }
       }
 
       function getNextColor(existingCategories) {
@@ -226,7 +229,7 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
 
           const label = document.createElement('span');
           label.textContent = category.name;
-          label.style.fontFamily = "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif"; /* Fixed quotes */
+          label.style.fontFamily = "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif";
           label.style.fontSize = '8px';
           label.style.marginTop = '3px';
           buttonContainer.appendChild(label);
@@ -266,13 +269,11 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
         const buttons = categoryRow.querySelectorAll('.category-button');
         buttons.forEach(button => {
           button.classList.toggle('selectable', isSelectMode);
-          button.onclick = (e) => {
-            if (isSelectMode) {
-              e.preventDefault();
-              const category = button.parentElement.dataset.category;
-              showDeleteCategoryPopup(category);
-            }
-          };
+          button.onclick = isSelectMode ? (e) => {
+            e.preventDefault();
+            const category = button.parentElement.dataset.category;
+            showDeleteCategoryPopup(category);
+          } : null;
         });
         selectButton.textContent = isSelectMode ? 'Done' : 'Select';
       });
