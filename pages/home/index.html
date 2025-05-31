@@ -1,6 +1,6 @@
 <!-- 
 Path: /jiffy/pages/home/index.html
-Purpose: Displays a header with burger menu, center-justified cycling user prompts with time/day/date frequency, three action buttons with Rewards linked, and a category row with dynamic buttons, moved up 10px.
+Purpose: Displays a header with burger menu, center-justified cycling user prompts with time/day/date frequency, three action buttons with Rewards linked, and a category row with dynamic buttons that save to localStorage, moved up 10px.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -31,28 +31,16 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
       visibility: visible !important;
       opacity: 1 !important;
     }
-    .category-specific-button {
-      display: none;
-      position: absolute;
-      top: 2px;
-      right: 2px;
-      width: 14px;
-      height: 14px;
-      border: 2px solid #FFFFFF;
+    .category-button {
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      background-color: #000000;
-      box-sizing: border-box;
+      background-color: #BBF5BB;
+      cursor: pointer;
+      border: none; /* No border for modern look */
     }
-    .category-specific-button .inner-circle {
-      display: none;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: #FFFFFF;
+    .category-button.selectable {
+      background-color: #FF4444; /* Highlight for delete mode */
     }
     .popup-button[data-action="yes"], .popup-button[data-action="confirm"] {
       background-color: #333333;
@@ -116,7 +104,7 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
         <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 3px;">Prompts</span>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center;">
-        <a href="/jiffy/pages/rewards/index.html"> <!-- Updated link -->
+        <a href="/jiffy/pages/rewards/index.html">
           <button class="action-button" data-action="show-rewards" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #004598; background-color: #BBF5BB; cursor: pointer;"></button>
         </a>
         <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 3px;">Rewards</span>
@@ -160,20 +148,156 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
         .then(reg => console.log('Service Worker registered:', reg))
         .catch(err => console.error('Service Worker registration failed:', err));
     }
-    // Prompt cycling script
+    // Prompt cycling and category management script
     document.addEventListener('DOMContentLoaded', () => {
-      console.log('Home page: Initializing prompt cycling');
+      console.log('Home page: Initializing prompt cycling and categories');
       const promptCycle = document.getElementById('prompt-cycle');
       const burgerMenu = document.getElementById('burger-menu');
+      const addButton = document.querySelector('.action-button[data-action="add"]');
+      const popup = document.getElementById('popup');
+      const selectButton = document.getElementById('select-button');
+      const deletePopup = document.getElementById('delete-popup');
+      const categoryRow = document.querySelector('.category-row');
+
       if (burgerMenu) {
         console.log('Home page: Burger menu found with content:', burgerMenu.textContent);
       } else {
         console.error('Home page: Burger menu element not found');
       }
-      if (!promptCycle) {
-        console.error('Home page: Prompt cycle element not found');
+      if (!promptCycle || !addButton || !popup || !selectButton || !deletePopup || !categoryRow) {
+        console.error('Home page: Required elements not found:', { promptCycle, addButton, popup, selectButton, deletePopup, categoryRow });
         return;
       }
+
+      function getCategories() {
+        try {
+          const categories = JSON.parse(localStorage.getItem('categories')) || ['General', 'Work', 'Home'];
+          return categories;
+        } catch (e) {
+          console.error('getCategories: Failed to parse categories:', e);
+          return ['General', 'Work', 'Home'];
+        }
+      }
+
+      function saveCategories(categories) {
+        localStorage.setItem('categories', JSON.stringify(categories));
+        console.log('saveCategories: Saved categories:', categories);
+      }
+
+      function renderCategories() {
+        categoryRow.innerHTML = '';
+        const categories = getCategories();
+        categories.forEach(category => {
+          const buttonContainer = document.createElement('div');
+          buttonContainer.style.display = 'flex';
+          buttonContainer.style.flexDirection = 'column';
+          buttonContainer.style.alignItems = 'center';
+          buttonContainer.dataset.category = category;
+
+          const button = document.createElement('a');
+          button.href = `/jiffy/pages/categories/template/index.html?category=${encodeURIComponent(category)}`;
+          button.innerHTML = `<button class="category-button"></button>`;
+          buttonContainer.appendChild(button);
+
+          const label = document.createElement('span');
+          label.textContent = category;
+          label.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          label.style.fontSize = '8px';
+          label.style.marginTop = '3px';
+          buttonContainer.appendChild(label);
+
+          categoryRow.appendChild(buttonContainer);
+        });
+        console.log('renderCategories: Rendered categories:', categories);
+      }
+
+      function showAddCategoryPopup() {
+        popup.style.display = 'flex';
+        document.getElementById('category-input').focus();
+      }
+
+      function closeAddCategoryPopup() {
+        popup.style.display = 'none';
+        document.getElementById('category-input').value = '';
+      }
+
+      function showDeleteCategoryPopup(category) {
+        document.getElementById('delete-popup-message').textContent = `Delete ${category}?`;
+        deletePopup.style.display = 'flex';
+        deletePopup.dataset.category = category;
+      }
+
+      let isSelectMode = false;
+
+      addButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        console.log('addButton: Add category button clicked');
+        showAddCategoryPopup();
+      });
+
+      selectButton.addEventListener('click', () => {
+        isSelectMode = !isSelectMode;
+        console.log('selectButton: Select mode toggled:', isSelectMode);
+        const buttons = categoryRow.querySelectorAll('.category-button');
+        buttons.forEach(button => {
+          button.classList.toggle('selectable', isSelectMode);
+          button.onclick = (e) => {
+            if (isSelectMode) {
+              e.preventDefault();
+              const category = button.parentElement.dataset.category;
+              showDeleteCategoryPopup(category);
+            }
+          };
+        });
+        selectButton.textContent = isSelectMode ? 'Done' : 'Select';
+      });
+
+      document.addEventListener('click', (event) => {
+        const popupButton = event.target.closest('.popup-button');
+        if (!popupButton) return;
+        const action = popupButton.getAttribute('data-action');
+        console.log(`click: Popup button clicked with action: ${action}`);
+
+        if (action === 'confirm' && popupButton.closest('#popup')) {
+          const input = document.getElementById('category-input');
+          const categoryName = input.value.trim();
+          if (categoryName) {
+            const categories = getCategories();
+            if (!categories.includes(categoryName)) {
+              categories.push(categoryName);
+              saveCategories(categories);
+              renderCategories();
+              closeAddCategoryPopup();
+            } else {
+              alert('Category already exists!');
+            }
+          } else {
+            alert('Please enter a category name!');
+          }
+        } else if (action === 'cancel' && popupButton.closest('#popup')) {
+          closeAddCategoryPopup();
+        }
+      });
+
+      document.getElementById('delete-popup-cancel').addEventListener('click', () => {
+        deletePopup.style.display = 'none';
+        deletePopup.dataset.category = '';
+      });
+
+      document.getElementById('delete-popup-delete').addEventListener('click', () => {
+        const category = deletePopup.dataset.category;
+        if (category) {
+          const categories = getCategories();
+          const updatedCategories = categories.filter(c => c !== category);
+          saveCategories(updatedCategories);
+          renderCategories();
+          deletePopup.style.display = 'none';
+          deletePopup.dataset.category = '';
+          console.log('deleteCategory: Deleted category:', category);
+        }
+      });
+
+      // Prompt cycling script
       function getPrompts() {
         try {
           const prompts = JSON.parse(localStorage.getItem('prompts')) || [];
@@ -243,7 +367,7 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
           }
         });
         // Date-specific low frequency (3/day)
-        const datePrompts = activePrompts.filter(p => p.triggerDate && !prompt.dayOnly);
+        const datePrompts = activePrompts.filter(p => p.triggerDate && !p.dayOnly);
         datePrompts.forEach(prompt => {
           const [month, day] = prompt.triggerDate.split('-').map(Number);
           const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -279,6 +403,7 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
         }
         showNextPrompt();
       }
+      renderCategories();
       cyclePrompts();
     });
   </script>
