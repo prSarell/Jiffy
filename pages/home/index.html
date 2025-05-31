@@ -1,4 +1,4 @@
-<!-- 
+m<!-- 
 Path: /jiffy/pages/home/index.html
 Purpose: Displays a header with burger menu, center-justified cycling user prompts with time/day/date frequency, three action buttons with Rewards linked, and a category row with dynamic buttons that save to localStorage with unique colors, moved up 10px.
 -->
@@ -303,12 +303,20 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
         const buttons = categoryRow.querySelectorAll('.category-specific-button');
         buttons.forEach(button => {
           button.style.display = isSelectMode ? 'block' : 'none';
+          button.classList.remove('selected'); // Reset selection
           button.onclick = isSelectMode ? (e) => {
             e.preventDefault();
+            // Deselect other buttons
+            buttons.forEach(b => {
+              if (b !== button) b.classList.remove('selected');
+            });
             button.classList.toggle('selected');
             const category = button.closest('[data-category]').dataset.category;
             if (button.classList.contains('selected')) {
               showDeleteCategoryPopup(category);
+            } else {
+              deletePopup.style.display = 'none';
+              deletePopup.dataset.category = '';
             }
           } : null;
         });
