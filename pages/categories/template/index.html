@@ -1,1 +1,42 @@
+<!-- 
+Path: /jiffy/pages/categories/template/index.html
+Purpose: Placeholder template for category pages, with a header similar to Prompts and Rewards pages.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Jiffy">
+  <title>Jiffy - Category</title>
+  <link rel="stylesheet" href="/jiffy/shared/styles.css">
+  <link rel="manifest" href="/jiffy/manifest.json">
+  <link rel="apple-touch-icon" href="/jiffy/assets/icon.png">
+</head>
+<body style="background-color: #000000; color: #FFFFFF; height: 100vh; margin: 0; padding: 0;">
+  <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 20px 20px 0 20px; box-sizing: border-box; margin-top: 10px;">
+    <a href="/jiffy/pages/home/index.html" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 18px; color: #FFFFFF; text-decoration: none; cursor: pointer;">←</a>
+    <h1 id="category-title" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 20px; text-align: center; margin: 0; font-weight: normal;">Category</h1>
+    <div style="width: 18px;"></div> <!-- Spacer for alignment -->
+  </div>
+  <div style="width: 100%; padding: 20px; box-sizing: border-box; text-align: center;">
+    <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 14px;">Category page placeholder.</p>
+  </div>
+  <script>
+    // Set category title from URL parameter
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const category = urlParams.get('category') || 'Category';
+      document.getElementById('category-title').textContent = category;
+    });
 
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/jiffy/service-workers/sw.js')
+        .then(reg => console.log('Service Worker registered:', reg))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    }
+  </script>
+</body>
+</html>
