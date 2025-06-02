@@ -54,6 +54,9 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
       border-radius: 50%;
       background-color: #FFFFFF;
     }
+    .master-active-button {
+      border: 2px solid #FFFFFF !important;
+    }
   </style>
 </head>
 <body style="background-color: #000000; color: #FFFFFF; height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; margin: 0; padding: env(safe-area-inset-top) 0 0 0; position: relative; touch-action: manipulation;">
@@ -84,13 +87,12 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
         <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 3px;">Add</span>
       </div>
     </div>
-
     <div class="category-row">
       <!-- Categories will be added dynamically -->
     </div>
   </div>
 
-  <!-- Popups remain unchanged -->
+  <!-- Popups and script imports remain unchanged -->
   <div id="popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
     <div style="background-color: #000000; padding: 20px; border-radius: 8px; text-align: center; width: 80%; max-width: 300px; border: 1px solid #333333;">
       <h2 id="popup-title" style="font-size: 16px; margin: 0 0 10px; color: #FFFFFF;">Add Category</h2>
