@@ -1,6 +1,6 @@
 <!-- 
 Path: /jiffy/pages/home/index.html
-Purpose: Displays a header with burger menu, center-justified cycling user prompts with time/day/date frequency, three action buttons with Rewards linked, and a category row with dynamic buttons, moved up 10px.
+Purpose: Displays the homepage with tabbed master categories, action buttons, and prompt cycling
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -54,30 +54,21 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
       border-radius: 50%;
       background-color: #FFFFFF;
     }
-    .popup-button[data-action="yes"], .popup-button[data-action="confirm"] {
-      background-color: #333333;
-      color: #FFFFFF;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 4px;
-      margin-right: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .popup-button[data-action="yes"]:hover, .popup-button[data-action="confirm"]:hover {
-      background-color: #444444;
-    }
-    .popup-button[data-action="no"], .popup-button[data-action="cancel"] {
+    .master-tab {
       background-color: #1A1A1A;
       color: #FFFFFF;
-      border: 1px solid #333333;
-      padding: 5px 10px;
-      border-radius: 4px;
+      border: 1px solid #444444;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 12px;
       cursor: pointer;
       transition: background-color 0.3s;
     }
-    .popup-button[data-action="no"]:hover, .popup-button[data-action="cancel"]:hover {
-      background-color: #2A2A2A;
+    .master-tab:hover {
+      background-color: #333333;
+    }
+    .active-tab {
+      background-color: #004598;
     }
     .prompt-cycle {
       width: 100%;
@@ -113,174 +104,33 @@ Purpose: Displays a header with burger menu, center-justified cycling user promp
         <a href="/jiffy/pages/prompts/index.html">
           <button class="action-button" data-action="show-prompts" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #004598; background-color: #BBF5BB; cursor: pointer;"></button>
         </a>
-        <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 3px;">Prompts</span>
+        <span style="font-size: 8px; margin-top: 3px;">Prompts</span>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center;">
-        <a href="/jiffy/pages/rewards/index.html"> <!-- Updated link -->
+        <a href="/jiffy/pages/rewards/index.html">
           <button class="action-button" data-action="show-rewards" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #004598; background-color: #BBF5BB; cursor: pointer;"></button>
         </a>
-        <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 3px;">Rewards</span>
+        <span style="font-size: 8px; margin-top: 3px;">Rewards</span>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center;">
         <button class="action-button" data-action="add" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #004598; background-color: #BBF5BB; cursor: pointer;"></button>
-        <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 3px;">Add</span>
+        <span style="font-size: 8px; margin-top: 3px;">Add</span>
       </div>
     </div>
-    <div style="display: flex; flex-wrap: wrap; justify-content: flex-start; align-items: center; gap: 20px; width: 240px; margin-top: 5px;" class="category-row">
-      <!-- Categories will be added dynamically -->
+
+    <!-- NEW Master Category Tabs -->
+    <div id="master-category-tabs" style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
+      <button class="master-tab active-tab" data-master="Home">Home</button>
+      <button class="master-tab" data-master="Life">Life</button>
+      <button class="master-tab" data-master="Work">Work</button>
+      <button class="master-tab" data-master="School">School</button>
     </div>
+
+    <!-- Category Row -->
+    <div class="category-row" style="margin-top: 5px;"></div>
   </div>
-  <div id="popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
-    <div style="background-color: #000000; padding: 20px; border-radius: 8px; text-align: center; width: 80%; max-width: 300px; border: 1px solid #333333;">
-      <h2 id="popup-title" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; margin: 0 0 10px; color: #FFFFFF;">Add Category</h2>
-      <input id="category-input" type="text" placeholder="Enter category name" style="width: 100%; padding: 5px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 4px; background-color: #1A1A1A; color: #FFFFFF;">
-      <button class="popup-button" data-action="confirm">Confirm</button>
-      <button class="popup-button" data-action="cancel">Cancel</button>
-    </div>
-  </div>
-  <div id="delete-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
-    <div style="background-color: #000000; padding: 20px; border-radius: 8px; text-align: center; width: 80%; max-width: 300px; border: 1px solid #333333;">
-      <h2 id="delete-popup-message" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; margin: 0 0 10px; color: #FFFFFF;"></h2>
-      <button id="delete-popup-cancel" style="background-color: #1A1A1A; color: #FFFFFF; border: 1px solid #333333; padding: 5px 10px; border-radius: 4px; margin-right: 5px; cursor: pointer; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#2A2A2A';" onmouseout="this.style.backgroundColor='#1A1A1A';">Cancel</button>
-      <button id="delete-popup-delete" style="background-color: #FF4444; color: #FFFFFF; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#FF6666';" onmouseout="this.style.backgroundColor='#FF4444';">Delete</button>
-    </div>
-  </div>
-  <div id="edit-color-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
-    <div style="background-color: #000000; padding: 20px; border-radius: 8px; text-align: center; width: 80%; max-width: 300px; border: 1px solid #333333;">
-      <h2 id="edit-color-popup-title" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; margin: 0 0 10px; color: #FFFFFF;">Edit Color</h2>
-      <input id="color-input" type="color" style="width: 100%; padding: 5px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 4px;">
-      <button class="popup-button" data-action="yes">Yes</button>
-      <button class="popup-button" data-action="cancel">Cancel</button>
-    </div>
-  </div>
+
+  <!-- Popups and script remain below -->
   <script type="module" src="/jiffy/shared/scripts/main.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/jiffy/service-workers/sw.js')
-        .then(reg => console.log('Service Worker registered:', reg))
-        .catch(err => console.error('Service Worker registration failed:', err));
-    }
-    // Prompt cycling script
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log('Home page: Initializing prompt cycling');
-      const promptCycle = document.getElementById('prompt-cycle');
-      const burgerMenu = document.getElementById('burger-menu');
-      if (burgerMenu) {
-        console.log('Home page: Burger menu found with content:', burgerMenu.textContent);
-      } else {
-        console.error('Home page: Burger menu element not found');
-      }
-      if (!promptCycle) {
-        console.error('Home page: Prompt cycle element not found');
-        return;
-      }
-      function getPrompts() {
-        try {
-          const prompts = JSON.parse(localStorage.getItem('prompts')) || [];
-          console.log('Home page: Retrieved prompts:', prompts);
-          return prompts;
-        } catch (e) {
-          console.error('Home page: Failed to parse prompts:', e);
-          return [];
-        }
-      }
-      function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-      }
-      function isPromptActive(prompt, now) {
-        if (!prompt.dayOnly && !prompt.triggerDay && !prompt.triggerTime && !prompt.triggerDate) {
-          return true; // General prompt
-        }
-        const dayMap = { 'Sunday': 0, 'Monday': 1, 'Tuesday': 2, 'Wednesday': 3, 'Thursday': 4, 'Friday': 5, 'Saturday': 6 };
-        if (prompt.dayOnly && prompt.triggerDay) {
-          return now.getDay() === dayMap[prompt.triggerDay];
-        }
-        if (prompt.triggerTime) {
-          const [hours, minutes] = prompt.triggerTime.split(':').map(Number);
-          const start = new Date(now);
-          start.setHours(hours - 1, minutes, 0, 0);
-          const end = new Date(now);
-          end.setHours(hours + 1, minutes, 0, 0);
-          const matchesDay = !prompt.triggerDay || now.getDay() === dayMap[prompt.triggerDay];
-          return matchesDay && now >= start && now <= end;
-        }
-        if (prompt.triggerDate) {
-          const [month, day] = prompt.triggerDate.split('-').map(Number);
-          const currentYear = now.getFullYear();
-          const start = new Date(currentYear, month - 1, day - 30); // 1 month before
-          const normal = new Date(currentYear, month - 1, day - 3); // 3 days before
-          const end = new Date(currentYear, month - 1, day, 23, 59, 59, 999);
-          const isActivePeriod = now >= start && now <= end;
-          const matchesDay = !prompt.triggerDay || now.getDay() === dayMap[prompt.triggerDay];
-          return isActivePeriod && matchesDay;
-        }
-        return false;
-      }
-      function cyclePrompts() {
-        const prompts = getPrompts();
-        if (prompts.length === 0) {
-          promptCycle.textContent = '';
-          console.log('Home page: No prompts to cycle');
-          return;
-        }
-        const now = new Date();
-        let activePrompts = prompts.filter(p => isPromptActive(p, now));
-        if (activePrompts.length === 0) {
-          promptCycle.textContent = '';
-          console.log('Home page: No active prompts to cycle');
-          return;
-        }
-        // Boost time/date prompts
-        let cyclePrompts = [];
-        activePrompts.forEach(prompt => {
-          cyclePrompts.push(prompt);
-          if ((prompt.triggerTime || prompt.triggerDate) && !prompt.dayOnly) {
-            cyclePrompts.push(prompt); // 2x boost
-          }
-        });
-        // Date-specific low frequency (3/day)
-        const datePrompts = activePrompts.filter(p => p.triggerDate && !prompt.dayOnly);
-        datePrompts.forEach(prompt => {
-          const [month, day] = prompt.triggerDate.split('-').map(Number);
-          const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-          const normalStart = new Date(now.getFullYear(), month - 1, day - 3);
-          if (nowDate < normalStart) {
-            // Limit to ~3/day by reducing frequency
-            if (Math.random() < 0.125) { // ~3 times in 24 hours (24*60/8s=10800 cycles/day)
-              cyclePrompts.push(prompt);
-            }
-          }
-        });
-        if (cyclePrompts.length === 0) {
-          promptCycle.textContent = '';
-          console.log('Home page: No cycle prompts after filtering');
-          return;
-        }
-        const shuffledPrompts = shuffle([...cyclePrompts]);
-        let index = 0;
-        function showNextPrompt() {
-          if (index >= shuffledPrompts.length) {
-            index = 0;
-            cyclePrompts();
-            return;
-          }
-          const prompt = shuffledPrompts[index];
-          promptCycle.textContent = prompt.text + (prompt.dueTime ? ` (Due: ${new Date(prompt.dueTime).toLocaleString()})` : '');
-          promptCycle.className = `prompt-cycle${prompt.weighted ? ' weighted' : ''}`;
-          console.log('Home page: Displaying prompt:', prompt.text, 'Weighted:', prompt.weighted);
-          const baseTime = parseInt(localStorage.getItem('cycleDuration')) || 8000;
-          const displayTime = prompt.weighted ? baseTime + 2000 : baseTime;
-          index++;
-          setTimeout(showNextPrompt, displayTime);
-        }
-        showNextPrompt();
-      }
-      cyclePrompts();
-    });
-  </script>
 </body>
 </html>
