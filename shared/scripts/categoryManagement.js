@@ -1,3 +1,4 @@
+// shared/scripts/categoryManagement.js
 import { getColor } from './colorManagement.js';
 
 /*
@@ -75,4 +76,31 @@ export function saveCategories(categoryRow) {
   localStorage.setItem('categoryData', JSON.stringify(data));
   console.log(`Saved ${categories.length} categories:`, categories);
   return categories;
+}
+
+export function removeCategory(categoryName) {
+  const masterCategories = ['Home', 'Life', 'Work', 'School'];
+
+  // Prevent deletion of master categories
+  if (masterCategories.includes(categoryName)) {
+    console.warn(`Cannot delete master category: ${categoryName}`);
+    return;
+  }
+
+  // Load existing categories
+  const storedData = JSON.parse(localStorage.getItem('categoryData'));
+  if (!storedData || !Array.isArray(storedData.categories)) {
+    console.error('No valid category data to remove from');
+    return;
+  }
+
+  const updatedCategories = storedData.categories.filter(cat => cat.name !== categoryName);
+  const updatedData = { version: STORAGE_VERSION, categories: updatedCategories };
+
+  // Save updated list
+  localStorage.setItem('categoryData', JSON.stringify(updatedData));
+  console.log(`Removed category "${categoryName}". Remaining:`, updatedCategories);
+
+  // Remove color assignment
+  localStorage.removeItem(`categoryColor-${categoryName}`);
 }
