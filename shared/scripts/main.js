@@ -1,7 +1,3 @@
-// File: /jiffy/shared/scripts/main.js
-// Purpose: Core app logic for loading, saving, displaying, and deleting categories.
-// Handles popup behavior, selection mode, color editing, and protects master categories from deletion.
-
 import { getColor, setColor } from './colorManagement.js';
 import { loadCategories, saveCategories, removeCategory } from './categoryManagement.js';
 
@@ -149,12 +145,8 @@ function initializeApp() {
           <span id="delete-button" style="font-size: 8px; margin-left: 5px; cursor: pointer;">Delete</span>
           <span id="cancel-button" style="font-size: 8px; margin-left: 5px; cursor: pointer;">Cancel</span>
         `;
-        document.querySelectorAll('.category-row > div').forEach(categoryDiv => {
-          const span = categoryDiv.querySelector('span:last-child');
-          const categoryName = span ? span.textContent.trim() : '';
-          const isMaster = ['Home', 'Life', 'Work', 'School'].includes(categoryName);
-          const button = categoryDiv.querySelector('.category-specific-button');
-          if (button) button.style.display = isMaster ? 'none' : 'block';
+        document.querySelectorAll('.category-specific-button').forEach(button => {
+          button.style.display = 'block';
         });
       } else if (action === 'cancel-button') {
         selectMode = false;
@@ -203,12 +195,9 @@ function initializeApp() {
 
     if (selectMode) {
       const span = categoryDiv.querySelector('span:last-child');
-      const categoryName = span ? span.textContent.trim() : '';
-      const isMaster = ['Home', 'Life', 'Work', 'School'].includes(categoryName);
-      if (isMaster) return; // Don't allow master categories to be selected
-
       const innerCircle = button.querySelector('.inner-circle');
       if (!span || !innerCircle) return;
+
       if (selectedCategories.has(categoryDiv)) {
         selectedCategories.delete(categoryDiv);
         innerCircle.style.display = 'none';
@@ -233,20 +222,14 @@ function initializeApp() {
 
   document.getElementById('delete-popup-delete').addEventListener('click', () => {
     selectedCategories.forEach(categoryDiv => {
-      const span = categoryDiv.querySelector('span:last-child');
-      if (!span) return;
-      const categoryName = span.textContent.trim();
-
-      const isMasterCategory = ['Home', 'Life', 'Work', 'School'].includes(categoryName);
-      if (isMasterCategory) {
-        alert(`"${categoryName}" is a master category and cannot be deleted.`);
-        return;
-      }
-
       categoryDiv.style.transition = 'opacity 0.3s';
       categoryDiv.style.opacity = '0';
 
       setTimeout(() => {
+        const span = categoryDiv.querySelector('span:last-child');
+        if (!span) return;
+        const categoryName = span.textContent.trim();
+
         removeCategory(categoryName);
         categoryDiv.remove();
         categories = saveCategories(categoryRow);
