@@ -2,8 +2,8 @@
 // Purpose: Core app logic for loading, saving, displaying, and deleting categories.
 // Handles popup behavior, selection mode, color editing, and protects master categories from deletion.
 
-import { getColor, setColor, removeCategory } from './colorManagement.js';
-import { loadCategories, saveCategories } from './categoryManagement.js';
+import { getColor, setColor } from './colorManagement.js';
+import { loadCategories, saveCategories, removeCategory } from './categoryManagement.js';
 
 // Function to wait for an element to be available
 function waitForElement(selector, callback, maxAttempts = 10, interval = 100) {
@@ -11,7 +11,6 @@ function waitForElement(selector, callback, maxAttempts = 10, interval = 100) {
   const intervalId = setInterval(() => {
     const element = document.querySelector(selector);
     attempts++;
-    console.log(`waitForElement: Attempt ${attempts} to find ${selector}:`, element);
     if (element) {
       clearInterval(intervalId);
       callback(element);
@@ -23,8 +22,6 @@ function waitForElement(selector, callback, maxAttempts = 10, interval = 100) {
 }
 
 function initializeApp() {
-  console.log('initializeApp: Starting app initialization');
-
   const popup = document.getElementById('popup');
   const deletePopup = document.getElementById('delete-popup');
   const editColorPopup = document.getElementById('edit-color-popup');
@@ -42,9 +39,7 @@ function initializeApp() {
 
   const addButton = document.querySelector('.action-button[data-action="add"]');
   if (addButton) {
-    addButton.addEventListener('click', () => {
-      showAddPopup();
-    });
+    addButton.addEventListener('click', showAddPopup);
   }
 
   let selectMode = false;
@@ -233,11 +228,20 @@ function initializeApp() {
     selectedCategories.forEach(categoryDiv => {
       categoryDiv.style.transition = 'opacity 0.3s';
       categoryDiv.style.opacity = '0';
+
       setTimeout(() => {
         const span = categoryDiv.querySelector('span:last-child');
         if (!span) return;
         const categoryName = span.textContent.trim();
-        removeCategory(categoryName); // ✅ Corrected from lineNumber to categoryName
+
+        const isMasterCategory = ['Home', 'Life', 'Work', 'School'].includes(categoryName);
+        if (isMasterCategory) {
+          alert(`"${categoryName}" is a master category and cannot be deleted.`);
+          categoryDiv.style.opacity = '1';
+          return;
+        }
+
+        removeCategory(categoryName);
         categoryDiv.remove();
         categories = saveCategories(categoryRow);
       }, 300);
@@ -255,7 +259,7 @@ function initializeApp() {
   });
 }
 
-// Wait for category-row to exist before initializing
+// Wait for the category-row to exist before initializing
 waitForElement('.category-row', () => {
   initializeApp();
 });
