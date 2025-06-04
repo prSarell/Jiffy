@@ -1,7 +1,7 @@
 // File: /jiffy/shared/scripts/masterCategoryManagement.js
 // Purpose: Renders and manages master category buttons on the homepage. Used to switch between tabs.
 
-export function renderMasterCategories(container, onClickCallback) {
+function renderMasterCategories(container, onClickCallback) {
   const masterCategories = ['Home', 'Work', 'Life', 'School'];
   container.innerHTML = ''; // Clear existing buttons
 
