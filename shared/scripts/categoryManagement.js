@@ -16,7 +16,7 @@ const defaultCategories = [
 
 const STORAGE_VERSION = 1;
 
-export function loadCategories(categoryRow) {
+function loadCategories(categoryRow) {
   let storedData = JSON.parse(localStorage.getItem('categoryData'));
   let categories = defaultCategories;
 
@@ -56,7 +56,7 @@ export function loadCategories(categoryRow) {
   return categories;
 }
 
-export function saveCategories(categoryRow) {
+function saveCategories(categoryRow) {
   const categoryDivs = categoryRow.querySelectorAll('div');
   const categories = Array.from(categoryDivs).map(div => {
     const span = div.querySelector('span:last-child');
@@ -78,7 +78,7 @@ export function saveCategories(categoryRow) {
   return categories;
 }
 
-export function removeCategory(categoryName) {
+function removeCategory(categoryName) {
   const masterCategories = ['Home', 'Life', 'Work', 'School'];
 
   // Prevent deletion of master categories
