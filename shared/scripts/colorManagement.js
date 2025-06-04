@@ -39,7 +39,7 @@ let lineCategoryCounts = {
   1: 4 // First line starts with 4 categories (Home, Life, Work, School)
 };
 
-export function getColor(categoryName, position) {
+function getColor(categoryName, position) {
   if (userColors[categoryName]) {
     return userColors[categoryName];
   }
@@ -99,12 +99,12 @@ export function getColor(categoryName, position) {
   return newColor;
 }
 
-export function setColor(categoryName, color) {
+function setColor(categoryName, color) {
   userColors[categoryName] = color;
   localStorage.setItem('userColors', JSON.stringify(userColors));
 }
 
-export function removeCategory(lineNumber) {
+function removeCategory(lineNumber) {
   // Decrement the category count for this line
   if (lineCategoryCounts[lineNumber]) {
     lineCategoryCounts[lineNumber]--;
