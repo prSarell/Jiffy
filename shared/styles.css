@@ -1,8 +1,7 @@
 /*
   File: /jiffy/shared/styles.css
-  Purpose: Core styling for category layout, selection, and master category appearance in Jiffy app.
-  Update: Restores original round blue button design for master categories (Home, Work, Life, School)
-          with distinct monogram-style shades of blue. Adjusts layout to support 4 master buttons per row.
+  Purpose: Core styling for category layout, selection, master categories, and action buttons in Jiffy app.
+  Update: Fixes squashed action button layout with flex container support.
 */
 
 /* === CATEGORY ROW === */
@@ -117,15 +116,28 @@
   position: relative;
 }
 
+/* === ACTION BUTTON CONTAINER === */
+#action-button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+  width: 240px;
+}
+
 /* === ACTION BUTTONS (Add Prompt, Add Reward, Add Category) === */
 .action-button {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  padding: 10px;
+  font-size: 12px;
+  border-radius: 20px;
+  text-align: center;
   background-color: #007BFF;
   color: white;
   border: none;
-  padding: 12px 20px;
-  border-radius: 25px;
-  font-size: 14px;
-  margin: 10px;
 }
 
 .action-button:hover {
