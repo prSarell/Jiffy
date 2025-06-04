@@ -20,7 +20,7 @@ function renderMasterCategories() {
 
   masterCategories.forEach((category) => {
     const button = document.createElement('button');
-    button.className = 'master-category-button';
+    button.className = `master-category-button master-${category.toLowerCase()}`;
     button.textContent = category;
     if (category === selectedMasterCategory) {
       button.classList.add('active');
