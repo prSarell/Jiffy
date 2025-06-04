@@ -1,17 +1,36 @@
-/* === MASTER CATEGORY BUTTONS === */
+/* === MASTER CATEGORY WRAPPER === */
+#master-category-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 240px;
+  margin-top: 10px;
+  gap: 0;
+}
+
+/* Master category buttons default shape */
 .master-category-button {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #004598;
   border: none;
   cursor: pointer;
   position: relative;
   transition: outline 0.2s ease;
-  margin: 0 10px;
 }
 
-/* Optional: Label styling if using <span> below the button */
+/* Master category colors */
+.master-home     { background-color: #004598; } /* Blue */
+.master-work     { background-color: #00B66D; } /* Green */
+.master-life     { background-color: #FFDD00; } /* Yellow */
+.master-school   { background-color: #A958A5; } /* Purple */
+
+/* Active white outline */
+.master-category-button.active {
+  outline: 2px solid #FFFFFF;
+}
+
+/* Optional: label styling */
 .master-category-label {
   display: block;
   font-size: 8px;
@@ -19,9 +38,4 @@
   color: #FFFFFF;
   margin-top: 5px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-/* Active (selected) master tab */
-.master-category-button.active {
-  outline: 2px solid #FFFFFF;
 }
