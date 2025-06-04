@@ -1,6 +1,6 @@
 <!-- 
 Path: /jiffy/pages/home/index.html
-Purpose: Displays the Jiffy homepage with a fixed header, round master categories (which act as tabs), user-created categories underneath, and action buttons positioned below the master categories.
+Purpose: Jiffy homepage with header, prompt cycle, action buttons, round master category buttons (as tabs), and filtered user-created categories.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -60,6 +60,7 @@ Purpose: Displays the Jiffy homepage with a fixed header, round master categorie
   </style>
 </head>
 <body style="background-color: #000000; color: #FFFFFF; height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; margin: 0; padding: env(safe-area-inset-top) 0 0 0; position: relative; touch-action: manipulation;">
+  <!-- Header -->
   <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 20px 20px 0 20px; box-sizing: border-box;">
     <div id="select-container" style="display: flex; align-items: center;">
       <span id="select-button" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin: 0; cursor: pointer;">Select</span>
@@ -68,15 +69,10 @@ Purpose: Displays the Jiffy homepage with a fixed header, round master categorie
     <div id="burger-menu" style="font-size: 24px; font-weight: 300; line-height: 1; cursor: pointer;">☰</div>
   </div>
 
+  <!-- Prompt Cycle -->
   <div id="prompt-cycle" class="prompt-cycle"></div>
 
-  <!-- Master categories (round buttons) will be dynamically managed via JS -->
-
-  <div class="category-row">
-    <!-- Master categories will sit here as fixed round buttons -->
-  </div>
-
-  <!-- Action Buttons (moved down from above) -->
+  <!-- Action Buttons -->
   <div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px;">
     <div style="display: flex; flex-direction: column; align-items: center;">
       <a href="/jiffy/pages/prompts/index.html">
@@ -94,6 +90,16 @@ Purpose: Displays the Jiffy homepage with a fixed header, round master categorie
       <button class="action-button" data-action="add" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #004598; background-color: #BBF5BB; cursor: pointer;"></button>
       <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 3px;">Add</span>
     </div>
+  </div>
+
+  <!-- Master Categories -->
+  <div class="category-row" id="master-category-row" style="margin-top: 20px;">
+    <!-- Round blue buttons for master categories go here -->
+  </div>
+
+  <!-- User-created Categories -->
+  <div class="category-row" id="user-category-row">
+    <!-- Filtered user-created category buttons appear here -->
   </div>
 
   <!-- Popups -->
