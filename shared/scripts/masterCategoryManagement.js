@@ -1,46 +1,39 @@
 // File: /jiffy/shared/scripts/masterCategoryManagement.js
-// Purpose: Manages master category tab behavior on the Jiffy homepage.
-// Highlights the active tab, stores selected tab in localStorage, and restores it on page load.
+// Purpose: Renders and manages master category buttons on the homepage. Used to switch between tabs.
 
-function initializeMasterCategoryTabs() {
-  const masterButtons = document.querySelectorAll('.master-category-button');
-  const ACTIVE_CLASS = 'active-master-tab';
-  const STORAGE_KEY = 'activeMasterCategory';
+export function renderMasterCategories(container, onClickCallback) {
+  const masterCategories = ['Home', 'Work', 'Life', 'School'];
+  container.innerHTML = ''; // Clear existing buttons
 
-  if (!masterButtons.length) {
-    console.warn('masterCategoryManagement.js: No master category buttons found.');
-    return;
-  }
+  masterCategories.forEach(category => {
+    const wrapper = document.createElement('div');
+    wrapper.style.display = 'flex';
+    wrapper.style.flexDirection = 'column';
+    wrapper.style.alignItems = 'center';
 
-  // Apply active tab from storage (if any)
-  const storedTab = localStorage.getItem(STORAGE_KEY);
-  if (storedTab) {
-    masterButtons.forEach(btn => {
-      const isActive = btn.dataset.tab === storedTab;
-      btn.classList.toggle(ACTIVE_CLASS, isActive);
-    });
-  }
+    const button = document.createElement('button');
+    const colorClass = `master-${category.toLowerCase()}`;
+    button.className = `master-category-button ${colorClass}`;
+    button.setAttribute('data-category', category);
 
-  // Add click listeners to each tab
-  masterButtons.forEach(button => {
+    const label = document.createElement('span');
+    label.textContent = category;
+    label.className = 'master-category-label';
+
+    // Button click handling
     button.addEventListener('click', () => {
-      const selectedTab = button.dataset.tab;
-
-      // Store active tab
-      localStorage.setItem(STORAGE_KEY, selectedTab);
-
-      // Highlight active tab
-      masterButtons.forEach(btn => {
-        btn.classList.toggle(ACTIVE_CLASS, btn === button);
+      document.querySelectorAll('.master-category-button').forEach(btn => {
+        btn.classList.remove('active');
       });
+      button.classList.add('active');
 
-      // (Optional: Trigger filtering or UI updates here)
-      console.log(`Master tab changed to: ${selectedTab}`);
+      if (typeof onClickCallback === 'function') {
+        onClickCallback(category);
+      }
     });
+
+    wrapper.appendChild(button);
+    wrapper.appendChild(label);
+    container.appendChild(wrapper);
   });
 }
-
-// Wait for DOM to be ready before initializing
-document.addEventListener('DOMContentLoaded', () => {
-  initializeMasterCategoryTabs();
-});
