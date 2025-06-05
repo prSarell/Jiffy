@@ -1,7 +1,7 @@
 /*
   File: /jiffy/shared/styles.css
   Purpose: Core styling for category layout, selection, master categories, and action buttons in Jiffy app.
-  Update: Fixes squashed action button layout and ensures even spacing.
+  Update: Resolves Add button squashing by applying fixed width to action buttons.
 */
 
 /* === CATEGORY ROW === */
@@ -128,17 +128,17 @@
 
 /* === ACTION BUTTONS (Add Prompt, Add Reward, Add Category) === */
 .action-button {
-  flex: 1 1 0;
-  min-width: 0;
-  max-width: 90px;
+  width: 70px;
   white-space: nowrap;
   padding: 10px;
-  font-size: 12px;
+  font-size: 11px;
   border-radius: 20px;
   text-align: center;
   background-color: #007BFF;
   color: white;
   border: none;
+  flex-shrink: 0;
+  flex-grow: 0;
 }
 
 .action-button:hover {
