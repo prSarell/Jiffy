@@ -128,8 +128,9 @@
 
 /* === ACTION BUTTONS (Add Prompt, Add Reward, Add Category) === */
 .action-button {
-  flex: 1;
+  flex: 1 1 0;
   min-width: 0;
+  max-width: 80px;
   white-space: nowrap;
   padding: 10px;
   font-size: 12px;
@@ -138,10 +139,6 @@
   background-color: #007BFF;
   color: white;
   border: none;
-}
-
-.action-button:hover {
-  background-color: #0056b3;
 }
 
 /* === BODY === */
