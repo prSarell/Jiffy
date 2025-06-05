@@ -1,7 +1,7 @@
 /*
   File: /jiffy/shared/styles.css
   Purpose: Core styling for category layout, selection, master categories, and action buttons in Jiffy app.
-  Update: Fixes squashed action button layout with flex container support.
+  Update: Fixes squashed action button layout and ensures even spacing.
 */
 
 /* === CATEGORY ROW === */
@@ -130,7 +130,7 @@
 .action-button {
   flex: 1 1 0;
   min-width: 0;
-  max-width: 80px;
+  max-width: 90px;
   white-space: nowrap;
   padding: 10px;
   font-size: 12px;
@@ -139,6 +139,10 @@
   background-color: #007BFF;
   color: white;
   border: none;
+}
+
+.action-button:hover {
+  background-color: #0056b3;
 }
 
 /* === BODY === */
