@@ -1,7 +1,7 @@
 /*
   File: /jiffy/shared/styles.css
   Purpose: Core styling for category layout, selection, master categories, and action buttons in Jiffy app.
-  Update: Align user categories in 4 neat columns directly below Home, Work, Life, School, 4 per row, vertically beneath.
+  Update: Align user categories in 4 neat columns under Home, Work, Life, School, 4 per row, vertically beneath, no offset.
 */
 
 /* === CATEGORY ROW === */
@@ -63,7 +63,7 @@
   display: flex;
   flex-direction: column;
   width: 240px;
-  transform: translateX(2px); /* Maintain overall offset */
+  transform: translateX(2px); /* Overall positioning */
 }
 
 /* === MASTER CATEGORY CONTAINER === */
@@ -80,10 +80,10 @@
 /* === USER CATEGORY CONTAINER === */
 #user-category-row {
   display: grid;
-  grid-template-columns: repeat(4, 40px); /* 4 fixed 40px columns to match Home, Work, Life, School */
+  grid-template-columns: repeat(4, 40px); /* 4 fixed 40px columns */
   width: 240px;
   gap: 20px;
-  justify-content: center; /* Center columns */
+  justify-content: center;
   margin-top: 10px;
   padding: 0;
 }
