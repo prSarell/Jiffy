@@ -35,3 +35,5 @@ function renderMasterCategories(container, onClickCallback) {
     container.appendChild(wrapper);
   });
 }
+
+export { renderMasterCategories };
