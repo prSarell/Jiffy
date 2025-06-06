@@ -1,7 +1,7 @@
 /*
   File: /jiffy/shared/styles.css
   Purpose: Core styling for category layout, selection, master categories, and action buttons in Jiffy app.
-  Update: Resolves Add button squashing by applying fixed width to action buttons.
+  Update: Align user categories 3 per row, remove 5px right offset; maintain horizontal shift context.
 */
 
 /* === CATEGORY ROW === */
@@ -21,6 +21,14 @@
   display: flex !important;
   visibility: visible !important;
   opacity: 1 !important;
+}
+
+/* === CATEGORY ITEM === */
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40px;
 }
 
 /* === CATEGORY SELECTION BUTTON === */
@@ -49,14 +57,32 @@
   background-color: #FFFFFF;
 }
 
+/* === CATEGORY WRAPPER === */
+.category-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  transform: translateX(2px); /* Adjust for 5px offset */
+}
+
 /* === MASTER CATEGORY CONTAINER === */
 #master-category-row {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-wrap: wrap;
   width: 240px;
+  gap: 20px;
+  justify-content: center;
   margin-top: 10px;
-  gap: 0;
+}
+
+/* === USER CATEGORY CONTAINER === */
+#user-category-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 per row */
+  width: 240px;
+  gap: 20px;
+  justify-items: center;
+  margin-top: 10px;
 }
 
 /* === MASTER CATEGORY BUTTON === */
@@ -70,7 +96,7 @@
   transition: outline 0.2s ease;
 }
 
-/* === ACTIVE MASTER CATEGORY BUTTON (OUTLINE) === */
+/* === ACTIVE MASTER CATEGORY BUTTON === */
 .master-category-button.active {
   outline: 2px solid #FFFFFF;
 }
@@ -79,27 +105,10 @@
 .master-category-label {
   display: block;
   font-size: 8px;
-  text-align: center;
   color: #FFFFFF;
-  margin-top: 5px;
+  text-align: center;
+  margin-top: 3px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-/* === MONOGRAM BLUE COLOR SCHEME FOR MASTER CATEGORIES === */
-.master-home {
-  background-color: #004598;  /* Deep Royal Blue */
-}
-
-.master-work {
-  background-color: #0066CC;  /* Vibrant Blue */
-}
-
-.master-life {
-  background-color: #3399FF;  /* Light Ocean Blue */
-}
-
-.master-school {
-  background-color: #66B2FF;  /* Pastel Blue */
 }
 
 /* === USER-CREATED CATEGORY BUBBLE === */
@@ -110,10 +119,36 @@
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  margin: 5px;
   color: white;
   font-size: 10px;
   position: relative;
+}
+
+/* === USER CATEGORY LABEL === */
+.user-category-label {
+  display: block;
+  font-size: 8px;
+  color: #FFFFFF;
+  text-align: center;
+  margin-top: 3px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* === MONOGRAM BLUE COLOR SCHEME FOR MASTER CATEGORIES === */
+.master-home {
+  background-color: #004598;
+}
+
+.master-work {
+  background-color: #0066CC;
+}
+
+.master-life {
+  background-color: #3399FF;
+}
+
+.master-school {
+  background-color: #66B2FF;
 }
 
 /* === ACTION BUTTON CONTAINER === */
@@ -126,7 +161,7 @@
   width: 240px;
 }
 
-/* === ACTION BUTTONS (Add Prompt, Add Reward, Add Category) === */
+/* === ACTION BUTTONS === */
 .action-button {
   width: 70px;
   white-space: nowrap;
@@ -148,6 +183,6 @@
 /* === BODY === */
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: #f8f8f8;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #000;
 }
