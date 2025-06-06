@@ -7,9 +7,7 @@ function renderMasterCategories(container, onClickCallback) {
 
   masterCategories.forEach(category => {
     const wrapper = document.createElement('div');
-    wrapper.style.display = 'flex';
-    wrapper.style.flexDirection = 'column';
-    wrapper.style.alignItems = 'center';
+    wrapper.className = 'category-item'; // This enables vertical stacking & alignment
 
     const button = document.createElement('button');
     const colorClass = `master-${category.toLowerCase()}`;
