@@ -1,7 +1,7 @@
 /*
   File: /jiffy/shared/styles.css
   Purpose: Core styling for category layout, selection, master categories, and action buttons in Jiffy app.
-  Update: Align user categories 4 per row, vertically beneath master categories, no 7px left offset.
+  Update: Align user categories 4 per row, vertically beneath master categories, exactly centered (no horizontal offset).
 */
 
 /* === CATEGORY ROW === */
@@ -86,7 +86,7 @@
   justify-items: center;
   margin-top: 10px;
   padding: 0;
-  margin-left: 7px; /* Counter 7px left offset */
+  margin-left: 0; /* Remove offset adjustment */
 }
 
 /* === MASTER CATEGORY BUTTON === */
@@ -185,7 +185,7 @@
 }
 
 /* === BODY === */
-.body {
+body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: #000;
