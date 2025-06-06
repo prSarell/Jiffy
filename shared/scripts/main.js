@@ -25,6 +25,11 @@ function renderUserCategories() {
   );
 
   filteredCategories.forEach((category, index) => {
+    // Create container
+    const wrapper = document.createElement('div');
+    wrapper.className = 'category-item';
+
+    // Create the circle button
     const categoryDiv = document.createElement('div');
     categoryDiv.className = 'user-category';
     categoryDiv.style.backgroundColor = category.color || '#004598';
@@ -41,7 +46,15 @@ function renderUserCategories() {
     });
 
     categoryDiv.appendChild(deleteButton);
-    userCategoryRow.appendChild(categoryDiv);
+
+    // Create label below the button
+    const label = document.createElement('span');
+    label.className = 'user-category-label';
+    label.textContent = category.name;
+
+    wrapper.appendChild(categoryDiv);
+    wrapper.appendChild(label);
+    userCategoryRow.appendChild(wrapper);
   });
 }
 
