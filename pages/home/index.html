@@ -1,19 +1,20 @@
 <!-- 
 Path: /jiffy/pages/home/index.html
 Purpose: Jiffy homepage with header, prompt cycle, action buttons, round master category buttons (as tabs), and filtered user-created categories.
+Update: Displays master category labels below round buttons using flex column structure.
 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Jiffy">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Jiffy" />
   <title>Jiffy - Home</title>
-  <link rel="stylesheet" href="/jiffy/shared/styles.css">
-  <link rel="manifest" href="/jiffy/manifest.json">
-  <link rel="apple-touch-icon" href="/jiffy/assets/icon.png">
+  <link rel="stylesheet" href="/jiffy/shared/styles.css" />
+  <link rel="manifest" href="/jiffy/manifest.json" />
+  <link rel="apple-touch-icon" href="/jiffy/assets/icon.png" />
   <style>
     .category-row {
       display: flex !important;
@@ -60,6 +61,7 @@ Purpose: Jiffy homepage with header, prompt cycle, action buttons, round master 
   </style>
 </head>
 <body style="background-color: #000000; color: #FFFFFF; height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; margin: 0; padding: env(safe-area-inset-top) 0 0 0; position: relative; touch-action: manipulation;">
+
   <!-- Header -->
   <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 20px 20px 0 20px; box-sizing: border-box;">
     <div id="select-container" style="display: flex; align-items: center;">
@@ -94,13 +96,26 @@ Purpose: Jiffy homepage with header, prompt cycle, action buttons, round master 
 
   <!-- Master Categories -->
   <div class="category-row" id="master-category-row" style="margin-top: 20px;">
-    <!-- Round blue buttons for master categories go here -->
+    <div class="category-item">
+      <button class="master-category-button master-home"></button>
+      <span class="master-category-label">Home</span>
+    </div>
+    <div class="category-item">
+      <button class="master-category-button master-life"></button>
+      <span class="master-category-label">Life</span>
+    </div>
+    <div class="category-item">
+      <button class="master-category-button master-school"></button>
+      <span class="master-category-label">School</span>
+    </div>
+    <div class="category-item">
+      <button class="master-category-button master-work"></button>
+      <span class="master-category-label">Work</span>
+    </div>
   </div>
 
   <!-- User-created Categories -->
-  <div class="category-row" id="user-category-row">
-    <!-- Filtered user-created category buttons appear here -->
-  </div>
+  <div class="category-row" id="user-category-row"></div>
 
   <!-- Popups -->
   <div id="popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
