@@ -1,6 +1,10 @@
+// File: /jiffy/shared/scripts/colorManagement.js
+// Purpose: Handle color assignment for master and user-created categories,
+// ensuring unique base colors per line and preventing overlap with master category colors.
+
 // Base colors for each line (distinct colors)
 const lineBaseColors = [
-  '#1E3A8A', // Blue (used by first line: Home, Life, Work, School)
+  '#1E3A8A', // Blue (used by master: Home, Life, Work, School)
   '#15803D', // Green
   '#B91C1C', // Red
   '#6B21A8', // Purple
@@ -47,54 +51,52 @@ function getColor(categoryName, position) {
   // Calculate the line number (1-based) and position within the line (0-3)
   const categoriesPerLine = 4;
   const lineNumber = Math.floor(position / categoriesPerLine) + 1;
-  const positionInLine = position % categoriesPerLine; // 0-3
+  const positionInLine = position % categoriesPerLine;
 
   // Initialize line data if not present
-  if (!linePositionColors[lineNumber]) {
-    linePositionColors[lineNumber] = {};
-  }
-  if (!lineCategoryCounts[lineNumber]) {
-    lineCategoryCounts[lineNumber] = 0;
-  }
+  if (!linePositionColors[lineNumber]) linePositionColors[lineNumber] = {};
+  if (!lineCategoryCounts[lineNumber]) lineCategoryCounts[lineNumber] = 0;
 
-  // Check if the position in this line already has an assigned color
+  // Reuse existing color for this position if already assigned
   if (linePositionColors[lineNumber][positionInLine]) {
-    // Use the previously assigned color for this position
     const assignedColor = linePositionColors[lineNumber][positionInLine];
-    setColor(categoryName, assignedColor); // Save to userColors
+    setColor(categoryName, assignedColor);
     return assignedColor;
   }
 
-  // Assign a base color to the line if it doesn't have one (or if the line is empty)
+  // Assign a base color to the line if needed
   if (!lineBaseColorAssignments[lineNumber] || lineCategoryCounts[lineNumber] === 0) {
-    // Get the previous line's base color (if it exists)
-    const prevLineNumber = lineNumber - 1;
-    const prevBaseColor = lineBaseColorAssignments[prevLineNumber];
-    
-    // Filter out the previous line's base color (if starting a new line)
-    const availableColors = positionInLine === 0 && prevBaseColor 
-      ? lineBaseColors.filter(color => color !== prevBaseColor) 
-      : lineBaseColors;
+    const masterCategoryColors = ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'];
 
-    // Randomly select a base color from available colors
-    const randomIndex = Math.floor(Math.random() * availableColors.length);
-    const newBaseColor = availableColors[randomIndex];
+    // Rule: Block base colors that include master category colors in their variations
+    const forbiddenBaseColors = lineBaseColors.filter(base =>
+      monochromeVariations[base].some(variant => masterCategoryColors.includes(variant))
+    );
+
+    const usedBaseColors = Object.values(lineBaseColorAssignments);
+
+    // Only allow base colors that are not used AND not forbidden
+    const availableColors = lineBaseColors.filter(base =>
+      !usedBaseColors.includes(base) && !forbiddenBaseColors.includes(base)
+    );
+
+    // Fallback if all allowed colors are used — assign a neutral grey
+    const newBaseColor = availableColors.length > 0
+      ? availableColors[Math.floor(Math.random() * availableColors.length)]
+      : '#6B7280'; // Neutral grey fallback
+
     lineBaseColorAssignments[lineNumber] = newBaseColor;
   }
 
-  // Get the base color for the line
+  // Get the base color for this line and assign the appropriate variation
   const baseColor = lineBaseColorAssignments[lineNumber];
+  const newColor = monochromeVariations[baseColor]
+    ? monochromeVariations[baseColor][positionInLine]
+    : baseColor; // Fallback for grey
 
-  // Assign a monochrome variation based on position in the line
-  const newColor = monochromeVariations[baseColor][positionInLine];
-
-  // Save the color for this position
+  // Save and return
   linePositionColors[lineNumber][positionInLine] = newColor;
-
-  // Increment the category count for this line
   lineCategoryCounts[lineNumber]++;
-
-  // Save the color for this category
   setColor(categoryName, newColor);
   return newColor;
 }
@@ -105,11 +107,9 @@ function setColor(categoryName, color) {
 }
 
 function removeCategory(lineNumber) {
-  // Decrement the category count for this line
   if (lineCategoryCounts[lineNumber]) {
     lineCategoryCounts[lineNumber]--;
     if (lineCategoryCounts[lineNumber] === 0) {
-      // If the line is now empty, clear its base color and position colors
       delete lineBaseColorAssignments[lineNumber];
       delete linePositionColors[lineNumber];
     }
