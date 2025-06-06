@@ -1,8 +1,10 @@
 /**
  * Path: /jiffy/shared/scripts/main.js
  * Purpose: Manages user-created categories, ensuring they are associated with the selected master category.
- *          Prevents deletion or editing of master categories.
+ *          Prevents deletion or editing of master categories. Uses shared masterCategoryManagement.js to render tabs.
  */
+
+import { renderMasterCategories } from './masterCategoryManagement.js';
 
 // Define master categories
 const masterCategories = ['Home', 'Work', 'Life', 'School'];
@@ -12,27 +14,6 @@ let selectedMasterCategory = 'Home';
 
 // Load user-created categories from localStorage
 let userCategories = JSON.parse(localStorage.getItem('userCategories')) || [];
-
-// Function to render master categories
-function renderMasterCategories() {
-  const masterCategoryRow = document.getElementById('master-category-row');
-  masterCategoryRow.innerHTML = '';
-
-  masterCategories.forEach((category) => {
-    const button = document.createElement('button');
-    button.className = `master-category-button master-${category.toLowerCase()}`;
-    button.textContent = category;
-    if (category === selectedMasterCategory) {
-      button.classList.add('active');
-    }
-    button.addEventListener('click', () => {
-      selectedMasterCategory = category;
-      renderMasterCategories();
-      renderUserCategories();
-    });
-    masterCategoryRow.appendChild(button);
-  });
-}
 
 // Function to render user-created categories
 function renderUserCategories() {
@@ -77,10 +58,16 @@ function addUserCategory(name, color) {
 
 // Initial render
 document.addEventListener('DOMContentLoaded', () => {
-  renderMasterCategories();
+  renderMasterCategories(
+    document.getElementById('master-category-row'),
+    (category) => {
+      selectedMasterCategory = category;
+      renderUserCategories();
+    }
+  );
   renderUserCategories();
 
-  // Example: Add category button functionality
+  // Add Category Button
   const addButton = document.querySelector('[data-action="add"]');
   addButton.addEventListener('click', () => {
     const categoryName = prompt('Enter category name:');
