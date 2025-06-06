@@ -1,7 +1,7 @@
 /*
   File: /jiffy/shared/styles.css
   Purpose: Core styling for category layout, selection, master categories, and action buttons in Jiffy app.
-  Update: Align user categories 3 per row, remove 5px right offset; maintain horizontal shift context.
+  Update: Restore user categories under master categories, 3 per row, no 5px right offset.
 */
 
 /* === CATEGORY ROW === */
@@ -60,9 +60,9 @@
 /* === CATEGORY WRAPPER === */
 .category-wrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Stack vertically */
   width: 240px;
-  transform: translateX(2px); /* Adjust for 5px offset */
+  transform: translateX(2px); /* Remove 5px offset */
 }
 
 /* === MASTER CATEGORY CONTAINER === */
