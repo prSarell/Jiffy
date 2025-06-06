@@ -33,7 +33,6 @@ function renderUserCategories() {
     const categoryDiv = document.createElement('div');
     categoryDiv.className = 'user-category';
     categoryDiv.style.backgroundColor = category.color || '#004598';
-    categoryDiv.textContent = category.name;
 
     // Add delete button
     const deleteButton = document.createElement('button');
