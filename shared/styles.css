@@ -1,7 +1,7 @@
 /*
   File: /jiffy/shared/styles.css
   Purpose: Core styling for category layout, selection, master categories, and action buttons in Jiffy app.
-  Update: Align user categories 4 per row, vertically beneath master categories, exactly centered (no ~7px left offset).
+  Update: Align user categories 4 per row, vertically beneath master categories, exactly centered with translateX(3px).
 */
 
 /* === CATEGORY ROW === */
@@ -63,7 +63,7 @@
   display: flex;
   flex-direction: column;
   width: 240px;
-  transform: translateX(2px); /* Maintain offset fix */
+  transform: translateX(2px); /* Maintain overall offset */
 }
 
 /* === MASTER CATEGORY CONTAINER === */
@@ -86,7 +86,7 @@
   justify-items: center;
   margin-top: 10px;
   padding: 0;
-  margin-left: 7px; /* Shift right to counter ~7px left offset */
+  transform: translateX(3px); /* Shift right to align with master categories */
 }
 
 /* === MASTER CATEGORY BUTTON === */
@@ -140,19 +140,19 @@
 
 /* === MONOGRAM BLUE COLOR SCHEME FOR MASTER CATEGORIES === */
 .master-home {
-  background-color: #004598;
+  background-color: #004598; /* Deep Royal Blue */
 }
 
 .master-work {
-  background-color: #0066CC;
+  background-color: #0066CC; /* Vibrant Blue */
 }
 
 .master-life {
-  background-color: #3399FF;
+  background-color: #3399FF; /* Light Ocean Blue */
 }
 
 .master-school {
-  background-color: #66B2FF;
+  background-color: #66B2FF; /* Pastel Blue */
 }
 
 /* === ACTION BUTTON CONTAINER === */
@@ -165,7 +165,7 @@
   width: 240px;
 }
 
-/* === ACTION BUTTONS === */
+/* === ACTION BUTTONS (Add Prompt, Add Reward, Add Category) === */
 .action-button {
   width: 70px;
   white-space: nowrap;
