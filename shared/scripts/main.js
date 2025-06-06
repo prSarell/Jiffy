@@ -40,7 +40,9 @@ function renderUserCategories() {
 
     const categoryDiv = document.createElement('div');
     categoryDiv.className = 'user-category';
-    categoryDiv.style.backgroundColor = getColor(category.name, globalIndex);
+
+    // FIXED: use row-local index to get variation in color per row
+    categoryDiv.style.backgroundColor = getColor(category.name, index);
 
     // Enable color editing on click
     categoryDiv.addEventListener('click', () => {
@@ -49,7 +51,7 @@ function renderUserCategories() {
       document.getElementById('edit-color-popup-title').textContent =
         `Edit Color: ${category.name}`;
       document.getElementById('color-input').value =
-        getColor(category.name, globalIndex);
+        getColor(category.name, index);
     });
 
     // Add delete button
