@@ -115,3 +115,5 @@ function removeCategory(lineNumber) {
     }
   }
 }
+
+export { getColor, setColor };
