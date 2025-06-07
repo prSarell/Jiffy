@@ -1,6 +1,7 @@
-<!-- 
+<!--
 Path: /jiffy/pages/prompts/index.html
 Purpose: Defines the Prompts page UI, with a header and MM:SS cycle duration input shifted down 10px, prompt list with weight icons and swipe-to-delete buttons, and popups for adding/editing prompts.
+Update: Line edit under "Prompts" now sets and saves prompt cycle duration to localStorage.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -52,6 +53,32 @@ Purpose: Defines the Prompts page UI, with a header and MM:SS cycle duration inp
     </div>
   </div>
   <script type="module" src="/jiffy/pages/prompts/scripts.js"></script>
+  <script>
+    const cycleInput = document.getElementById('cycle-duration');
+    const parseTimeToSeconds = (str) => {
+      const parts = str.split(':');
+      if (parts.length !== 2) return null;
+      const minutes = parseInt(parts[0]);
+      const seconds = parseInt(parts[1]);
+      if (isNaN(minutes) || isNaN(seconds)) return null;
+      return minutes * 60 + seconds;
+    };
+
+    cycleInput.addEventListener('input', () => {
+      const seconds = parseTimeToSeconds(cycleInput.value);
+      if (seconds && seconds > 0) {
+        localStorage.setItem('promptCycleSeconds', seconds);
+      }
+    });
+
+    // Populate from localStorage if available
+    const savedSeconds = parseInt(localStorage.getItem('promptCycleSeconds'));
+    if (!isNaN(savedSeconds)) {
+      const mm = String(Math.floor(savedSeconds / 60)).padStart(2, '0');
+      const ss = String(savedSeconds % 60).padStart(2, '0');
+      cycleInput.value = `${mm}:${ss}`;
+    }
+  </script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/jiffy/service-workers/sw.js')
