@@ -1,11 +1,8 @@
-// shared/scripts/categoryManagement.js
-import { getColor } from './colorManagement.js';
+// File: /shared/scripts/categoryManagement.js
+// Purpose: Load and save categories to localStorage, render category buttons with dynamic colors.
+//          Buttons now include class="category-button" to support active styling and navigation.
 
-/*
-  File: /shared/scripts/categoryManagement.js
-  Purpose: Load and save categories to localStorage, render category buttons with dynamic colors.
-           Buttons now include class="category-button" to support active styling.
-*/
+import { getColor } from './colorManagement.js';
 
 const defaultCategories = [
   { name: 'Home' },
@@ -21,7 +18,12 @@ function loadCategories(categoryRow) {
   let categories = defaultCategories;
 
   console.log('loadCategories: Stored data from localStorage:', storedData);
-  if (storedData && storedData.version === STORAGE_VERSION && Array.isArray(storedData.categories) && storedData.categories.length > 0) {
+  if (
+    storedData &&
+    storedData.version === STORAGE_VERSION &&
+    Array.isArray(storedData.categories) &&
+    storedData.categories.length > 0
+  ) {
     categories = storedData.categories;
   } else {
     console.log('loadCategories: Using default categories due to invalid or empty stored data');
@@ -37,10 +39,12 @@ function loadCategories(categoryRow) {
       console.error(`Invalid category name: "${category.name}"`);
       return;
     }
+
     const categoryDiv = document.createElement('div');
     categoryDiv.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
     const dynamicColor = getColor(category.name, index);
     console.log(`loadCategories: Assigning color ${dynamicColor} to category ${category.name} at index ${index}`);
+
     categoryDiv.innerHTML = `
       <button class="category-button" style="width: 40px; height: 40px; border-radius: 50%; background-color: ${dynamicColor}; cursor: pointer; border: none; position: relative;">
         <span class="category-specific-button" style="display: none;">
@@ -49,6 +53,16 @@ function loadCategories(categoryRow) {
       </button>
       <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">${category.name}</span>
     `;
+
+    // Add navigation to category page
+    const button = categoryDiv.querySelector('button.category-button');
+    if (button) {
+      button.addEventListener('click', () => {
+        localStorage.setItem('activeCategory', category.name);
+        window.location.href = '/jiffy/pages/category.html';
+      });
+    }
+
     categoryRow.appendChild(categoryDiv);
   });
 
@@ -104,3 +118,5 @@ function removeCategory(categoryName) {
   // Remove color assignment
   localStorage.removeItem(`categoryColor-${categoryName}`);
 }
+
+export { loadCategories, saveCategories, removeCategory };
