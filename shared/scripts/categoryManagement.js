@@ -48,7 +48,19 @@ function loadCategories(categoryRow) {
           <span class="inner-circle"></span>
         </span>
       </button>
-      <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">${category.name}</span>
+      <span style="
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 8px;
+        margin-top: 5px;
+        text-align: center;
+        white-space: normal;
+        display: block;
+        max-width: 60px;
+        line-height: 1.1;
+        word-wrap: break-word;
+      ">
+        ${category.name}
+      </span>
     `;
 
     const button = categoryDiv.querySelector('button.category-button');
