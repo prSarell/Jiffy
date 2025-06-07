@@ -93,7 +93,7 @@ function renderUserCategories() {
     label.style.textAlign = "center";
     label.style.whiteSpace = "normal";
     label.style.display = "block";
-    label.style.maxWidth = "40px";
+    label.style.maxWidth = "70px";
     label.style.lineHeight = "1.1";
     label.style.wordWrap = "break-word";
 
