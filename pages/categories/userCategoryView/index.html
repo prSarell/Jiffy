@@ -173,9 +173,10 @@
         "Is there something you’re avoiding?"
       ];
       let index = 0;
+      promptArea.textContent = prompts[index];
       setInterval(() => {
-        promptArea.textContent = prompts[index];
         index = (index + 1) % prompts.length;
+        promptArea.textContent = prompts[index];
       }, 5000);
     }
 
