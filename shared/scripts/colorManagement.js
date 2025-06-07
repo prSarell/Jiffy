@@ -11,7 +11,7 @@ const lineBaseColors = [
   '#EA580C'  // Orange
 ];
 
-// Monochrome variations for each base color (positions 0-3 in a line)
+// Monochrome variations for each base color (positions 0–3 in a line)
 const monochromeVariations = {
   '#1E3A8A': ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'], // Blue shades
   '#15803D': ['#15803D', '#16A34A', '#22C55E', '#4ADE80'], // Green shades
@@ -25,22 +25,22 @@ let userColors = JSON.parse(localStorage.getItem('userColors')) || {};
 
 // Track the base color assigned to each line (reset on app start)
 let lineBaseColorAssignments = {
-  1: '#1E3A8A' // First line (Home, Life, Work, School) uses Blue
+  1: '#1E3A8A' // Line 1 (Home, Life, Work, School) is always blue
 };
 
-// Track the color assigned to each position within a line (lineNumber -> position -> color)
+// Track the color assigned to each position within a line
 let linePositionColors = {
   1: {
-    0: '#1E3A8A', // Home
-    1: '#3B82F6', // Life
-    2: '#60A5FA', // Work
-    3: '#93C5FD'  // School
+    0: '#1E3A8A',
+    1: '#3B82F6',
+    2: '#60A5FA',
+    3: '#93C5FD'
   }
 };
 
-// Track the number of categories in each line (lineNumber -> count)
+// Track how many categories exist in each line
 let lineCategoryCounts = {
-  1: 4 // First line starts with 4 categories (Home, Life, Work, School)
+  1: 4
 };
 
 function getColor(categoryName, position) {
@@ -48,67 +48,65 @@ function getColor(categoryName, position) {
     return userColors[categoryName];
   }
 
-  // Calculate the line number (1-based) and position within the line (0-3)
   const categoriesPerLine = 4;
   const lineNumber = Math.floor(position / categoriesPerLine) + 1;
   const positionInLine = position % categoriesPerLine;
 
-  // Initialize line data if not present
   if (!linePositionColors[lineNumber]) linePositionColors[lineNumber] = {};
   if (!lineCategoryCounts[lineNumber]) lineCategoryCounts[lineNumber] = 0;
 
-  // Reuse existing color for this position if already assigned
   if (linePositionColors[lineNumber][positionInLine]) {
     const assignedColor = linePositionColors[lineNumber][positionInLine];
     setColor(categoryName, assignedColor);
     return assignedColor;
   }
 
-  // Assign a base color to the line if needed
+  // Assign a base color to this line if not already assigned
   if (!lineBaseColorAssignments[lineNumber] || lineCategoryCounts[lineNumber] === 0) {
     const masterCategoryColors = ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'];
+    const usedBaseColors = Object.values(lineBaseColorAssignments);
 
-    // Rule: Block base colors that include master category colors in their variations
+    // Block base colors that have master colors in their variants
     const forbiddenBaseColors = lineBaseColors.filter(base =>
       monochromeVariations[base].some(variant => masterCategoryColors.includes(variant))
     );
 
-    const usedBaseColors = Object.values(lineBaseColorAssignments);
+    // Additional strict rule: prevent line 2 (first user-created line) from using blue at all
+    const blueVariants = ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'];
+    const blockBlueInLine2 = lineNumber === 2;
 
-    // Additional rule: Prevent line 2 (first user category row) from using any blue shades
-    const isUserFirstLine = lineNumber === 2;
-    const blueShades = ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'];
-
-    const extraForbidden = isUserFirstLine
-      ? lineBaseColors.filter(base =>
-          monochromeVariations[base].some(variant => blueShades.includes(variant))
-        )
-      : [];
-
-    const totalForbidden = [...new Set([...forbiddenBaseColors, ...extraForbidden])];
-
-    const availableColors = lineBaseColors.filter(base =>
-      !usedBaseColors.includes(base) && !totalForbidden.includes(base)
+    const blueBaseColors = lineBaseColors.filter(base =>
+      monochromeVariations[base].some(variant => blueVariants.includes(variant))
     );
 
-    // Fallback if all allowed colors are used — assign a neutral grey
+    const totalForbidden = new Set([
+      ...forbiddenBaseColors,
+      ...(blockBlueInLine2 ? blueBaseColors : [])
+    ]);
+
+    const availableColors = lineBaseColors.filter(base =>
+      !usedBaseColors.includes(base) && !totalForbidden.has(base)
+    );
+
     const newBaseColor = availableColors.length > 0
       ? availableColors[Math.floor(Math.random() * availableColors.length)]
-      : '#6B7280'; // Neutral grey fallback
+      : '#6B7280'; // fallback gray
 
     lineBaseColorAssignments[lineNumber] = newBaseColor;
+
+    console.log(`getColor: Assigned new base color for line ${lineNumber}:`, newBaseColor);
   }
 
-  // Get the base color for this line and assign the appropriate variation
   const baseColor = lineBaseColorAssignments[lineNumber];
   const newColor = monochromeVariations[baseColor]
     ? monochromeVariations[baseColor][positionInLine]
-    : baseColor; // Fallback for grey
+    : baseColor;
 
-  // Save and return
   linePositionColors[lineNumber][positionInLine] = newColor;
   lineCategoryCounts[lineNumber]++;
   setColor(categoryName, newColor);
+
+  console.log(`getColor: Assigned color "${newColor}" to "${categoryName}" on line ${lineNumber}, position ${positionInLine}`);
   return newColor;
 }
 
