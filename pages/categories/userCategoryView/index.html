@@ -1,10 +1,7 @@
 <!--
-  File: /jiffy/pages/userCategoryView/index.html
-  Purpose: Home view for any user-created category.
-           Includes 4 functional tabs (Tasks, Time, Notes, Summary),
-           global prompt cycling, and a category-specific header with back navigation and color indicator.
+  File: /jiffy/pages/categories/userCategoryView/index.html
+  Update: Switched to black background with white text for visual consistency with the rest of the app.
 -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,6 +15,8 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       margin: 0;
       padding: 0;
+      background-color: #000000;
+      color: #FFFFFF;
     }
 
     #category-header {
@@ -25,8 +24,8 @@
       justify-content: space-between;
       align-items: center;
       padding: 14px 20px;
-      background-color: #ffffff;
-      border-bottom: 1px solid #ccc;
+      background-color: #000000;
+      border-bottom: 1px solid #333333;
       font-size: 16px;
       font-weight: bold;
       position: fixed;
@@ -56,11 +55,12 @@
       position: fixed;
       top: 56px;
       width: 100%;
-      background: #e0f7fa;
+      background: #1a1a1a;
       text-align: center;
       padding: 10px;
       font-size: 14px;
       z-index: 9;
+      color: #FFFFFF;
     }
 
     .tab-content {
@@ -77,8 +77,8 @@
     .tab-nav {
       display: flex;
       justify-content: space-around;
-      background-color: #f0f0f0;
-      border-top: 1px solid #ccc;
+      background-color: #111111;
+      border-top: 1px solid #333333;
       position: fixed;
       bottom: 0;
       width: 100%;
@@ -91,6 +91,7 @@
       background: none;
       font-weight: bold;
       cursor: pointer;
+      color: #FFFFFF;
     }
   </style>
 </head>
@@ -135,9 +136,7 @@
     <button onclick="switchTab('summary')">Summary</button>
   </div>
 
-  <script type="module">
-    import { getPrompts } from '/jiffy/pages/prompts/promptManagement.js';
-
+  <script>
     function switchTab(name) {
       document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
@@ -167,20 +166,16 @@
 
     function loadPrompts() {
       const promptArea = document.getElementById('global-prompts');
-      const prompts = getPrompts();
-      if (!prompts.length) return;
-
-      let index = Math.floor(Math.random() * prompts.length);
-      promptArea.textContent = prompts[index].text;
-
+      const prompts = [
+        "Take a deep breath",
+        "What’s the smallest next step?",
+        "Celebrate a small win",
+        "Is there something you’re avoiding?"
+      ];
+      let index = 0;
       setInterval(() => {
-        let nextIndex;
-        do {
-          nextIndex = Math.floor(Math.random() * prompts.length);
-        } while (nextIndex === index);
-
-        index = nextIndex;
-        promptArea.textContent = prompts[index].text;
+        promptArea.textContent = prompts[index];
+        index = (index + 1) % prompts.length;
       }, 5000);
     }
 
