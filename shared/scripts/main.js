@@ -1,4 +1,3 @@
-
 // File: /jiffy/shared/scripts/main.js
 // Purpose: Manages user-created categories, ensures they're associated with the selected master category.
 //          Prevents deletion or editing of master categories. Uses masterCategoryManagement.js to render tabs.
