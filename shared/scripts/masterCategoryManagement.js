@@ -1,39 +1,61 @@
 // File: /jiffy/shared/scripts/masterCategoryManagement.js
-// Purpose: Renders and manages master category buttons on the homepage. Used to switch between tabs.
+// Purpose: Render and manage master category buttons as tabs on the homepage.
 
-function renderMasterCategories(container, onClickCallback) {
-  const masterCategories = ['Home', 'Work', 'Life', 'School'];
-  container.innerHTML = ''; // Clear existing buttons
+const masterCategories = ['Home', 'Life', 'Work', 'School'];
+let selectedCategory = 'Home';
 
-  masterCategories.forEach(category => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'category-item'; // This enables vertical stacking & alignment
+function renderMasterCategories(container, onSelect) {
+  container.innerHTML = '';
 
+  masterCategories.forEach((category) => {
     const button = document.createElement('button');
-    const colorClass = `master-${category.toLowerCase()}`;
-    button.className = `master-category-button ${colorClass}`;
-    button.setAttribute('data-category', category);
+    button.className = 'category-button master';
+    button.textContent = '';
+    button.style.width = '40px';
+    button.style.height = '40px';
+    button.style.borderRadius = '50%';
+    button.style.cursor = 'pointer';
+    button.style.backgroundColor = getMasterColor(category);
+    button.style.margin = '0 5px';
+    button.style.position = 'relative';
 
-    const label = document.createElement('span');
-    label.textContent = category;
-    label.className = 'master-category-label';
+    if (category === selectedCategory) {
+      button.classList.add('selected');
+    }
 
-    // Button click handling
     button.addEventListener('click', () => {
-      document.querySelectorAll('.master-category-button').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      button.classList.add('active');
-
-      if (typeof onClickCallback === 'function') {
-        onClickCallback(category);
-      }
+      selectedCategory = category;
+      renderMasterCategories(container, onSelect);
+      onSelect(category);
     });
 
+    const label = document.createElement('span');
+    label.style.fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+    label.style.fontSize = '8px';
+    label.style.marginTop = '5px';
+    label.style.display = 'block';
+    label.style.textAlign = 'center';
+    label.textContent = category;
+
+    const wrapper = document.createElement('div');
+    wrapper.style.display = 'flex';
+    wrapper.style.flexDirection = 'column';
+    wrapper.style.alignItems = 'center';
     wrapper.appendChild(button);
     wrapper.appendChild(label);
+
     container.appendChild(wrapper);
   });
+}
+
+function getMasterColor(category) {
+  switch (category) {
+    case 'Home': return '#1E3A8A'; // Navy blue
+    case 'Life': return '#3B82F6'; // Bright blue
+    case 'Work': return '#60A5FA'; // Mid blue
+    case 'School': return '#93C5FD'; // Light blue
+    default: return '#1E3A8A';
+  }
 }
 
 export { renderMasterCategories };
