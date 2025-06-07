@@ -1,11 +1,13 @@
 /**
  * Path: /jiffy/shared/scripts/main.js
- * Purpose: Manages user-created categories, ensuring they are associated with the selected master category.
- *          Prevents deletion or editing of master categories. Uses shared masterCategoryManagement.js to render tabs.
+ * Purpose: Manages user-created categories, ensures they're associated with the selected master category.
+ *          Prevents deletion or editing of master categories. Uses masterCategoryManagement.js to render tabs.
+ * Update: Adds prompt display logic to homepage
  */
 
 import { renderMasterCategories } from './masterCategoryManagement.js';
 import { getColor, setColor } from './colorManagement.js';
+import { getPrompts } from '../../pages/prompts/promptManagement.js'; // ✅ NEW
 
 // Define master categories
 const masterCategories = ['Home', 'Work', 'Life', 'School'];
@@ -19,7 +21,21 @@ let userCategories = JSON.parse(localStorage.getItem('userCategories')) || [];
 // Used for color editing
 let currentEditIndex = null;
 
-// Function to render user-created categories
+// ✅ NEW: Display a single random prompt at the top
+function displayPrompt() {
+  const prompts = getPrompts();
+  if (!prompts.length) return;
+
+  const randomIndex = Math.floor(Math.random() * prompts.length);
+  const prompt = prompts[randomIndex];
+
+  const container = document.getElementById('prompt-container');
+  if (container) {
+    container.textContent = prompt.text;
+  }
+}
+
+// Render user-created categories
 function renderUserCategories() {
   const userCategoryRow = document.getElementById('user-category-row');
   userCategoryRow.innerHTML = '';
@@ -41,10 +57,10 @@ function renderUserCategories() {
     const categoryDiv = document.createElement('div');
     categoryDiv.className = 'user-category';
 
-    // FIXED: use row-local index to get variation in color per row
+    // Set color using row-local index
     categoryDiv.style.backgroundColor = getColor(category.name, index);
 
-    // Enable color editing on click
+    // Enable color editing
     categoryDiv.addEventListener('click', () => {
       currentEditIndex = globalIndex;
       document.getElementById('edit-color-popup').style.display = 'flex';
@@ -54,7 +70,7 @@ function renderUserCategories() {
         getColor(category.name, index);
     });
 
-    // Add delete button
+    // Delete button
     const deleteButton = document.createElement('button');
     deleteButton.className = 'category-specific-button';
     deleteButton.textContent = '×';
@@ -77,7 +93,7 @@ function renderUserCategories() {
   });
 }
 
-// Function to add a new user-created category
+// Add a new user-created category
 function addUserCategory(name, color) {
   userCategories.push({
     name,
@@ -88,8 +104,10 @@ function addUserCategory(name, color) {
   renderUserCategories();
 }
 
-// Initial render
+// Initialize everything on DOM load
 document.addEventListener('DOMContentLoaded', () => {
+  displayPrompt(); // ✅ Show prompt at top of screen on load
+
   renderMasterCategories(
     document.getElementById('master-category-row'),
     (category) => {
@@ -97,9 +115,10 @@ document.addEventListener('DOMContentLoaded', () => {
       renderUserCategories();
     }
   );
+
   renderUserCategories();
 
-  // Add Category Button
+  // Add category
   const addButton = document.querySelector('[data-action="add"]');
   addButton.addEventListener('click', () => {
     const categoryName = prompt('Enter category name:');
@@ -109,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Color picker popup buttons
+  // Color picker popup controls
   const yesButton = document.querySelector('#edit-color-popup [data-action="yes"]');
   const cancelButton = document.querySelector('#edit-color-popup [data-action="cancel"]');
   const popup = document.getElementById('edit-color-popup');
