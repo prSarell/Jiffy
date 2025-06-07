@@ -1,6 +1,6 @@
 <!--
   File: /jiffy/pages/categories/userCategoryView/index.html
-  Update: Switched to black background with white text for visual consistency with the rest of the app.
+  Update: Switched to black background with white text. Prompts now import from promptManagement.js. Back arrow fixed.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -99,7 +99,7 @@
 
   <!-- HEADER -->
   <div id="category-header">
-    <span id="back-arrow" onclick="goBack()">←</span>
+    <span id="back-arrow">←</span>
     <span id="category-title">[Category]</span>
     <span id="category-dot"></span>
   </div>
@@ -139,14 +139,14 @@
   <script type="module">
     import { getPrompts } from '/jiffy/pages/prompts/promptManagement.js';
 
-    function switchTab(name) {
+    window.switchTab = function(name) {
       document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
       });
       document.getElementById(`tab-${name}`).classList.add('active');
     }
 
-    function goBack() {
+    window.goBack = function() {
       window.location.href = "/jiffy/pages/home/index.html";
     }
 
@@ -169,9 +169,11 @@
     function loadPrompts() {
       const promptArea = document.getElementById('global-prompts');
       const prompts = getPrompts();
-      if (!prompts.length) return;
+      if (!prompts || !prompts.length) return;
+
       let index = 0;
       promptArea.textContent = prompts[index].text;
+
       setInterval(() => {
         index = (index + 1) % prompts.length;
         promptArea.textContent = prompts[index].text;
