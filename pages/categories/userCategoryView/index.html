@@ -136,7 +136,9 @@
     <button onclick="switchTab('summary')">Summary</button>
   </div>
 
-  <script>
+  <script type="module">
+    import { getPrompts } from '/jiffy/pages/prompts/promptManagement.js';
+
     function switchTab(name) {
       document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
@@ -166,17 +168,13 @@
 
     function loadPrompts() {
       const promptArea = document.getElementById('global-prompts');
-      const prompts = [
-        "Take a deep breath",
-        "What’s the smallest next step?",
-        "Celebrate a small win",
-        "Is there something you’re avoiding?"
-      ];
+      const prompts = getPrompts();
+      if (!prompts.length) return;
       let index = 0;
-      promptArea.textContent = prompts[index];
+      promptArea.textContent = prompts[index].text;
       setInterval(() => {
         index = (index + 1) % prompts.length;
-        promptArea.textContent = prompts[index];
+        promptArea.textContent = prompts[index].text;
       }, 5000);
     }
 
