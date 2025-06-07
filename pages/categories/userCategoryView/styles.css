@@ -1,1 +1,50 @@
+/* 
+Path: /jiffy/pages/userCategoryView/styles.css
+Purpose: Styles the user-created category view page, including the prompt list, layout, and mobile-friendly spacing.
+*/
 
+/* Container wrapping all prompts */
+.prompt-list-wrapper {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+/* Individual prompt item */
+.prompt-item {
+  margin-left: 20px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+/* Weighted prompts (if reused from Prompts page) */
+.prompt-item.weighted {
+  font-weight: bold;
+}
+
+/* Highlight important prompts */
+.prompt-item.important {
+  color: green;
+}
+
+/* Input for editing prompt duration or cycling */
+.cycle-duration-input {
+  margin-left: 20px;
+  width: 60px;
+  padding: 4px;
+  font-size: 13px;
+}
+
+/* Optional: spacing for mobile */
+@media (max-width: 600px) {
+  .prompt-list-wrapper {
+    padding: 0 10px;
+  }
+}
