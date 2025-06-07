@@ -1,9 +1,7 @@
-/**
- * Path: /jiffy/shared/scripts/main.js
- * Purpose: Manages user-created categories, ensures they're associated with the selected master category.
- *          Prevents deletion or editing of master categories. Uses masterCategoryManagement.js to render tabs.
- * Update: Replaces color popup with redirect to user category page.
- */
+// File: /jiffy/shared/scripts/main.js
+// Purpose: Manages user-created categories, ensures they're associated with the selected master category.
+//          Prevents deletion or editing of master categories. Uses masterCategoryManagement.js to render tabs.
+// Update: Removed manual color prompt — uses getColor() with correct position offset.
 
 import { renderMasterCategories } from './masterCategoryManagement.js';
 import { getColor, setColor } from './colorManagement.js';
@@ -59,7 +57,7 @@ function renderUserCategories() {
 
     const categoryDiv = document.createElement('div');
     categoryDiv.className = 'user-category';
-    categoryDiv.style.backgroundColor = getColor(category.name, index);
+    categoryDiv.style.backgroundColor = getColor(category.name, index + 4); // +4 to offset master categories
 
     categoryDiv.addEventListener('click', () => {
       console.log("✅ Redirecting to user category view:", category.name);
@@ -91,7 +89,10 @@ function renderUserCategories() {
   });
 }
 
-function addUserCategory(name, color) {
+function addUserCategory(name) {
+  const position = userCategories.length + 4; // Offset master categories
+  const color = getColor(name, position);
+
   userCategories.push({
     name,
     color,
@@ -119,8 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
   addButton.addEventListener('click', () => {
     const categoryName = prompt('Enter category name:');
     if (categoryName) {
-      const categoryColor = prompt('Enter category color (hex code):', '#004598');
-      addUserCategory(categoryName, categoryColor);
+      addUserCategory(categoryName);
     }
   });
 });
