@@ -51,7 +51,6 @@ function loadCategories(categoryRow) {
       <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px; margin-top: 5px;">${category.name}</span>
     `;
 
-    // Add navigation logic for all categories
     const button = categoryDiv.querySelector('button.category-button');
     if (button) {
       button.addEventListener('click', () => {
