@@ -1,135 +1,114 @@
-// File: /jiffy/shared/scripts/main.js
-// Purpose: Manages user-created categories, ensures they're associated with the selected master category.
-//          Prevents deletion or editing of master categories. Uses masterCategoryManagement.js to render tabs.
-// Update: Removed manual color prompt — uses getColor() with correct position offset.
+// File: /shared/scripts/categoryManagement.js
+// Purpose: Load, render, save, and delete categories for the homepage.
+//          Clicking a category opens userCategoryView/index.html.
+//          Master categories are protected from deletion.
 
-import { renderMasterCategories } from './masterCategoryManagement.js';
-import { getColor, setColor } from './colorManagement.js';
-import { getPrompts } from '../../pages/prompts/promptManagement.js';
+import { getColor } from './colorManagement.js';
 
-const masterCategories = ['Home', 'Work', 'Life', 'School'];
-let selectedMasterCategory = 'Home';
-let userCategories = JSON.parse(localStorage.getItem('userCategories')) || [];
-let currentPromptIndex = -1;
+const defaultCategories = [
+  { name: 'Home' },
+  { name: 'Life' },
+  { name: 'Work' },
+  { name: 'School' }
+];
 
-function displayPrompt() {
-  const prompts = getPrompts();
-  if (!prompts.length) return;
+const STORAGE_VERSION = 1;
 
-  const randomIndex = Math.floor(Math.random() * prompts.length);
-  currentPromptIndex = randomIndex;
+function loadCategories(categoryRow) {
+  let storedData = JSON.parse(localStorage.getItem('categoryData'));
+  let categories = defaultCategories;
 
-  const container = document.getElementById('prompt-container');
-  if (container) {
-    container.textContent = prompts[randomIndex].text;
+  if (
+    storedData &&
+    storedData.version === STORAGE_VERSION &&
+    Array.isArray(storedData.categories) &&
+    storedData.categories.length > 0
+  ) {
+    categories = storedData.categories;
+  } else {
+    storedData = { version: STORAGE_VERSION, categories: defaultCategories };
+    localStorage.setItem('categoryData', JSON.stringify(storedData));
   }
-}
 
-function cyclePrompts(interval = 15000) {
-  const prompts = getPrompts();
-  if (prompts.length <= 1) return;
-
-  setInterval(() => {
-    let nextIndex;
-    do {
-      nextIndex = Math.floor(Math.random() * prompts.length);
-    } while (nextIndex === currentPromptIndex);
-
-    currentPromptIndex = nextIndex;
-    const container = document.getElementById('prompt-container');
-    if (container) {
-      container.textContent = prompts[nextIndex].text;
+  categoryRow.innerHTML = '';
+  categories.forEach((category, index) => {
+    if (!category.name || typeof category.name !== 'string' || category.name.trim() === '') {
+      console.error(`Invalid category name: "${category.name}"`);
+      return;
     }
-  }, interval);
-}
-
-function renderUserCategories() {
-  const userCategoryRow = document.getElementById('user-category-row');
-  userCategoryRow.innerHTML = '';
-
-  const filteredCategories = userCategories.filter(
-    (cat) => cat.masterCategory === selectedMasterCategory
-  );
-
-  filteredCategories.forEach((category, index) => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'category-item';
 
     const categoryDiv = document.createElement('div');
-    categoryDiv.className = 'user-category';
-    categoryDiv.style.backgroundColor = getColor(category.name, index + 4); // +4 to offset master categories
+    categoryDiv.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
 
-    categoryDiv.addEventListener('click', () => {
-      console.log("✅ Redirecting to user category view:", category.name);
-      localStorage.setItem('activeCategory', category.name);
-      window.location.href = '/jiffy/pages/categories/userCategoryView/';
-    });
+    const dynamicColor = getColor(category.name, index);
 
-    const deleteButton = document.createElement('button');
-    deleteButton.className = 'category-specific-button';
-    deleteButton.textContent = '×';
-    deleteButton.addEventListener('click', (e) => {
-      e.stopPropagation();
-      userCategories = userCategories.filter(
-        (cat) => !(cat.name === category.name && cat.masterCategory === category.masterCategory)
-      );
-      localStorage.setItem('userCategories', JSON.stringify(userCategories));
-      renderUserCategories();
-    });
+    categoryDiv.innerHTML = `
+      <button class="category-button" style="width: 40px; height: 40px; border-radius: 50%; background-color: ${dynamicColor}; cursor: pointer; border: none; position: relative;">
+        <span class="category-specific-button" style="display: none;">
+          <span class="inner-circle"></span>
+        </span>
+      </button>
+      <span style="
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 8px;
+        margin-top: 5px;
+        text-align: center;
+        white-space: normal;
+        display: block;
+        max-width: 60px;
+        line-height: 1.1;
+        word-wrap: break-word;
+      ">
+        ${category.name}
+      </span>
+    `;
 
-    categoryDiv.appendChild(deleteButton);
+    const button = categoryDiv.querySelector('button.category-button');
+    if (button) {
+      button.addEventListener('click', () => {
+        localStorage.setItem('activeCategory', category.name);
+        window.location.href = '/jiffy/pages/categories/userCategoryView/';
+      });
+    }
 
-    const label = document.createElement('span');
-    label.className = 'user-category-label';
-    label.textContent = category.name;
-    label.style.fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-    label.style.fontSize = "8px";
-    label.style.marginTop = "5px";
-    label.style.textAlign = "center";
-    label.style.whiteSpace = "normal";
-    label.style.display = "block";
-    label.style.maxWidth = "40px";
-    label.style.lineHeight = "1.1";
-    label.style.wordWrap = "break-word";
-
-    wrapper.appendChild(categoryDiv);
-    wrapper.appendChild(label);
-    userCategoryRow.appendChild(wrapper);
+    categoryRow.appendChild(categoryDiv);
   });
+
+  return categories;
 }
 
-function addUserCategory(name) {
-  const position = userCategories.length + 4; // Offset master categories
-  const color = getColor(name, position);
+function saveCategories(categoryRow) {
+  const categoryDivs = categoryRow.querySelectorAll('div');
+  const categories = Array.from(categoryDivs).map(div => {
+    const span = div.querySelector('span:last-child');
+    if (!span) return null;
+    const name = span.textContent.trim();
+    if (!name || name === '') return null;
+    return { name };
+  }).filter(category => category !== null);
 
-  userCategories.push({
-    name,
-    color,
-    masterCategory: selectedMasterCategory,
-  });
-  localStorage.setItem('userCategories', JSON.stringify(userCategories));
-  renderUserCategories();
+  const data = { version: STORAGE_VERSION, categories };
+  localStorage.setItem('categoryData', JSON.stringify(data));
+  return categories;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  displayPrompt();
-  cyclePrompts();
+function removeCategory(categoryName) {
+  const masterCategories = ['Home', 'Life', 'Work', 'School'];
 
-  renderMasterCategories(
-    document.getElementById('master-category-row'),
-    (category) => {
-      selectedMasterCategory = category;
-      renderUserCategories();
-    }
-  );
+  if (masterCategories.includes(categoryName)) {
+    console.warn(`Cannot delete master category: ${categoryName}`);
+    return;
+  }
 
-  renderUserCategories();
+  const storedData = JSON.parse(localStorage.getItem('categoryData'));
+  if (!storedData || !Array.isArray(storedData.categories)) {
+    return;
+  }
 
-  const addButton = document.querySelector('[data-action="add"]');
-  addButton.addEventListener('click', () => {
-    const categoryName = prompt('Enter category name:');
-    if (categoryName) {
-      addUserCategory(categoryName);
-    }
-  });
-});
+  const updatedCategories = storedData.categories.filter(cat => cat.name !== categoryName);
+  const updatedData = { version: STORAGE_VERSION, categories: updatedCategories };
+  localStorage.setItem('categoryData', JSON.stringify(updatedData));
+  localStorage.removeItem(`categoryColor-${categoryName}`);
+}
+
+export { loadCategories, saveCategories, removeCategory };
