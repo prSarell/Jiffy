@@ -75,9 +75,20 @@ function getColor(categoryName, position) {
 
     const usedBaseColors = Object.values(lineBaseColorAssignments);
 
-    // Only allow base colors that are not used AND not forbidden
+    // Additional rule: Prevent line 2 (first user category row) from using any blue shades
+    const isUserFirstLine = lineNumber === 2;
+    const blueShades = ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'];
+
+    const extraForbidden = isUserFirstLine
+      ? lineBaseColors.filter(base =>
+          monochromeVariations[base].some(variant => blueShades.includes(variant))
+        )
+      : [];
+
+    const totalForbidden = [...new Set([...forbiddenBaseColors, ...extraForbidden])];
+
     const availableColors = lineBaseColors.filter(base =>
-      !usedBaseColors.includes(base) && !forbiddenBaseColors.includes(base)
+      !usedBaseColors.includes(base) && !totalForbidden.includes(base)
     );
 
     // Fallback if all allowed colors are used — assign a neutral grey
