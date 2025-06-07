@@ -2,12 +2,12 @@
  * Path: /jiffy/shared/scripts/main.js
  * Purpose: Manages user-created categories, ensures they're associated with the selected master category.
  *          Prevents deletion or editing of master categories. Uses masterCategoryManagement.js to render tabs.
- * Update: Adds prompt display logic to homepage
+ * Update: Adds prompt display logic and automatic cycling
  */
 
 import { renderMasterCategories } from './masterCategoryManagement.js';
 import { getColor, setColor } from './colorManagement.js';
-import { getPrompts } from '../../pages/prompts/promptManagement.js'; // ✅ NEW
+import { getPrompts } from '../../pages/prompts/promptManagement.js';
 
 // Define master categories
 const masterCategories = ['Home', 'Work', 'Life', 'School'];
@@ -21,21 +21,41 @@ let userCategories = JSON.parse(localStorage.getItem('userCategories')) || [];
 // Used for color editing
 let currentEditIndex = null;
 
-// ✅ NEW: Display a single random prompt at the top
+// === PROMPT DISPLAY ===
+let currentPromptIndex = -1;
+
 function displayPrompt() {
   const prompts = getPrompts();
   if (!prompts.length) return;
 
   const randomIndex = Math.floor(Math.random() * prompts.length);
-  const prompt = prompts[randomIndex];
+  currentPromptIndex = randomIndex;
 
   const container = document.getElementById('prompt-container');
   if (container) {
-    container.textContent = prompt.text;
+    container.textContent = prompts[randomIndex].text;
   }
 }
 
-// Render user-created categories
+function cyclePrompts(interval = 15000) {
+  const prompts = getPrompts();
+  if (prompts.length <= 1) return;
+
+  setInterval(() => {
+    let nextIndex;
+    do {
+      nextIndex = Math.floor(Math.random() * prompts.length);
+    } while (nextIndex === currentPromptIndex);
+
+    currentPromptIndex = nextIndex;
+    const container = document.getElementById('prompt-container');
+    if (container) {
+      container.textContent = prompts[nextIndex].text;
+    }
+  }, interval);
+}
+
+// === CATEGORY RENDERING ===
 function renderUserCategories() {
   const userCategoryRow = document.getElementById('user-category-row');
   userCategoryRow.innerHTML = '';
@@ -56,11 +76,8 @@ function renderUserCategories() {
 
     const categoryDiv = document.createElement('div');
     categoryDiv.className = 'user-category';
-
-    // Set color using row-local index
     categoryDiv.style.backgroundColor = getColor(category.name, index);
 
-    // Enable color editing
     categoryDiv.addEventListener('click', () => {
       currentEditIndex = globalIndex;
       document.getElementById('edit-color-popup').style.display = 'flex';
@@ -70,7 +87,6 @@ function renderUserCategories() {
         getColor(category.name, index);
     });
 
-    // Delete button
     const deleteButton = document.createElement('button');
     deleteButton.className = 'category-specific-button';
     deleteButton.textContent = '×';
@@ -93,7 +109,6 @@ function renderUserCategories() {
   });
 }
 
-// Add a new user-created category
 function addUserCategory(name, color) {
   userCategories.push({
     name,
@@ -104,9 +119,10 @@ function addUserCategory(name, color) {
   renderUserCategories();
 }
 
-// Initialize everything on DOM load
+// === INITIALIZE ===
 document.addEventListener('DOMContentLoaded', () => {
-  displayPrompt(); // ✅ Show prompt at top of screen on load
+  displayPrompt();
+  cyclePrompts();
 
   renderMasterCategories(
     document.getElementById('master-category-row'),
@@ -118,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   renderUserCategories();
 
-  // Add category
   const addButton = document.querySelector('[data-action="add"]');
   addButton.addEventListener('click', () => {
     const categoryName = prompt('Enter category name:');
@@ -128,7 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Color picker popup controls
   const yesButton = document.querySelector('#edit-color-popup [data-action="yes"]');
   const cancelButton = document.querySelector('#edit-color-popup [data-action="cancel"]');
   const popup = document.getElementById('edit-color-popup');
