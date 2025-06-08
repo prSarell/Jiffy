@@ -62,7 +62,7 @@ function renderUserCategories() {
 
     const categoryDiv = document.createElement('div');
     categoryDiv.className = 'user-category';
-    categoryDiv.style.backgroundColor = getColor(category.name, index + 4); // +4 to offset master categories
+    categoryDiv.style.backgroundColor = getColor(category.name, index); // <- fixed here (no +4)
     categoryDiv.style.width = '40px';
     categoryDiv.style.height = '40px';
     categoryDiv.style.borderRadius = '50%';
@@ -124,7 +124,10 @@ function renderUserCategories() {
 }
 
 function addUserCategory(name) {
-  const position = userCategories.length + 4;
+  const filteredCategories = userCategories.filter(
+    (cat) => cat.masterCategory === selectedMasterCategory
+  );
+  const position = filteredCategories.length;
   const color = getColor(name, position);
 
   userCategories.push({
