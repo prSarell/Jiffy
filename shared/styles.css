@@ -102,3 +102,9 @@ Purpose: Global styles for Jiffy, including category buttons, labels, and prompt
 .popup-button:hover {
   background-color: #444;
 }
+
+/* Font fix: ensure popup and children inherit system font */
+#delete-popup,
+#delete-popup * {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
