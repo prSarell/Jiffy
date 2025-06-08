@@ -1,5 +1,5 @@
 // File: /jiffy/shared/scripts/main.js
-// Purpose: Manages user-created categories, master category tab logic, prompt cycling, and reintroduces Select/Delete functionality.
+// Purpose: Manages user-created categories, master category tab logic, prompt cycling, and category selection mode
 
 import { renderMasterCategories } from './masterCategoryManagement.js';
 import { getColor, setColor } from './colorManagement.js';
@@ -104,10 +104,10 @@ function renderUserCategories() {
       popup.style.display = 'flex';
     });
 
-    // Select toggle button (inner-circle)
+    // Select toggle button (tick circle)
     const selectButton = document.createElement('span');
     selectButton.className = 'category-specific-button';
-    selectButton.style.display = isSelectMode ? 'inline-block' : 'none';
+    selectButton.style.display = isSelectMode ? 'inline-flex' : 'none';
     selectButton.style.position = 'absolute';
     selectButton.style.top = '-5px';
     selectButton.style.right = '-5px';
@@ -116,7 +116,6 @@ function renderUserCategories() {
     selectButton.style.border = '2px solid #333';
     selectButton.style.backgroundColor = 'white';
     selectButton.style.borderRadius = '50%';
-    selectButton.style.display = isSelectMode ? 'inline-flex' : 'none';
     selectButton.style.alignItems = 'center';
     selectButton.style.justifyContent = 'center';
     selectButton.style.zIndex = '2';
@@ -253,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   renderUserCategories();
   setupDeletePopup();
-  setupSelectModeToggle();
+  setupSelectModeControls();
 
   const addButton = document.querySelector('[data-action="add"]');
   addButton.addEventListener('click', () => {
