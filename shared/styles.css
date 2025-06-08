@@ -32,7 +32,12 @@ Purpose: Global styles for Jiffy, including category buttons, labels, and prompt
   border: none;
 }
 
-/* CATEGORY-SPECIFIC SELECT BUTTON */
+/* CLEAN DELETE BUTTON (if still needed elsewhere) */
+.category-specific-button.delete {
+  display: none !important; /* disables red delete styling */
+}
+
+/* SELECT MODE BUTTON */
 .category-specific-button.select-mode {
   position: absolute;
   top: -4px;
@@ -48,6 +53,7 @@ Purpose: Global styles for Jiffy, including category buttons, labels, and prompt
   cursor: pointer;
   z-index: 2;
   padding: 0;
+  box-sizing: border-box;
 }
 
 /* SELECTED STATE */
@@ -59,7 +65,7 @@ Purpose: Global styles for Jiffy, including category buttons, labels, and prompt
   background-color: black;
 }
 
-/* INNER DOT (Only visible when selected) */
+/* Inner Dot */
 .category-specific-button.select-mode .inner-circle {
   width: 6px;
   height: 6px;
@@ -67,7 +73,7 @@ Purpose: Global styles for Jiffy, including category buttons, labels, and prompt
   background-color: transparent;
 }
 
-/* LABEL BELOW CATEGORY BUTTONS */
+/* Label below category buttons */
 .user-category-label,
 .category-label {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -121,7 +127,7 @@ Purpose: Global styles for Jiffy, including category buttons, labels, and prompt
   background-color: #444;
 }
 
-/* Font fix: ensure popup and children inherit system font */
+/* Font fix */
 #delete-popup,
 #delete-popup * {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
