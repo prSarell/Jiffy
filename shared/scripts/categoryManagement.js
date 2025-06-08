@@ -14,6 +14,23 @@ const defaultCategories = [
 
 const STORAGE_VERSION = 1;
 
+let categorySelectionMode = false;
+let selectedCategories = [];
+
+function toggleCategorySelectionMode() {
+  categorySelectionMode = !categorySelectionMode;
+  selectedCategories = [];
+
+  document.querySelectorAll('.category-specific-button').forEach(btn => {
+    btn.style.display = categorySelectionMode ? 'inline-block' : 'none';
+    btn.classList.remove('selected');
+  });
+}
+
+function getSelectedCategories() {
+  return selectedCategories.slice(); // return a copy
+}
+
 function loadCategories(categoryRow) {
   let storedData = JSON.parse(localStorage.getItem('categoryData'));
   let categories = defaultCategories;
@@ -44,7 +61,7 @@ function loadCategories(categoryRow) {
 
     categoryDiv.innerHTML = `
       <button class="category-button" style="width: 40px; height: 40px; border-radius: 50%; background-color: ${dynamicColor}; cursor: pointer; border: none; position: relative;">
-        <span class="category-specific-button" style="display: none;">
+        <span class="category-specific-button" style="display: ${categorySelectionMode ? 'inline-block' : 'none'};">
           <span class="inner-circle"></span>
         </span>
       </button>
@@ -64,8 +81,25 @@ function loadCategories(categoryRow) {
     `;
 
     const button = categoryDiv.querySelector('button.category-button');
+    const selectButton = categoryDiv.querySelector('.category-specific-button');
+
+    if (selectButton) {
+      selectButton.addEventListener('click', (e) => {
+        e.stopPropagation(); // Don’t trigger category open
+        const index = selectedCategories.indexOf(category.name);
+        if (index >= 0) {
+          selectedCategories.splice(index, 1);
+          selectButton.classList.remove('selected');
+        } else {
+          selectedCategories.push(category.name);
+          selectButton.classList.add('selected');
+        }
+      });
+    }
+
     if (button) {
       button.addEventListener('click', () => {
+        if (categorySelectionMode) return;
         localStorage.setItem('activeCategory', category.name);
         window.location.href = '/jiffy/pages/categories/userCategoryView/';
       });
@@ -111,4 +145,10 @@ function removeCategory(categoryName) {
   localStorage.removeItem(`categoryColor-${categoryName}`);
 }
 
-export { loadCategories, saveCategories, removeCategory };
+export {
+  loadCategories,
+  saveCategories,
+  removeCategory,
+  toggleCategorySelectionMode,
+  getSelectedCategories
+};
