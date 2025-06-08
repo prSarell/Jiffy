@@ -1,6 +1,6 @@
 // File: /jiffy/shared/scripts/colorManagement.js
-// Purpose: Assign random, non-repeating row master colors globally across master categories,
-// preventing duplicates and consecutive repeats within any one category.
+// Purpose: Assign random, unique row master colors across all master categories
+// Enforce 5-per-row, prevent repetition, and block blue as first row in any tab
 
 const lineBaseColors = [
   '#1E3A8A', // Blue
@@ -18,13 +18,8 @@ const monochromeVariations = {
   '#EA580C': ['#EA580C', '#F97316', '#FB923C', '#FDBA74', '#FED7AA']
 };
 
-// Local storage of assigned colors
 let userColors = JSON.parse(localStorage.getItem('userColors')) || {};
-
-// Global state
 let usedGlobalBaseColors = [];
-
-// Per-master category tracking
 let masterColorState = {};
 
 function getColor(categoryName, position, masterCategory = 'Home') {
@@ -32,7 +27,6 @@ function getColor(categoryName, position, masterCategory = 'Home') {
     return userColors[categoryName];
   }
 
-  // Initialize state for master category
   if (!masterColorState[masterCategory]) {
     masterColorState[masterCategory] = {
       lineBaseColorAssignments: {},
@@ -50,13 +44,20 @@ function getColor(categoryName, position, masterCategory = 'Home') {
   if (!state.linePositionColors[lineNumber]) state.linePositionColors[lineNumber] = {};
   if (!state.lineCategoryCounts[lineNumber]) state.lineCategoryCounts[lineNumber] = 0;
 
-  // Assign row master color only once
   if (positionInLine === 0 && !state.lineBaseColorAssignments[lineNumber]) {
-    const availableColors = lineBaseColors.filter(
+    let availableColors = lineBaseColors.filter(
       base =>
         !usedGlobalBaseColors.includes(base) &&
-        base !== state.lastUsedBaseColor // prevent consecutive duplicate in same master
+        base !== state.lastUsedBaseColor
     );
+
+    // ✅ Enforce "no blue on first line of any master category"
+    if (lineNumber === 2) {
+      const blueVariants = ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE'];
+      availableColors = availableColors.filter(base =>
+        !monochromeVariations[base]?.some(variant => blueVariants.includes(variant))
+      );
+    }
 
     const newBaseColor = availableColors.length > 0
       ? availableColors[Math.floor(Math.random() * availableColors.length)]
@@ -69,15 +70,12 @@ function getColor(categoryName, position, masterCategory = 'Home') {
       usedGlobalBaseColors.push(newBaseColor);
     }
 
-    console.log(`getColor: ${masterCategory} row ${lineNumber} assigned base color ${newBaseColor}`);
+    console.log(`getColor: Assigned base ${newBaseColor} to ${masterCategory} row ${lineNumber}`);
   }
 
   const baseColor = state.lineBaseColorAssignments[lineNumber] || '#6B7280';
   const variants = monochromeVariations[baseColor];
-
-  const color = (variants && variants[positionInLine])
-    ? variants[positionInLine]
-    : baseColor;
+  const color = (variants && variants[positionInLine]) ? variants[positionInLine] : baseColor;
 
   state.linePositionColors[lineNumber][positionInLine] = color;
   state.lineCategoryCounts[lineNumber]++;
