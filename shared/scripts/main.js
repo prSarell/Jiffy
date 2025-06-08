@@ -11,6 +11,7 @@ let userCategories = JSON.parse(localStorage.getItem('userCategories')) || [];
 let currentPromptIndex = -1;
 let isSelectMode = false;
 let selectedCategoryName = null;
+let selectedUserCategories = [];
 
 function displayPrompt() {
   const prompts = getPrompts();
@@ -62,7 +63,7 @@ function renderUserCategories() {
 
     const categoryDiv = document.createElement('div');
     categoryDiv.className = 'user-category';
-    categoryDiv.style.backgroundColor = getColor(category.name, index); // <- fixed here (no +4)
+    categoryDiv.style.backgroundColor = getColor(category.name, index);
     categoryDiv.style.width = '40px';
     categoryDiv.style.height = '40px';
     categoryDiv.style.borderRadius = '50%';
@@ -73,11 +74,12 @@ function renderUserCategories() {
     categoryDiv.style.alignItems = 'center';
 
     categoryDiv.addEventListener('click', () => {
-      if (isSelectMode) return; // Don’t open the page in select mode
+      if (isSelectMode) return;
       localStorage.setItem('activeCategory', category.name);
       window.location.href = '/jiffy/pages/categories/userCategoryView/';
     });
 
+    // Delete button
     const deleteButton = document.createElement('span');
     deleteButton.className = 'category-specific-button';
     deleteButton.textContent = '×';
@@ -102,7 +104,49 @@ function renderUserCategories() {
       popup.style.display = 'flex';
     });
 
+    // Select toggle button (inner-circle)
+    const selectButton = document.createElement('span');
+    selectButton.className = 'category-specific-button';
+    selectButton.style.display = isSelectMode ? 'inline-block' : 'none';
+    selectButton.style.position = 'absolute';
+    selectButton.style.top = '-5px';
+    selectButton.style.right = '-5px';
+    selectButton.style.width = '16px';
+    selectButton.style.height = '16px';
+    selectButton.style.border = '2px solid #333';
+    selectButton.style.backgroundColor = 'white';
+    selectButton.style.borderRadius = '50%';
+    selectButton.style.display = isSelectMode ? 'inline-flex' : 'none';
+    selectButton.style.alignItems = 'center';
+    selectButton.style.justifyContent = 'center';
+    selectButton.style.zIndex = '2';
+    selectButton.style.cursor = 'pointer';
+
+    const innerCircle = document.createElement('span');
+    innerCircle.className = 'inner-circle';
+    innerCircle.style.width = '6px';
+    innerCircle.style.height = '6px';
+    innerCircle.style.backgroundColor = 'white';
+    innerCircle.style.borderRadius = '50%';
+
+    selectButton.appendChild(innerCircle);
+
+    selectButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const index = selectedUserCategories.indexOf(category.name);
+      if (index >= 0) {
+        selectedUserCategories.splice(index, 1);
+        selectButton.style.backgroundColor = 'white';
+        selectButton.style.borderColor = '#333';
+      } else {
+        selectedUserCategories.push(category.name);
+        selectButton.style.backgroundColor = '#4caf50';
+        selectButton.style.borderColor = '#4caf50';
+      }
+    });
+
     categoryDiv.appendChild(deleteButton);
+    categoryDiv.appendChild(selectButton);
 
     const label = document.createElement('span');
     label.className = 'user-category-label';
@@ -167,7 +211,8 @@ function setupSelectModeToggle() {
   const selectButton = document.getElementById('select-button');
   selectButton.addEventListener('click', () => {
     isSelectMode = !isSelectMode;
-    renderUserCategories(); // rerender to show/hide delete buttons
+    selectedUserCategories = [];
+    renderUserCategories(); // rerender to show/hide buttons
   });
 }
 
