@@ -1,231 +1,136 @@
-// File: /shared/scripts/main.js
-// Purpose: Manages user-created categories, master category tab logic, prompt cycling, and reintroduces Select/Delete functionality.
-
+// Path: /jiffy/shared/scripts/main.js
 import { renderMasterCategories } from './masterCategoryManagement.js';
-import { getColor, setColor } from './colorManagement.js';
+import { getColor } from './colorManagement.js';
 import { getPrompts } from '../../pages/prompts/promptManagement.js';
 
-const masterCategories = ['Home', 'Work', 'Life', 'School'];
-let selectedMasterCategory = 'Home';
 let userCategories = JSON.parse(localStorage.getItem('userCategories')) || [];
-let currentPromptIndex = -1;
-let isSelectMode = false;
-let selectedCategoryName = null;
+let selectedMasterCategory = 'Home';
 let selectedUserCategories = [];
+let isSelectMode = false;
 
 function displayPrompt() {
   const prompts = getPrompts();
   if (!prompts.length) return;
-
   const randomIndex = Math.floor(Math.random() * prompts.length);
-  currentPromptIndex = randomIndex;
-
-  const container = document.getElementById('prompt-container');
-  if (container) {
-    container.textContent = prompts[randomIndex].text;
-  }
-}
-
-function cyclePrompts(interval = 15000) {
-  const prompts = getPrompts();
-  if (prompts.length <= 1) return;
-
-  setInterval(() => {
-    let nextIndex;
-    do {
-      nextIndex = Math.floor(Math.random() * prompts.length);
-    } while (nextIndex === currentPromptIndex);
-
-    currentPromptIndex = nextIndex;
-    const container = document.getElementById('prompt-container');
-    if (container) {
-      container.textContent = prompts[nextIndex].text;
-    }
-  }, interval);
+  document.getElementById('prompt-container').textContent = prompts[randomIndex].text;
 }
 
 function renderUserCategories() {
-  const userCategoryRow = document.getElementById('user-category-row');
-  userCategoryRow.innerHTML = '';
+  const row = document.getElementById('user-category-row');
+  row.innerHTML = '';
+  userCategories
+    .filter(cat => cat.masterCategory === selectedMasterCategory)
+    .forEach((cat, i) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'category-item';
+      wrapper.style = 'display: flex; flex-direction: column; align-items: center; width: 40px; position: relative;';
 
-  const filteredCategories = userCategories.filter(
-    (cat) => cat.masterCategory === selectedMasterCategory
-  );
+      const button = document.createElement('button');
+      button.className = 'user-category';
+      button.style.backgroundColor = getColor(cat.name, i);
+      button.addEventListener('click', () => {
+        if (!isSelectMode) {
+          localStorage.setItem('activeCategory', cat.name);
+          window.location.href = '/jiffy/pages/categories/userCategoryView/';
+        }
+      });
 
-  filteredCategories.forEach((category, index) => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'category-item';
-    wrapper.style.display = 'flex';
-    wrapper.style.flexDirection = 'column';
-    wrapper.style.alignItems = 'center';
-    wrapper.style.width = '40px';
-    wrapper.style.position = 'relative';
+      const selectBtn = document.createElement('span');
+      selectBtn.className = 'category-specific-button select-mode';
+      selectBtn.style.display = isSelectMode ? 'inline-flex' : 'none';
 
-    const categoryDiv = document.createElement('div');
-    categoryDiv.className = 'user-category';
-    categoryDiv.style.backgroundColor = getColor(category.name, index);
-    categoryDiv.style.width = '40px';
-    categoryDiv.style.height = '40px';
-    categoryDiv.style.borderRadius = '50%';
-    categoryDiv.style.cursor = 'pointer';
-    categoryDiv.style.position = 'relative';
-    categoryDiv.style.display = 'flex';
-    categoryDiv.style.justifyContent = 'center';
-    categoryDiv.style.alignItems = 'center';
+      const inner = document.createElement('span');
+      inner.className = 'inner-circle';
+      selectBtn.appendChild(inner);
 
-    categoryDiv.addEventListener('click', () => {
-      if (isSelectMode) return;
-      localStorage.setItem('activeCategory', category.name);
-      window.location.href = '/jiffy/pages/categories/userCategoryView/';
+      selectBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        const index = selectedUserCategories.indexOf(cat.name);
+        if (index >= 0) {
+          selectedUserCategories.splice(index, 1);
+          selectBtn.classList.remove('selected');
+        } else {
+          selectedUserCategories.push(cat.name);
+          selectBtn.classList.add('selected');
+        }
+      });
+
+      button.appendChild(selectBtn);
+      wrapper.appendChild(button);
+
+      const label = document.createElement('span');
+      label.className = 'user-category-label';
+      label.textContent = cat.name;
+      wrapper.appendChild(label);
+
+      row.appendChild(wrapper);
     });
-
-    // Select toggle button (inner-circle)
-    const selectButton = document.createElement('span');
-    selectButton.className = 'category-specific-button select-mode';
-    selectButton.style.display = isSelectMode ? 'inline-flex' : 'none';
-
-    const innerCircle = document.createElement('span');
-    innerCircle.className = 'inner-circle';
-
-    selectButton.appendChild(innerCircle);
-
-    selectButton.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const index = selectedUserCategories.indexOf(category.name);
-      if (index >= 0) {
-        selectedUserCategories.splice(index, 1);
-        selectButton.classList.remove('selected');
-      } else {
-        selectedUserCategories.push(category.name);
-        selectButton.classList.add('selected');
-      }
-    });
-
-    categoryDiv.appendChild(selectButton);
-
-    const label = document.createElement('span');
-    label.className = 'user-category-label';
-    label.textContent = category.name;
-    label.style.fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-    label.style.fontSize = "8px";
-    label.style.marginTop = "5px";
-    label.style.textAlign = "center";
-    label.style.whiteSpace = "normal";
-    label.style.display = "block";
-    label.style.maxWidth = "70px";
-    label.style.lineHeight = "1.1";
-    label.style.wordWrap = "break-word";
-
-    wrapper.appendChild(categoryDiv);
-    wrapper.appendChild(label);
-    userCategoryRow.appendChild(wrapper);
-  });
-}
-
-function addUserCategory(name) {
-  const filteredCategories = userCategories.filter(
-    (cat) => cat.masterCategory === selectedMasterCategory
-  );
-  const position = filteredCategories.length;
-  const color = getColor(name, position);
-
-  userCategories.push({
-    name,
-    color,
-    masterCategory: selectedMasterCategory,
-  });
-
-  localStorage.setItem('userCategories', JSON.stringify(userCategories));
-  renderUserCategories();
-}
-
-function setupDeletePopup() {
-  const popup = document.getElementById('delete-popup');
-  const cancelBtn = document.getElementById('delete-popup-cancel');
-  const deleteBtn = document.getElementById('delete-popup-delete');
-
-  cancelBtn.addEventListener('click', () => {
-    popup.style.display = 'none';
-    selectedCategoryName = null;
-  });
-
-  deleteBtn.addEventListener('click', () => {
-    if (selectedCategoryName) {
-      userCategories = userCategories.filter(
-        (cat) => !(cat.name === selectedCategoryName && cat.masterCategory === selectedMasterCategory)
-      );
-      localStorage.setItem('userCategories', JSON.stringify(userCategories));
-      renderUserCategories();
-    }
-    popup.style.display = 'none';
-    selectedCategoryName = null;
-  });
 }
 
 function setupSelectModeControls() {
-  const selectBtn = document.getElementById('select-button');
+  const select = document.getElementById('select-button');
   const deleteBtn = document.getElementById('delete-button');
-  const cancelBtn = document.getElementById('cancel-button');
+  const cancel = document.getElementById('cancel-button');
+  const popup = document.getElementById('delete-popup');
+  const confirm = document.getElementById('delete-confirm');
+  const popupCancel = document.getElementById('delete-cancel');
 
-  selectBtn.addEventListener('click', () => {
+  select.addEventListener('click', () => {
     isSelectMode = true;
     selectedUserCategories = [];
-
-    selectBtn.style.display = 'none';
+    select.style.display = 'none';
     deleteBtn.style.display = 'inline';
-    cancelBtn.style.display = 'inline';
-
+    cancel.style.display = 'inline';
     renderUserCategories();
   });
 
-  cancelBtn.addEventListener('click', () => {
+  cancel.addEventListener('click', () => {
     isSelectMode = false;
     selectedUserCategories = [];
-
-    selectBtn.style.display = 'inline';
+    select.style.display = 'inline';
     deleteBtn.style.display = 'none';
-    cancelBtn.style.display = 'none';
-
+    cancel.style.display = 'none';
     renderUserCategories();
   });
 
   deleteBtn.addEventListener('click', () => {
-    if (selectedUserCategories.length === 0) return;
+    popup.style.display = 'flex';
+  });
 
-    selectedUserCategories.forEach((categoryName) => {
-      userCategories = userCategories.filter(
-        (cat) => !(cat.name === categoryName && cat.masterCategory === selectedMasterCategory)
-      );
-    });
-
+  confirm.addEventListener('click', () => {
+    userCategories = userCategories.filter(
+      cat => !selectedUserCategories.includes(cat.name)
+    );
     localStorage.setItem('userCategories', JSON.stringify(userCategories));
+    isSelectMode = false;
     selectedUserCategories = [];
-
+    popup.style.display = 'none';
+    select.style.display = 'inline';
+    deleteBtn.style.display = 'none';
+    cancel.style.display = 'none';
     renderUserCategories();
+  });
+
+  popupCancel.addEventListener('click', () => {
+    popup.style.display = 'none';
   });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   displayPrompt();
-  cyclePrompts();
-
-  renderMasterCategories(
-    document.getElementById('master-category-row'),
-    (category) => {
-      selectedMasterCategory = category;
-      renderUserCategories();
-    }
-  );
-
+  renderMasterCategories(document.getElementById('master-category-row'), (category) => {
+    selectedMasterCategory = category;
+    renderUserCategories();
+  });
   renderUserCategories();
-  setupDeletePopup();
   setupSelectModeControls();
 
-  const addButton = document.querySelector('[data-action="add"]');
-  addButton.addEventListener('click', () => {
-    const categoryName = prompt('Enter category name:');
-    if (categoryName) {
-      addUserCategory(categoryName);
+  document.querySelector('[data-action="add"]').addEventListener('click', () => {
+    const name = prompt('Enter category name:');
+    if (name) {
+      userCategories.push({ name, masterCategory: selectedMasterCategory });
+      localStorage.setItem('userCategories', JSON.stringify(userCategories));
+      renderUserCategories();
     }
   });
 });
