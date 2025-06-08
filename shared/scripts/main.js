@@ -207,12 +207,35 @@ function setupDeletePopup() {
   });
 }
 
-function setupSelectModeToggle() {
-  const selectButton = document.getElementById('select-button');
-  selectButton.addEventListener('click', () => {
-    isSelectMode = !isSelectMode;
+function setupSelectModeControls() {
+  const selectBtn = document.getElementById('select-button');
+  const deleteBtn = document.getElementById('delete-button');
+  const cancelBtn = document.getElementById('cancel-button');
+
+  selectBtn.addEventListener('click', () => {
+    isSelectMode = true;
     selectedUserCategories = [];
-    renderUserCategories(); // rerender to show/hide buttons
+
+    selectBtn.style.display = 'none';
+    deleteBtn.style.display = 'inline';
+    cancelBtn.style.display = 'inline';
+
+    renderUserCategories();
+  });
+
+  cancelBtn.addEventListener('click', () => {
+    isSelectMode = false;
+    selectedUserCategories = [];
+
+    selectBtn.style.display = 'inline';
+    deleteBtn.style.display = 'none';
+    cancelBtn.style.display = 'none';
+
+    renderUserCategories();
+  });
+
+  deleteBtn.addEventListener('click', () => {
+    alert(`Deleting: ${selectedUserCategories.join(', ')}`);
   });
 }
 
