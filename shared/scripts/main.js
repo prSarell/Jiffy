@@ -1,7 +1,5 @@
 // File: /jiffy/shared/scripts/main.js
-// Purpose: Manages user-created categories, ensures they're associated with the selected master category.
-//          Prevents deletion or editing of master categories. Uses masterCategoryManagement.js to render tabs.
-// Update: Removed manual color prompt — uses getColor() with correct position offset.
+// Purpose: Manages user-created categories, master category tab logic, prompt cycling, and reintroduces Select/Delete functionality.
 
 import { renderMasterCategories } from './masterCategoryManagement.js';
 import { getColor, setColor } from './colorManagement.js';
@@ -11,6 +9,8 @@ const masterCategories = ['Home', 'Work', 'Life', 'School'];
 let selectedMasterCategory = 'Home';
 let userCategories = JSON.parse(localStorage.getItem('userCategories')) || [];
 let currentPromptIndex = -1;
+let isSelectMode = false;
+let selectedCategoryName = null;
 
 function displayPrompt() {
   const prompts = getPrompts();
@@ -63,23 +63,43 @@ function renderUserCategories() {
     const categoryDiv = document.createElement('div');
     categoryDiv.className = 'user-category';
     categoryDiv.style.backgroundColor = getColor(category.name, index + 4); // +4 to offset master categories
+    categoryDiv.style.width = '40px';
+    categoryDiv.style.height = '40px';
+    categoryDiv.style.borderRadius = '50%';
+    categoryDiv.style.cursor = 'pointer';
+    categoryDiv.style.position = 'relative';
+    categoryDiv.style.display = 'flex';
+    categoryDiv.style.justifyContent = 'center';
+    categoryDiv.style.alignItems = 'center';
 
     categoryDiv.addEventListener('click', () => {
-      console.log("✅ Redirecting to user category view:", category.name);
+      if (isSelectMode) return; // Don’t open the page in select mode
       localStorage.setItem('activeCategory', category.name);
       window.location.href = '/jiffy/pages/categories/userCategoryView/';
     });
 
-    const deleteButton = document.createElement('button');
+    const deleteButton = document.createElement('span');
     deleteButton.className = 'category-specific-button';
     deleteButton.textContent = '×';
+    deleteButton.style.position = 'absolute';
+    deleteButton.style.top = '-5px';
+    deleteButton.style.right = '-5px';
+    deleteButton.style.background = '#FF4444';
+    deleteButton.style.borderRadius = '50%';
+    deleteButton.style.color = '#fff';
+    deleteButton.style.fontSize = '12px';
+    deleteButton.style.padding = '2px 6px';
+    deleteButton.style.display = isSelectMode ? 'inline-block' : 'none';
+    deleteButton.style.cursor = 'pointer';
+
     deleteButton.addEventListener('click', (e) => {
       e.stopPropagation();
-      userCategories = userCategories.filter(
-        (cat) => !(cat.name === category.name && cat.masterCategory === category.masterCategory)
-      );
-      localStorage.setItem('userCategories', JSON.stringify(userCategories));
-      renderUserCategories();
+      selectedCategoryName = category.name;
+
+      const popup = document.getElementById('delete-popup');
+      const message = document.getElementById('delete-popup-message');
+      message.textContent = `Delete "${category.name}"?`;
+      popup.style.display = 'flex';
     });
 
     categoryDiv.appendChild(deleteButton);
@@ -104,7 +124,7 @@ function renderUserCategories() {
 }
 
 function addUserCategory(name) {
-  const position = userCategories.length + 4; // Offset master categories
+  const position = userCategories.length + 4;
   const color = getColor(name, position);
 
   userCategories.push({
@@ -112,8 +132,40 @@ function addUserCategory(name) {
     color,
     masterCategory: selectedMasterCategory,
   });
+
   localStorage.setItem('userCategories', JSON.stringify(userCategories));
   renderUserCategories();
+}
+
+function setupDeletePopup() {
+  const popup = document.getElementById('delete-popup');
+  const cancelBtn = document.getElementById('delete-popup-cancel');
+  const deleteBtn = document.getElementById('delete-popup-delete');
+
+  cancelBtn.addEventListener('click', () => {
+    popup.style.display = 'none';
+    selectedCategoryName = null;
+  });
+
+  deleteBtn.addEventListener('click', () => {
+    if (selectedCategoryName) {
+      userCategories = userCategories.filter(
+        (cat) => !(cat.name === selectedCategoryName && cat.masterCategory === selectedMasterCategory)
+      );
+      localStorage.setItem('userCategories', JSON.stringify(userCategories));
+      renderUserCategories();
+    }
+    popup.style.display = 'none';
+    selectedCategoryName = null;
+  });
+}
+
+function setupSelectModeToggle() {
+  const selectButton = document.getElementById('select-button');
+  selectButton.addEventListener('click', () => {
+    isSelectMode = !isSelectMode;
+    renderUserCategories(); // rerender to show/hide delete buttons
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -129,6 +181,8 @@ document.addEventListener('DOMContentLoaded', () => {
   );
 
   renderUserCategories();
+  setupDeletePopup();
+  setupSelectModeToggle();
 
   const addButton = document.querySelector('[data-action="add"]');
   addButton.addEventListener('click', () => {
