@@ -72,8 +72,8 @@ function setupSelectModeControls() {
   const deleteBtn = document.getElementById('delete-button');
   const cancel = document.getElementById('cancel-button');
   const popup = document.getElementById('delete-popup');
-  const confirm = document.getElementById('delete-confirm');
-  const popupCancel = document.getElementById('delete-cancel');
+  const confirm = document.getElementById('delete-popup-delete');
+  const popupCancel = document.getElementById('delete-popup-cancel');
 
   select.addEventListener('click', () => {
     isSelectMode = true;
@@ -95,6 +95,7 @@ function setupSelectModeControls() {
 
   deleteBtn.addEventListener('click', () => {
     popup.style.display = 'flex';
+    document.getElementById('delete-popup-message').textContent = 'Delete selected?';
   });
 
   confirm.addEventListener('click', () => {
@@ -116,6 +117,34 @@ function setupSelectModeControls() {
   });
 }
 
+function setupAddCategoryPopup() {
+  const addBtn = document.querySelector('[data-action="add"]');
+  const popup = document.getElementById('popup');
+  const input = document.getElementById('category-input');
+  const confirmBtn = popup.querySelector('[data-action="confirm"]');
+  const cancelBtn = popup.querySelector('[data-action="cancel"]');
+
+  addBtn.addEventListener('click', () => {
+    input.value = '';
+    popup.style.display = 'flex';
+    input.focus();
+  });
+
+  confirmBtn.addEventListener('click', () => {
+    const name = input.value.trim();
+    if (name) {
+      userCategories.push({ name, masterCategory: selectedMasterCategory });
+      localStorage.setItem('userCategories', JSON.stringify(userCategories));
+      renderUserCategories();
+    }
+    popup.style.display = 'none';
+  });
+
+  cancelBtn.addEventListener('click', () => {
+    popup.style.display = 'none';
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   displayPrompt();
   renderMasterCategories(document.getElementById('master-category-row'), (category) => {
@@ -124,13 +153,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   renderUserCategories();
   setupSelectModeControls();
-
-  document.querySelector('[data-action="add"]').addEventListener('click', () => {
-    const name = prompt('Enter category name:');
-    if (name) {
-      userCategories.push({ name, masterCategory: selectedMasterCategory });
-      localStorage.setItem('userCategories', JSON.stringify(userCategories));
-      renderUserCategories();
-    }
-  });
+  setupAddCategoryPopup();
 });
