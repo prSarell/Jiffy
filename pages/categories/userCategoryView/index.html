@@ -25,10 +25,7 @@
     <div onclick="window.history.back()" style="position: absolute; left: 20px; cursor: pointer;">←</div>
 
     <!-- Centered Title -->
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <div id="category-dot" style="width: 10px; height: 10px; border-radius: 50%; background-color: white;"></div>
-      <div id="category-title">Category</div>
-    </div>
+    <div id="category-title">Category</div>
   </div>
 
   <!-- Page Tabs (Tasks, Time, Notes, Summary) -->
@@ -44,6 +41,14 @@
     <!-- Tab content will be loaded here dynamically -->
   </div>
 
+  <!-- Script -->
   <script type="module" src="./scripts.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const name = localStorage.getItem('activeCategory');
+      const title = document.getElementById('category-title');
+      title.textContent = name || 'Category';
+    });
+  </script>
 </body>
 </html>
