@@ -1,5 +1,6 @@
 // File: /jiffy/shared/scripts/colorManagement.js
-// Purpose: Strict color assignment for 5-per-row category layout with row-based monochrome logic.
+// Purpose: Handle color assignment for user-created categories.
+// Supports 5 per row, row-based monochrome logic, and prevents color duplication across master categories.
 
 const lineBaseColors = [
   '#1E3A8A', // Blue
@@ -19,67 +20,78 @@ const monochromeVariations = {
 
 let userColors = JSON.parse(localStorage.getItem('userColors')) || {};
 
-let lineBaseColorAssignments = {
-  1: '#1E3A8A'
-};
-
-let linePositionColors = {
-  1: {
-    0: '#1E3A8A',
-    1: '#3B82F6',
-    2: '#60A5FA',
-    3: '#93C5FD',
-    4: '#BFDBFE'
+// Track colors and assignments per master category
+let masterColorState = {
+  Home: {
+    lineBaseColorAssignments: { 1: '#1E3A8A' },
+    linePositionColors: {
+      1: {
+        0: '#1E3A8A',
+        1: '#3B82F6',
+        2: '#60A5FA',
+        3: '#93C5FD',
+        4: '#BFDBFE'
+      }
+    },
+    lineCategoryCounts: { 1: 5 },
+    usedBaseColors: ['#1E3A8A']
   }
+  // Other master categories (Life, Work, etc.) will be initialized dynamically
 };
 
-let lineCategoryCounts = {
-  1: 5
-};
-
-function getColor(categoryName, position) {
+function getColor(categoryName, position, masterCategory = 'Home') {
   if (userColors[categoryName]) {
     return userColors[categoryName];
   }
 
+  // Initialize master category state if not already done
+  if (!masterColorState[masterCategory]) {
+    masterColorState[masterCategory] = {
+      lineBaseColorAssignments: {},
+      linePositionColors: {},
+      lineCategoryCounts: {},
+      usedBaseColors: []
+    };
+  }
+
+  const state = masterColorState[masterCategory];
   const categoriesPerLine = 5;
-  const lineNumber = Math.floor(position / categoriesPerLine) + 1;
+  const lineNumber = Math.floor(position / categoriesPerLine) + 2; // start at line 2 for user categories
   const positionInLine = position % categoriesPerLine;
 
-  if (!linePositionColors[lineNumber]) linePositionColors[lineNumber] = {};
-  if (!lineCategoryCounts[lineNumber]) lineCategoryCounts[lineNumber] = 0;
+  if (!state.linePositionColors[lineNumber]) state.linePositionColors[lineNumber] = {};
+  if (!state.lineCategoryCounts[lineNumber]) state.lineCategoryCounts[lineNumber] = 0;
 
-  // ✅ Only assign base color once
-  if (positionInLine === 0 && !lineBaseColorAssignments[lineNumber]) {
-    const usedBaseColors = Object.values(lineBaseColorAssignments);
+  // Assign new base color for this line only once
+  if (positionInLine === 0 && !state.lineBaseColorAssignments[lineNumber]) {
     const availableColors = lineBaseColors.filter(
-      base => !usedBaseColors.includes(base)
+      base => !state.usedBaseColors.includes(base)
     );
 
     const newBaseColor = availableColors.length > 0
       ? availableColors[Math.floor(Math.random() * availableColors.length)]
-      : null;
+      : '#6B7280'; // fallback grey
 
-    if (newBaseColor) {
-      lineBaseColorAssignments[lineNumber] = newBaseColor;
-      console.log(`getColor: Row master color for line ${lineNumber} set to ${newBaseColor}`);
-    } else {
-      console.warn(`getColor: No available base colors for line ${lineNumber}`);
+    state.lineBaseColorAssignments[lineNumber] = newBaseColor;
+    if (!state.usedBaseColors.includes(newBaseColor)) {
+      state.usedBaseColors.push(newBaseColor);
     }
+
+    console.log(`getColor: ${masterCategory} row ${lineNumber} base color = ${newBaseColor}`);
   }
 
-  const baseColor = lineBaseColorAssignments[lineNumber] || '#6B7280';
+  const baseColor = state.lineBaseColorAssignments[lineNumber] || '#6B7280';
   const variants = monochromeVariations[baseColor];
 
-  const color = (variants && variants[positionInLine]) 
-    ? variants[positionInLine] 
+  const color = (variants && variants[positionInLine])
+    ? variants[positionInLine]
     : baseColor;
 
-  linePositionColors[lineNumber][positionInLine] = color;
-  lineCategoryCounts[lineNumber]++;
+  state.linePositionColors[lineNumber][positionInLine] = color;
+  state.lineCategoryCounts[lineNumber]++;
   setColor(categoryName, color);
 
-  console.log(`getColor: Assigned color "${color}" to "${categoryName}" on line ${lineNumber}, position ${positionInLine}`);
+  console.log(`getColor: Assigned color "${color}" to "${categoryName}" in ${masterCategory}, line ${lineNumber}, pos ${positionInLine}`);
   return color;
 }
 
@@ -88,12 +100,18 @@ function setColor(categoryName, color) {
   localStorage.setItem('userColors', JSON.stringify(userColors));
 }
 
-function removeCategory(lineNumber) {
-  if (lineCategoryCounts[lineNumber]) {
-    lineCategoryCounts[lineNumber]--;
-    if (lineCategoryCounts[lineNumber] === 0) {
-      delete lineBaseColorAssignments[lineNumber];
-      delete linePositionColors[lineNumber];
+function removeCategory(lineNumber, masterCategory = 'Home') {
+  const state = masterColorState[masterCategory];
+  if (!state || !state.lineCategoryCounts[lineNumber]) return;
+
+  state.lineCategoryCounts[lineNumber]--;
+  if (state.lineCategoryCounts[lineNumber] === 0) {
+    const removedBase = state.lineBaseColorAssignments[lineNumber];
+    delete state.lineBaseColorAssignments[lineNumber];
+    delete state.linePositionColors[lineNumber];
+    const index = state.usedBaseColors.indexOf(removedBase);
+    if (index > -1) {
+      state.usedBaseColors.splice(index, 1);
     }
   }
 }
