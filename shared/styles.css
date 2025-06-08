@@ -47,6 +47,33 @@ Purpose: Global styles for Jiffy, including category buttons, labels, and prompt
   line-height: 14px;
   text-align: center;
   cursor: pointer;
+  z-index: 2;
+}
+
+/* Category-specific SELECT buttons (inner-circle style) */
+.category-specific-button.select-mode {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border: 2px solid #333;
+  width: 16px;
+  height: 16px;
+  top: -5px;
+  right: -5px;
+  padding: 0;
+}
+
+.category-specific-button.select-mode.selected {
+  background-color: #4caf50;
+  border-color: #4caf50;
+}
+
+.category-specific-button.select-mode .inner-circle {
+  width: 6px;
+  height: 6px;
+  background-color: white;
+  border-radius: 50%;
 }
 
 /* Label below category buttons */
