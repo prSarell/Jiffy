@@ -1,5 +1,5 @@
-// File: /jiffy/shared/scripts/main.js
-// Purpose: Manages user-created categories, master category tab logic, prompt cycling, and category selection mode
+// File: /shared/scripts/main.js
+// Purpose: Manages user-created categories, master category tab logic, prompt cycling, and reintroduces Select/Delete functionality.
 
 import { renderMasterCategories } from './masterCategoryManagement.js';
 import { getColor, setColor } from './colorManagement.js';
@@ -79,54 +79,13 @@ function renderUserCategories() {
       window.location.href = '/jiffy/pages/categories/userCategoryView/';
     });
 
-    // Delete button
-    const deleteButton = document.createElement('span');
-    deleteButton.className = 'category-specific-button';
-    deleteButton.textContent = '×';
-    deleteButton.style.position = 'absolute';
-    deleteButton.style.top = '-5px';
-    deleteButton.style.right = '-5px';
-    deleteButton.style.background = '#FF4444';
-    deleteButton.style.borderRadius = '50%';
-    deleteButton.style.color = '#fff';
-    deleteButton.style.fontSize = '12px';
-    deleteButton.style.padding = '2px 6px';
-    deleteButton.style.display = isSelectMode ? 'inline-block' : 'none';
-    deleteButton.style.cursor = 'pointer';
-
-    deleteButton.addEventListener('click', (e) => {
-      e.stopPropagation();
-      selectedCategoryName = category.name;
-
-      const popup = document.getElementById('delete-popup');
-      const message = document.getElementById('delete-popup-message');
-      message.textContent = `Delete "${category.name}"?`;
-      popup.style.display = 'flex';
-    });
-
-    // Select toggle button (tick circle)
+    // Select toggle button (inner-circle)
     const selectButton = document.createElement('span');
-    selectButton.className = 'category-specific-button';
+    selectButton.className = 'category-specific-button select-mode';
     selectButton.style.display = isSelectMode ? 'inline-flex' : 'none';
-    selectButton.style.position = 'absolute';
-    selectButton.style.top = '-5px';
-    selectButton.style.right = '-5px';
-    selectButton.style.width = '16px';
-    selectButton.style.height = '16px';
-    selectButton.style.border = '2px solid #333';
-    selectButton.style.backgroundColor = 'white';
-    selectButton.style.borderRadius = '50%';
-    selectButton.style.alignItems = 'center';
-    selectButton.style.justifyContent = 'center';
-    selectButton.style.zIndex = '2';
-    selectButton.style.cursor = 'pointer';
 
     const innerCircle = document.createElement('span');
     innerCircle.className = 'inner-circle';
-    innerCircle.style.width = '6px';
-    innerCircle.style.height = '6px';
-    innerCircle.style.backgroundColor = 'white';
-    innerCircle.style.borderRadius = '50%';
 
     selectButton.appendChild(innerCircle);
 
@@ -135,16 +94,13 @@ function renderUserCategories() {
       const index = selectedUserCategories.indexOf(category.name);
       if (index >= 0) {
         selectedUserCategories.splice(index, 1);
-        selectButton.style.backgroundColor = 'white';
-        selectButton.style.borderColor = '#333';
+        selectButton.classList.remove('selected');
       } else {
         selectedUserCategories.push(category.name);
-        selectButton.style.backgroundColor = '#4caf50';
-        selectButton.style.borderColor = '#4caf50';
+        selectButton.classList.add('selected');
       }
     });
 
-    categoryDiv.appendChild(deleteButton);
     categoryDiv.appendChild(selectButton);
 
     const label = document.createElement('span');
@@ -234,7 +190,18 @@ function setupSelectModeControls() {
   });
 
   deleteBtn.addEventListener('click', () => {
-    alert(`Deleting: ${selectedUserCategories.join(', ')}`);
+    if (selectedUserCategories.length === 0) return;
+
+    selectedUserCategories.forEach((categoryName) => {
+      userCategories = userCategories.filter(
+        (cat) => !(cat.name === categoryName && cat.masterCategory === selectedMasterCategory)
+      );
+    });
+
+    localStorage.setItem('userCategories', JSON.stringify(userCategories));
+    selectedUserCategories = [];
+
+    renderUserCategories();
   });
 }
 
