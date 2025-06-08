@@ -153,21 +153,21 @@
     }
 
     function loadCategoryHeader() {
-      const name = localStorage.getItem('activeCategory');
-      const title = document.getElementById('category-title');
-      const dot = document.getElementById('category-dot');
+  const name = localStorage.getItem('activeCategory');
+  const title = document.getElementById('category-title');
+  const dot = document.getElementById('category-dot');
 
-      if (name) {
-        title.textContent = name;
-        const color = localStorage.getItem(`categoryColor-${name}`);
-        if (color) {
-          dot.style.backgroundColor = color;
-        }
-      } else {
-        title.textContent = "Category";
-      }
+  if (name) {
+    title.textContent = name;
+    const color = localStorage.getItem(`categoryColor-${name}`);
+    if (color) {
+      dot.style.backgroundColor = color;
+      title.style.color = color; // <- new line here
     }
-
+  } else {
+    title.textContent = "Category";
+  }
+}
     function loadPrompts() {
       const promptArea = document.getElementById('global-prompts');
       const prompts = getPrompts();
