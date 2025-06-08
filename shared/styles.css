@@ -32,7 +32,42 @@ Purpose: Global styles for Jiffy, including category buttons, labels, and prompt
   border: none;
 }
 
-/* Label below category buttons */
+/* CATEGORY-SPECIFIC SELECT BUTTON */
+.category-specific-button.select-mode {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: black;
+  border: 1px solid white;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 2;
+  padding: 0;
+}
+
+/* SELECTED STATE */
+.category-specific-button.select-mode.selected {
+  background-color: white;
+}
+
+.category-specific-button.select-mode.selected .inner-circle {
+  background-color: black;
+}
+
+/* INNER DOT (Only visible when selected) */
+.category-specific-button.select-mode .inner-circle {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: transparent;
+}
+
+/* LABEL BELOW CATEGORY BUTTONS */
 .user-category-label,
 .category-label {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -90,54 +125,4 @@ Purpose: Global styles for Jiffy, including category buttons, labels, and prompt
 #delete-popup,
 #delete-popup * {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-}
-
-/* Category-specific SELECT buttons (select mode) */
-.category-specific-button.select-mode {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  background-color: black; /* inactive state */
-  border: 1px solid white;
-  width: 16px;
-  height: 16px;
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  border-radius: 50%;
-  padding: 0;
-  z-index: 2;
-}
-
-.category-specific-button.select-mode.selected {
-  background-color: white;
-}
-
-.category-specific-button.select-mode.selected .inner-circle {
-  background-color: black;
-}
-
-.category-specific-button.select-mode .inner-circle {
-  width: 6px;
-  height: 6px;
-  background-color: transparent;
-  border-radius: 50%;
-}
-
-/* Legacy small red delete buttons — remove when cleaned up */
-.category-specific-button:not(.select-mode) {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  background-color: #222;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  font-size: 12px;
-  width: 16px;
-  height: 16px;
-  line-height: 14px;
-  text-align: center;
-  cursor: pointer;
-  z-index: 2;
 }
