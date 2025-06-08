@@ -1,8 +1,6 @@
 // File: /jiffy/shared/scripts/colorManagement.js
-// Purpose: Handle color assignment for master and user-created categories,
-// enforcing strict row master color rules and supporting 5 categories per row.
+// Purpose: Strict color assignment for 5-per-row category layout with row-based monochrome logic.
 
-// Distinct base colors
 const lineBaseColors = [
   '#1E3A8A', // Blue
   '#15803D', // Green
@@ -11,7 +9,6 @@ const lineBaseColors = [
   '#EA580C'  // Orange
 ];
 
-// Monochrome variations for each base color (now includes 5 shades)
 const monochromeVariations = {
   '#1E3A8A': ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE'],
   '#15803D': ['#15803D', '#16A34A', '#22C55E', '#4ADE80', '#BBF7D0'],
@@ -20,15 +17,12 @@ const monochromeVariations = {
   '#EA580C': ['#EA580C', '#F97316', '#FB923C', '#FDBA74', '#FED7AA']
 };
 
-// User-assigned colors (from localStorage)
 let userColors = JSON.parse(localStorage.getItem('userColors')) || {};
 
-// Row master color assignment
 let lineBaseColorAssignments = {
-  1: '#1E3A8A' // Line 1 reserved for master categories
+  1: '#1E3A8A'
 };
 
-// Tracks position-specific color in each line
 let linePositionColors = {
   1: {
     0: '#1E3A8A',
@@ -39,7 +33,6 @@ let linePositionColors = {
   }
 };
 
-// Category count per line
 let lineCategoryCounts = {
   1: 5
 };
@@ -56,7 +49,7 @@ function getColor(categoryName, position) {
   if (!linePositionColors[lineNumber]) linePositionColors[lineNumber] = {};
   if (!lineCategoryCounts[lineNumber]) lineCategoryCounts[lineNumber] = 0;
 
-  // Lock row master color on first assignment only
+  // ✅ Only assign base color once
   if (positionInLine === 0 && !lineBaseColorAssignments[lineNumber]) {
     const usedBaseColors = Object.values(lineBaseColorAssignments);
     const availableColors = lineBaseColors.filter(
@@ -65,16 +58,21 @@ function getColor(categoryName, position) {
 
     const newBaseColor = availableColors.length > 0
       ? availableColors[Math.floor(Math.random() * availableColors.length)]
-      : '#6B7280'; // fallback grey
+      : null;
 
-    lineBaseColorAssignments[lineNumber] = newBaseColor;
-
-    console.log(`getColor: Row master color for line ${lineNumber} set to ${newBaseColor}`);
+    if (newBaseColor) {
+      lineBaseColorAssignments[lineNumber] = newBaseColor;
+      console.log(`getColor: Row master color for line ${lineNumber} set to ${newBaseColor}`);
+    } else {
+      console.warn(`getColor: No available base colors for line ${lineNumber}`);
+    }
   }
 
-  const baseColor = lineBaseColorAssignments[lineNumber];
-  const color = monochromeVariations[baseColor]
-    ? monochromeVariations[baseColor][positionInLine]
+  const baseColor = lineBaseColorAssignments[lineNumber] || '#6B7280';
+  const variants = monochromeVariations[baseColor];
+
+  const color = (variants && variants[positionInLine]) 
+    ? variants[positionInLine] 
     : baseColor;
 
   linePositionColors[lineNumber][positionInLine] = color;
