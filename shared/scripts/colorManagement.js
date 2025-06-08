@@ -1,6 +1,6 @@
 // File: /jiffy/shared/scripts/colorManagement.js
 // Purpose: Handle color assignment for master and user-created categories,
-// ensuring strict row master color rules and preventing overlap across rows.
+// enforcing strict row master color rules and supporting 5 categories per row.
 
 // Distinct base colors
 const lineBaseColors = [
@@ -11,13 +11,13 @@ const lineBaseColors = [
   '#EA580C'  // Orange
 ];
 
-// Monochrome variations for each base color
+// Monochrome variations for each base color (now includes 5 shades)
 const monochromeVariations = {
-  '#1E3A8A': ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'],
-  '#15803D': ['#15803D', '#16A34A', '#22C55E', '#4ADE80'],
-  '#B91C1C': ['#B91C1C', '#DC2626', '#F87171', '#FCA5A5'],
-  '#6B21A8': ['#6B21A8', '#9333EA', '#C084FC', '#D8B4FE'],
-  '#EA580C': ['#EA580C', '#F97316', '#FB923C', '#FDBA74']
+  '#1E3A8A': ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE'],
+  '#15803D': ['#15803D', '#16A34A', '#22C55E', '#4ADE80', '#BBF7D0'],
+  '#B91C1C': ['#B91C1C', '#DC2626', '#F87171', '#FCA5A5', '#FECACA'],
+  '#6B21A8': ['#6B21A8', '#9333EA', '#C084FC', '#D8B4FE', '#E9D5FF'],
+  '#EA580C': ['#EA580C', '#F97316', '#FB923C', '#FDBA74', '#FED7AA']
 };
 
 // User-assigned colors (from localStorage)
@@ -34,13 +34,14 @@ let linePositionColors = {
     0: '#1E3A8A',
     1: '#3B82F6',
     2: '#60A5FA',
-    3: '#93C5FD'
+    3: '#93C5FD',
+    4: '#BFDBFE'
   }
 };
 
 // Category count per line
 let lineCategoryCounts = {
-  1: 4
+  1: 5
 };
 
 function getColor(categoryName, position) {
@@ -48,14 +49,14 @@ function getColor(categoryName, position) {
     return userColors[categoryName];
   }
 
-  const categoriesPerLine = 4;
+  const categoriesPerLine = 5;
   const lineNumber = Math.floor(position / categoriesPerLine) + 1;
   const positionInLine = position % categoriesPerLine;
 
   if (!linePositionColors[lineNumber]) linePositionColors[lineNumber] = {};
   if (!lineCategoryCounts[lineNumber]) lineCategoryCounts[lineNumber] = 0;
 
-  // ✅ Only assign base color if it hasn't been set yet
+  // Lock row master color on first assignment only
   if (positionInLine === 0 && !lineBaseColorAssignments[lineNumber]) {
     const usedBaseColors = Object.values(lineBaseColorAssignments);
     const availableColors = lineBaseColors.filter(
