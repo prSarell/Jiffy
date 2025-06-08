@@ -1,7 +1,4 @@
-<!--
-  File: /jiffy/pages/categories/userCategoryView/index.html
-  Update: Switched to black background with white text. Prompts now import from promptManagement.js. Back arrow fixed.
--->
+<!-- Path: /jiffy/pages/categories/userCategoryView/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,175 +15,35 @@
       background-color: #000000;
       color: #FFFFFF;
     }
-
-    #category-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 20px;
-      background-color: #000000;
-      border-bottom: 1px solid #333333;
-      font-size: 16px;
-      font-weight: bold;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 10;
-    }
-
-    #back-arrow {
-      cursor: pointer;
-      font-size: 20px;
-    }
-
-   #category-title {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-weight: bold;
-}
-
-    #category-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background-color: blue;
-    }
-
-    #global-prompts {
-      position: fixed;
-      top: 56px;
-      width: 100%;
-      background: #1a1a1a;
-      text-align: center;
-      padding: 10px;
-      font-size: 14px;
-      z-index: 9;
-      color: #FFFFFF;
-    }
-
-    .tab-content {
-      display: none;
-      padding: 20px;
-      margin-top: 110px;
-      margin-bottom: 60px;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    .tab-nav {
-      display: flex;
-      justify-content: space-around;
-      background-color: #111111;
-      border-top: 1px solid #333333;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-    }
-
-    .tab-nav button {
-      flex: 1;
-      padding: 12px 0;
-      border: none;
-      background: none;
-      font-weight: bold;
-      cursor: pointer;
-      color: #FFFFFF;
-    }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <div id="category-header">
-    <span id="back-arrow">←</span>
-    <span id="category-title">[Category]</span>
-    <span id="category-dot"></span>
+  <!-- Header -->
+  <div id="category-header" style="display: flex; justify-content: center; align-items: center; position: relative; padding: 14px 20px; background-color: #000000; border-bottom: 1px solid #333333; font-size: 16px; font-weight: bold;">
+    <!-- Back Button -->
+    <div onclick="window.history.back()" style="position: absolute; left: 20px; cursor: pointer;">←</div>
+
+    <!-- Centered Title -->
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <div id="category-dot" style="width: 10px; height: 10px; border-radius: 50%; background-color: white;"></div>
+      <div id="category-title">Category</div>
+    </div>
   </div>
 
-  <!-- GLOBAL PROMPTS -->
-  <div id="global-prompts">[Prompt goes here]</div>
-
-  <!-- TAB CONTENT -->
-  <div id="tab-tasks" class="tab-content active">
-    <h2>Task List</h2>
-    <p>(Placeholder for task checklist)</p>
+  <!-- Page Tabs (Tasks, Time, Notes, Summary) -->
+  <div id="category-tabs" style="display: flex; justify-content: space-around; margin-top: 60px; padding: 10px 0; border-bottom: 1px solid #444;">
+    <button class="category-tab" data-tab="tasks">Tasks</button>
+    <button class="category-tab" data-tab="time">Time</button>
+    <button class="category-tab" data-tab="notes">Notes</button>
+    <button class="category-tab" data-tab="summary">Summary</button>
   </div>
 
-  <div id="tab-time" class="tab-content">
-    <h2>Time Tracker</h2>
-    <p>(Placeholder for timer and log)</p>
+  <!-- Main Content -->
+  <div id="category-content" style="padding: 20px;">
+    <!-- Tab content will be loaded here dynamically -->
   </div>
 
-  <div id="tab-notes" class="tab-content">
-    <h2>Notes</h2>
-    <p>(Placeholder for notes)</p>
-  </div>
-
-  <div id="tab-summary" class="tab-content">
-    <h2>Summary</h2>
-    <p>(Placeholder for summary stats)</p>
-  </div>
-
-  <!-- NAVIGATION -->
-  <div class="tab-nav">
-    <button onclick="switchTab('tasks')">Tasks</button>
-    <button onclick="switchTab('time')">Time</button>
-    <button onclick="switchTab('notes')">Notes</button>
-    <button onclick="switchTab('summary')">Summary</button>
-  </div>
-
-  <script type="module">
-    import { getPrompts } from '/jiffy/pages/prompts/promptManagement.js';
-
-    window.switchTab = function(name) {
-      document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      document.getElementById(`tab-${name}`).classList.add('active');
-    }
-
-    window.goBack = function() {
-      window.location.href = "/jiffy/pages/home/index.html";
-    }
-
-    function loadCategoryHeader() {
-  const name = localStorage.getItem('activeCategory');
-  const title = document.getElementById('category-title');
-  const dot = document.getElementById('category-dot');
-
-  if (name) {
-    title.textContent = name;
-    const color = localStorage.getItem(`categoryColor-${name}`);
-    if (color) {
-      dot.style.backgroundColor = color;
-      title.style.color = color; // <- new line here
-    }
-  } else {
-    title.textContent = "Category";
-  }
-}
-    function loadPrompts() {
-      const promptArea = document.getElementById('global-prompts');
-      const prompts = getPrompts();
-      if (!prompts || !prompts.length) return;
-
-      let index = 0;
-      promptArea.textContent = prompts[index].text;
-
-      setInterval(() => {
-        index = (index + 1) % prompts.length;
-        promptArea.textContent = prompts[index].text;
-      }, 5000);
-    }
-
-document.addEventListener('DOMContentLoaded', () => {
-  loadPrompts();
-  loadCategoryHeader();
-  document.getElementById('back-arrow').addEventListener('click', goBack);
-});
-  </script>
+  <script type="module" src="./scripts.js"></script>
 </body>
 </html>
