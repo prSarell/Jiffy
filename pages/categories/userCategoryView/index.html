@@ -180,10 +180,11 @@
       }, 5000);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      loadPrompts();
-      loadCategoryHeader();
-    });
+document.addEventListener('DOMContentLoaded', () => {
+  loadPrompts();
+  loadCategoryHeader();
+  document.getElementById('back-arrow').addEventListener('click', goBack);
+});
   </script>
 </body>
 </html>
