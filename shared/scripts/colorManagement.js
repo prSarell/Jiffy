@@ -13,11 +13,11 @@ const lineBaseColors = [
 
 // Monochrome variations for each base color
 const monochromeVariations = {
-  '#1E3A8A': ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'], // Blue
-  '#15803D': ['#15803D', '#16A34A', '#22C55E', '#4ADE80'], // Green
-  '#B91C1C': ['#B91C1C', '#DC2626', '#F87171', '#FCA5A5'], // Red
-  '#6B21A8': ['#6B21A8', '#9333EA', '#C084FC', '#D8B4FE'], // Purple
-  '#EA580C': ['#EA580C', '#F97316', '#FB923C', '#FDBA74']  // Orange
+  '#1E3A8A': ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD'],
+  '#15803D': ['#15803D', '#16A34A', '#22C55E', '#4ADE80'],
+  '#B91C1C': ['#B91C1C', '#DC2626', '#F87171', '#FCA5A5'],
+  '#6B21A8': ['#6B21A8', '#9333EA', '#C084FC', '#D8B4FE'],
+  '#EA580C': ['#EA580C', '#F97316', '#FB923C', '#FDBA74']
 };
 
 // User-assigned colors (from localStorage)
@@ -52,12 +52,11 @@ function getColor(categoryName, position) {
   const lineNumber = Math.floor(position / categoriesPerLine) + 1;
   const positionInLine = position % categoriesPerLine;
 
-  // Initialize storage
   if (!linePositionColors[lineNumber]) linePositionColors[lineNumber] = {};
   if (!lineCategoryCounts[lineNumber]) lineCategoryCounts[lineNumber] = 0;
 
-  // Strict rule: first category in line sets the base color
-  if (positionInLine === 0) {
+  // ✅ Only assign base color if it hasn't been set yet
+  if (positionInLine === 0 && !lineBaseColorAssignments[lineNumber]) {
     const usedBaseColors = Object.values(lineBaseColorAssignments);
     const availableColors = lineBaseColors.filter(
       base => !usedBaseColors.includes(base)
