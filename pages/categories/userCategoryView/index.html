@@ -15,6 +15,26 @@
       background-color: #000000;
       color: #FFFFFF;
     }
+
+    #timer-display {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .timer-button {
+      margin: 5px;
+      padding: 10px 16px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      background-color: #444;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .timer-button:hover {
+      background-color: #666;
+    }
   </style>
 </head>
 <body>
@@ -31,7 +51,7 @@
   <!-- Prompt Display -->
   <div id="category-prompt-container" style="text-align: center; font-size: 16px; margin: 20px;"></div>
 
-  <!-- Page Tabs (Tasks, Time, Notes, Summary) -->
+  <!-- Page Tabs -->
   <div id="category-tabs" style="display: flex; justify-content: space-around; margin-top: 20px; padding: 10px 0; border-bottom: 1px solid #444;">
     <button class="category-tab" data-tab="tasks">Tasks</button>
     <button class="category-tab" data-tab="time">Time</button>
@@ -39,11 +59,78 @@
     <button class="category-tab" data-tab="summary">Summary</button>
   </div>
 
-  <!-- Main Content -->
+  <!-- Main Content Area -->
   <div id="category-content" style="padding: 20px;">
-    <!-- Tab content will be loaded here dynamically -->
+    <!-- Tab content will load here -->
   </div>
 
-  <script type="module" src="./scripts.js"></script>
+  <script type="module">
+    // Handle title from localStorage
+    const name = localStorage.getItem('activeCategory');
+    const title = document.getElementById('category-title');
+    if (name) {
+      title.textContent = name;
+    }
+
+    // Tab Switching Logic
+    document.querySelectorAll('.category-tab').forEach(button => {
+      button.addEventListener('click', () => {
+        const tab = button.dataset.tab;
+        switch (tab) {
+          case 'time':
+            loadTimeTab();
+            break;
+          default:
+            document.getElementById('category-content').innerHTML = `<div style="text-align: center; font-size: 14px;">${tab.toUpperCase()} content coming soon.</div>`;
+        }
+      });
+    });
+
+    // Timer Tab Logic
+    function loadTimeTab() {
+      const container = document.getElementById('category-content');
+      container.innerHTML = `
+        <div style="text-align: center;">
+          <div id="timer-display">00:00</div>
+          <button class="timer-button" id="start-timer">Start</button>
+          <button class="timer-button" id="pause-timer">Pause</button>
+          <button class="timer-button" id="reset-timer">Reset</button>
+        </div>
+      `;
+
+      let timer = null;
+      let seconds = 0;
+
+      function updateDisplay() {
+        const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+        const secs = String(seconds % 60).padStart(2, '0');
+        document.getElementById('timer-display').textContent = `${mins}:${secs}`;
+      }
+
+      document.getElementById('start-timer').onclick = () => {
+        if (timer === null) {
+          timer = setInterval(() => {
+            seconds++;
+            updateDisplay();
+          }, 1000);
+        }
+      };
+
+      document.getElementById('pause-timer').onclick = () => {
+        clearInterval(timer);
+        timer = null;
+      };
+
+      document.getElementById('reset-timer').onclick = () => {
+        clearInterval(timer);
+        timer = null;
+        seconds = 0;
+        updateDisplay();
+      };
+
+      updateDisplay();
+    }
+  </script>
+
 </body>
 </html>
