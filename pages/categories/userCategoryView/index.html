@@ -97,9 +97,10 @@
       const container = document.getElementById('category-content');
       container.innerHTML = `
         <div id="timer-wrapper">
-          <svg class="timer-svg" width="200" height="200">
+          <svg class="timer-svg" width="200" height="200" viewBox="0 0 200 200">
             <circle cx="100" cy="100" r="90" stroke="#333" stroke-width="10" fill="none"/>
             <circle id="timer-arc" cx="100" cy="100" r="90" stroke="${categoryColor}" stroke-width="10" fill="none" stroke-dasharray="565.48" stroke-dashoffset="0" />
+            ${generateTickMarks(100, 100, 76, 82, 12)}
           </svg>
           <div id="time-display">60:00</div>
           <div class="timer-controls">
@@ -153,6 +154,20 @@
       };
 
       updateDisplay();
+    }
+
+    // Helper to generate 12 ticks like a clock face
+    function generateTickMarks(cx, cy, r1, r2, count) {
+      let lines = '';
+      for (let i = 0; i < count; i++) {
+        const angle = (i / count) * 2 * Math.PI;
+        const x1 = cx + r1 * Math.cos(angle);
+        const y1 = cy + r1 * Math.sin(angle);
+        const x2 = cx + r2 * Math.cos(angle);
+        const y2 = cy + r2 * Math.sin(angle);
+        lines += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#FFFFFF" stroke-width="2"/>`;
+      }
+      return lines;
     }
   </script>
 
