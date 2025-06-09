@@ -61,6 +61,17 @@
     .timer-controls span:hover {
       text-decoration: underline;
     }
+
+    #tasks-editor {
+      min-height: 300px;
+      padding: 16px;
+      background-color: #111;
+      border: 1px solid #333;
+      border-radius: 6px;
+      font-size: 14px;
+      line-height: 1.5;
+      outline: none;
+    }
   </style>
 </head>
 <body>
@@ -94,10 +105,23 @@
     document.querySelectorAll('.category-tab').forEach(button => {
       button.addEventListener('click', () => {
         const tab = button.dataset.tab;
-        if (tab === 'time') loadTimeTab();
+        if (tab === 'tasks') loadTasksTab();
+        else if (tab === 'time') loadTimeTab();
         else document.getElementById('category-content').innerHTML = `<div style="text-align: center;">${tab.toUpperCase()} content coming soon.</div>`;
       });
     });
+
+    function loadTasksTab() {
+      const container = document.getElementById('category-content');
+      const saved = localStorage.getItem('tasks-' + name) || '';
+      container.innerHTML = `
+        <div id="tasks-editor" contenteditable="true">${saved}</div>
+      `;
+      const editor = document.getElementById('tasks-editor');
+      editor.addEventListener('input', () => {
+        localStorage.setItem('tasks-' + name, editor.innerHTML);
+      });
+    }
 
     function loadTimeTab() {
       const container = document.getElementById('category-content');
@@ -187,6 +211,12 @@
       document.getElementById('reset-timer').onclick = () => {
         clearInterval(timer);
         timer = null;
+
+        if (currentSeconds < targetSeconds) {
+          // You can hook this to the Rewards system later
+          alert("🎉 You beat the clock! Reward triggered.");
+        }
+
         currentSeconds = 0;
         targetSeconds = 0;
         updateVisuals();
@@ -196,6 +226,5 @@
       updateVisuals();
     }
   </script>
-
 </body>
 </html>
