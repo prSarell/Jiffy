@@ -27,7 +27,6 @@
     }
 
     .timer-button {
-      margin: 10px 5px;
       padding: 10px 16px;
       font-size: 16px;
       border: none;
@@ -39,6 +38,13 @@
 
     .timer-button:hover {
       background-color: #666;
+    }
+
+    .timer-button.small {
+      padding: 6px 10px;
+      font-size: 14px;
+      min-width: 40px;
+      height: 36px;
     }
 
     #time-display {
@@ -99,10 +105,10 @@
             <circle id="timer-arc" cx="100" cy="100" r="90" stroke="${categoryColor}" stroke-width="10" fill="none" stroke-dasharray="565.48" stroke-dashoffset="0" />
           </svg>
           <div id="time-display">60:00</div>
-          <div>
-            <button class="timer-button" id="start-timer">Start</button>
-            <button class="timer-button" id="pause-timer">Pause</button>
-            <button class="timer-button" id="reset-timer">Reset</button>
+          <div style="display: flex; gap: 8px; justify-content: center; margin-top: 20px;">
+            <button class="timer-button small" id="start-timer">▶</button>
+            <button class="timer-button small" id="pause-timer">⏸</button>
+            <button class="timer-button small" id="reset-timer">⟳</button>
           </div>
         </div>
       `;
