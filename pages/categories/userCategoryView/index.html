@@ -65,12 +65,20 @@
     #tasks-editor {
       min-height: 300px;
       padding: 16px;
-      background-color: #111;
-      border: 1px solid #333;
-      border-radius: 6px;
       font-size: 14px;
       line-height: 1.5;
       outline: none;
+      color: #FFFFFF;
+      position: relative;
+    }
+
+    #tasks-editor.empty::before {
+      content: attr(data-placeholder);
+      color: #666666;
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -115,12 +123,27 @@
       const container = document.getElementById('category-content');
       const saved = localStorage.getItem('tasks-' + name) || '';
       container.innerHTML = `
-        <div id="tasks-editor" contenteditable="true">${saved}</div>
+        <div id="tasks-editor"
+             class="${saved.trim() ? '' : 'empty'}"
+             contenteditable="true"
+             data-placeholder="Your tasks here...">${saved}</div>
       `;
       const editor = document.getElementById('tasks-editor');
+
+      function updatePlaceholderState() {
+        if (editor.innerText.trim()) {
+          editor.classList.remove('empty');
+        } else {
+          editor.classList.add('empty');
+        }
+      }
+
       editor.addEventListener('input', () => {
         localStorage.setItem('tasks-' + name, editor.innerHTML);
+        updatePlaceholderState();
       });
+
+      updatePlaceholderState();
     }
 
     function loadTimeTab() {
@@ -213,7 +236,6 @@
         timer = null;
 
         if (currentSeconds < targetSeconds) {
-          // You can hook this to the Rewards system later
           alert("🎉 You beat the clock! Reward triggered.");
         }
 
