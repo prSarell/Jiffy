@@ -17,6 +17,20 @@
       touch-action: none;
     }
 
+    /* Tabs and Timer Controls */
+    .category-tab, .timer-controls span {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 16px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .category-tab:hover, .timer-controls span:hover {
+      text-decoration: underline;
+    }
+
     #timer-wrapper {
       display: flex;
       flex-direction: column;
@@ -50,16 +64,6 @@
       gap: 24px;
       margin-top: 30px;
       font-size: 16px;
-    }
-
-    .timer-controls span {
-      cursor: pointer;
-      color: white;
-      user-select: none;
-    }
-
-    .timer-controls span:hover {
-      text-decoration: underline;
     }
 
     #tasks-editor {
@@ -148,6 +152,10 @@
 
     function loadTimeTab() {
       const container = document.getElementById('category-content');
+      let targetSeconds = parseInt(localStorage.getItem('timerTarget-' + name)) || 0;
+      let currentSeconds = 0;
+      let timer = null;
+
       container.innerHTML = `
         <div id="timer-wrapper">
           <svg class="timer-svg" width="200" height="200" viewBox="0 0 200 200">
@@ -162,10 +170,6 @@
           <span id="reset-timer">Complete</span>
         </div>
       `;
-
-      let currentSeconds = 0;
-      let targetSeconds = 0;
-      let timer = null;
 
       const arc = document.getElementById('timer-arc');
       const display = document.getElementById('time-display');
@@ -197,11 +201,14 @@
         display.style.opacity = enable ? "1" : "0.7";
       }
 
+      display.textContent = formatTime(currentSeconds);
+
       display.addEventListener('blur', () => {
         const parsed = parseTime(display.textContent);
         if (parsed !== null) {
           currentSeconds = 0;
           targetSeconds = parsed;
+          localStorage.setItem('timerTarget-' + name, targetSeconds);
           updateVisuals();
         } else {
           display.textContent = formatTime(currentSeconds);
@@ -241,12 +248,16 @@
 
         currentSeconds = 0;
         targetSeconds = 0;
+        localStorage.removeItem('timerTarget-' + name);
         updateVisuals();
         enableEditing(true);
       };
 
       updateVisuals();
     }
+
+    // Load Tasks tab by default
+    loadTasksTab();
   </script>
 </body>
 </html>
