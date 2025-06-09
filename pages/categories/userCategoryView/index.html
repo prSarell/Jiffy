@@ -116,8 +116,8 @@
         </div>
       `;
 
-      const maxSeconds = 60 * 60;
-      let remainingSeconds = 0;
+      let currentSeconds = 0;
+      let targetSeconds = 0;
       let timer = null;
 
       const arc = document.getElementById('timer-arc');
@@ -130,18 +130,18 @@
         return `${hrs}:${mins}:${secs}`;
       }
 
-      function updateVisuals() {
-        display.textContent = formatTime(remainingSeconds);
-        const progress = 565.48 * (remainingSeconds / maxSeconds);
-        arc.setAttribute('stroke-dashoffset', 565.48 - progress);
-      }
-
       function parseTime(text) {
         const match = text.trim().match(/^(\d{1,2}):(\d{2}):(\d{2})$/);
         if (!match) return null;
         const [_, h, m, s] = match;
-        const total = parseInt(h) * 3600 + parseInt(m) * 60 + parseInt(s);
-        return Math.min(maxSeconds, Math.max(0, total));
+        return parseInt(h) * 3600 + parseInt(m) * 60 + parseInt(s);
+      }
+
+      function updateVisuals() {
+        display.textContent = formatTime(currentSeconds);
+        let fillRatio = targetSeconds > 0 ? Math.min(currentSeconds / targetSeconds, 1) : 0;
+        const progress = 565.48 * fillRatio;
+        arc.setAttribute('stroke-dashoffset', 565.48 - progress);
       }
 
       function enableEditing(enable) {
@@ -153,10 +153,11 @@
       display.addEventListener('blur', () => {
         const parsed = parseTime(display.textContent);
         if (parsed !== null) {
-          remainingSeconds = parsed;
+          currentSeconds = 0;
+          targetSeconds = parsed;
           updateVisuals();
         } else {
-          display.textContent = formatTime(remainingSeconds); // revert invalid
+          display.textContent = formatTime(currentSeconds);
         }
       });
 
@@ -168,17 +169,11 @@
       });
 
       document.getElementById('start-timer').onclick = () => {
-        if (!timer && remainingSeconds > 0) {
+        if (!timer) {
           enableEditing(false);
           timer = setInterval(() => {
-            if (remainingSeconds > 0) {
-              remainingSeconds--;
-              updateVisuals();
-            } else {
-              clearInterval(timer);
-              timer = null;
-              enableEditing(true);
-            }
+            currentSeconds++;
+            updateVisuals();
           }, 1000);
         }
       };
@@ -192,7 +187,8 @@
       document.getElementById('reset-timer').onclick = () => {
         clearInterval(timer);
         timer = null;
-        remainingSeconds = 0;
+        currentSeconds = 0;
+        targetSeconds = 0;
         updateVisuals();
         enableEditing(true);
       };
