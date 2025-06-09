@@ -16,13 +16,18 @@
       color: #FFFFFF;
     }
 
-    #timer-display {
-      font-size: 48px;
-      margin-bottom: 20px;
+    #timer-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .timer-svg {
+      transform: rotate(-90deg);
     }
 
     .timer-button {
-      margin: 5px;
+      margin: 10px 5px;
       padding: 10px 16px;
       font-size: 16px;
       border: none;
@@ -35,16 +40,20 @@
     .timer-button:hover {
       background-color: #666;
     }
+
+    #time-display {
+      font-size: 36px;
+      margin-top: -180px;
+      text-align: center;
+      position: absolute;
+    }
   </style>
 </head>
 <body>
 
   <!-- Header -->
   <div id="category-header" style="display: flex; justify-content: center; align-items: center; position: relative; padding: 14px 20px; background-color: #000000; border-bottom: 1px solid #333333; font-size: 16px; font-weight: bold;">
-    <!-- Back Button -->
     <div onclick="window.history.back()" style="position: absolute; left: 20px; cursor: pointer;">←</div>
-
-    <!-- Centered Title -->
     <div id="category-title">Category</div>
   </div>
 
@@ -60,58 +69,70 @@
   </div>
 
   <!-- Main Content Area -->
-  <div id="category-content" style="padding: 20px;">
+  <div id="category-content" style="padding: 20px; position: relative;">
     <!-- Tab content will load here -->
   </div>
 
   <script type="module">
-    // Handle title from localStorage
     const name = localStorage.getItem('activeCategory');
     const title = document.getElementById('category-title');
-    if (name) {
-      title.textContent = name;
-    }
+    const categoryColor = localStorage.getItem('categoryColor-' + name) || '#FF00FF';
+    if (name) title.textContent = name;
 
-    // Tab Switching Logic
     document.querySelectorAll('.category-tab').forEach(button => {
       button.addEventListener('click', () => {
         const tab = button.dataset.tab;
         switch (tab) {
-          case 'time':
-            loadTimeTab();
-            break;
+          case 'time': loadTimeTab(); break;
           default:
             document.getElementById('category-content').innerHTML = `<div style="text-align: center; font-size: 14px;">${tab.toUpperCase()} content coming soon.</div>`;
         }
       });
     });
 
-    // Timer Tab Logic
     function loadTimeTab() {
       const container = document.getElementById('category-content');
       container.innerHTML = `
-        <div style="text-align: center;">
-          <div id="timer-display">00:00</div>
-          <button class="timer-button" id="start-timer">Start</button>
-          <button class="timer-button" id="pause-timer">Pause</button>
-          <button class="timer-button" id="reset-timer">Reset</button>
+        <div id="timer-wrapper">
+          <svg class="timer-svg" width="200" height="200">
+            <circle cx="100" cy="100" r="90" stroke="#333" stroke-width="10" fill="none"/>
+            <circle id="timer-arc" cx="100" cy="100" r="90" stroke="${categoryColor}" stroke-width="10" fill="none" stroke-dasharray="565.48" stroke-dashoffset="0" />
+          </svg>
+          <div id="time-display">60:00</div>
+          <div>
+            <button class="timer-button" id="start-timer">Start</button>
+            <button class="timer-button" id="pause-timer">Pause</button>
+            <button class="timer-button" id="reset-timer">Reset</button>
+          </div>
         </div>
       `;
 
+      const maxSeconds = 60 * 60; // 1 hour
+      let remainingSeconds = maxSeconds;
       let timer = null;
-      let seconds = 0;
+
+      const arc = document.getElementById('timer-arc');
+      const display = document.getElementById('time-display');
 
       function updateDisplay() {
-        const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
-        const secs = String(seconds % 60).padStart(2, '0');
-        document.getElementById('timer-display').textContent = `${mins}:${secs}`;
+        const mins = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
+        const secs = String(remainingSeconds % 60).padStart(2, '0');
+        display.textContent = `${mins}:${secs}`;
+
+        const progress = 565.48 * (remainingSeconds / maxSeconds);
+        arc.setAttribute('stroke-dashoffset', 565.48 - progress);
       }
 
       document.getElementById('start-timer').onclick = () => {
-        if (timer === null) {
+        if (!timer && remainingSeconds > 0) {
           timer = setInterval(() => {
-            seconds++;
-            updateDisplay();
+            if (remainingSeconds > 0) {
+              remainingSeconds--;
+              updateDisplay();
+            } else {
+              clearInterval(timer);
+              timer = null;
+            }
           }, 1000);
         }
       };
@@ -124,7 +145,7 @@
       document.getElementById('reset-timer').onclick = () => {
         clearInterval(timer);
         timer = null;
-        seconds = 0;
+        remainingSeconds = maxSeconds;
         updateDisplay();
       };
 
