@@ -20,6 +20,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
     }
 
     .timer-svg {
@@ -29,10 +33,13 @@
     #time-display {
       font-size: 24px;
       font-variant-numeric: tabular-nums;
-      text-align: center;
       position: absolute;
-      margin-top: -180px;
-      width: 100%;
+      top: 85px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      z-index: 1;
+      pointer-events: none;
     }
 
     .timer-controls {
@@ -105,11 +112,11 @@
             ${generateTickMarks(100, 100, 76, 82, 12)}
           </svg>
           <div id="time-display">01:00:00</div>
-          <div class="timer-controls">
-            <span id="start-timer">Play</span>
-            <span id="pause-timer">Pause</span>
-            <span id="reset-timer">Reset</span>
-          </div>
+        </div>
+        <div class="timer-controls">
+          <span id="start-timer">Play</span>
+          <span id="pause-timer">Pause</span>
+          <span id="reset-timer">Reset</span>
         </div>
       `;
 
