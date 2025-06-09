@@ -28,8 +28,11 @@
     <div id="category-title">Category</div>
   </div>
 
+  <!-- Prompt Display -->
+  <div id="category-prompt-container" style="text-align: center; font-size: 16px; margin: 20px;"></div>
+
   <!-- Page Tabs (Tasks, Time, Notes, Summary) -->
-  <div id="category-tabs" style="display: flex; justify-content: space-around; margin-top: 60px; padding: 10px 0; border-bottom: 1px solid #444;">
+  <div id="category-tabs" style="display: flex; justify-content: space-around; margin-top: 20px; padding: 10px 0; border-bottom: 1px solid #444;">
     <button class="category-tab" data-tab="tasks">Tasks</button>
     <button class="category-tab" data-tab="time">Time</button>
     <button class="category-tab" data-tab="notes">Notes</button>
@@ -41,14 +44,6 @@
     <!-- Tab content will be loaded here dynamically -->
   </div>
 
-  <!-- Script -->
   <script type="module" src="./scripts.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const name = localStorage.getItem('activeCategory');
-      const title = document.getElementById('category-title');
-      title.textContent = name || 'Category';
-    });
-  </script>
 </body>
 </html>
