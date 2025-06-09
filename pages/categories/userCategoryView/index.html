@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>Category Workspace</title>
   <link rel="stylesheet" href="/jiffy/shared/styles.css" />
   <link rel="stylesheet" href="styles.css" />
@@ -14,6 +14,7 @@
       padding: 0;
       background-color: #000000;
       color: #FFFFFF;
+      touch-action: none;
     }
 
     #timer-wrapper {
@@ -39,7 +40,8 @@
       right: 0;
       text-align: center;
       z-index: 1;
-      pointer-events: none;
+      pointer-events: auto;
+      outline: none;
     }
 
     .timer-controls {
@@ -81,9 +83,7 @@
   </div>
 
   <!-- Main Content Area -->
-  <div id="category-content" style="padding: 20px; position: relative;">
-    <!-- Tab content will load here -->
-  </div>
+  <div id="category-content" style="padding: 20px; position: relative;"></div>
 
   <script type="module">
     const name = localStorage.getItem('activeCategory');
@@ -94,11 +94,8 @@
     document.querySelectorAll('.category-tab').forEach(button => {
       button.addEventListener('click', () => {
         const tab = button.dataset.tab;
-        switch (tab) {
-          case 'time': loadTimeTab(); break;
-          default:
-            document.getElementById('category-content').innerHTML = `<div style="text-align: center; font-size: 14px;">${tab.toUpperCase()} content coming soon.</div>`;
-        }
+        if (tab === 'time') loadTimeTab();
+        else document.getElementById('category-content').innerHTML = `<div style="text-align: center;">${tab.toUpperCase()} content coming soon.</div>`;
       });
     });
 
@@ -108,10 +105,9 @@
         <div id="timer-wrapper">
           <svg class="timer-svg" width="200" height="200" viewBox="0 0 200 200">
             <circle cx="100" cy="100" r="90" stroke="#333" stroke-width="10" fill="none"/>
-            <circle id="timer-arc" cx="100" cy="100" r="90" stroke="${categoryColor}" stroke-width="10" fill="none" stroke-dasharray="565.48" stroke-dashoffset="0" />
-            ${generateTickMarks(100, 100, 76, 82, 12)}
+            <circle id="timer-arc" cx="100" cy="100" r="90" stroke="${categoryColor}" stroke-width="10" fill="none" stroke-dasharray="565.48" stroke-dashoffset="565.48" />
           </svg>
-          <div id="time-display">01:00:00</div>
+          <span id="time-display" contenteditable="true">00:00:00</span>
         </div>
         <div class="timer-controls">
           <span id="start-timer">Play</span>
@@ -120,8 +116,8 @@
         </div>
       `;
 
-      const maxSeconds = 60 * 60; // 1 hour
-      let remainingSeconds = maxSeconds;
+      const maxSeconds = 60 * 60;
+      let remainingSeconds = 0;
       let timer = null;
 
       const arc = document.getElementById('timer-arc');
@@ -134,21 +130,54 @@
         return `${hrs}:${mins}:${secs}`;
       }
 
-      function updateDisplay() {
+      function updateVisuals() {
         display.textContent = formatTime(remainingSeconds);
         const progress = 565.48 * (remainingSeconds / maxSeconds);
         arc.setAttribute('stroke-dashoffset', 565.48 - progress);
       }
 
+      function parseTime(text) {
+        const match = text.trim().match(/^(\d{1,2}):(\d{2}):(\d{2})$/);
+        if (!match) return null;
+        const [_, h, m, s] = match;
+        const total = parseInt(h) * 3600 + parseInt(m) * 60 + parseInt(s);
+        return Math.min(maxSeconds, Math.max(0, total));
+      }
+
+      function enableEditing(enable) {
+        display.contentEditable = enable;
+        display.style.pointerEvents = enable ? "auto" : "none";
+        display.style.opacity = enable ? "1" : "0.7";
+      }
+
+      display.addEventListener('blur', () => {
+        const parsed = parseTime(display.textContent);
+        if (parsed !== null) {
+          remainingSeconds = parsed;
+          updateVisuals();
+        } else {
+          display.textContent = formatTime(remainingSeconds); // revert invalid
+        }
+      });
+
+      display.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          display.blur();
+        }
+      });
+
       document.getElementById('start-timer').onclick = () => {
         if (!timer && remainingSeconds > 0) {
+          enableEditing(false);
           timer = setInterval(() => {
             if (remainingSeconds > 0) {
               remainingSeconds--;
-              updateDisplay();
+              updateVisuals();
             } else {
               clearInterval(timer);
               timer = null;
+              enableEditing(true);
             }
           }, 1000);
         }
@@ -157,29 +186,18 @@
       document.getElementById('pause-timer').onclick = () => {
         clearInterval(timer);
         timer = null;
+        enableEditing(true);
       };
 
       document.getElementById('reset-timer').onclick = () => {
         clearInterval(timer);
         timer = null;
-        remainingSeconds = maxSeconds;
-        updateDisplay();
+        remainingSeconds = 0;
+        updateVisuals();
+        enableEditing(true);
       };
 
-      updateDisplay();
-    }
-
-    function generateTickMarks(cx, cy, r1, r2, count) {
-      let lines = '';
-      for (let i = 0; i < count; i++) {
-        const angle = (i / count) * 2 * Math.PI;
-        const x1 = cx + r1 * Math.cos(angle);
-        const y1 = cy + r1 * Math.sin(angle);
-        const x2 = cx + r2 * Math.cos(angle);
-        const y2 = cy + r2 * Math.sin(angle);
-        lines += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#FFFFFF" stroke-width="2"/>`;
-      }
-      return lines;
+      updateVisuals();
     }
   </script>
 
