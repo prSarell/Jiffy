@@ -26,32 +26,29 @@
       transform: rotate(-90deg);
     }
 
-    .timer-button {
-      padding: 10px 16px;
-      font-size: 16px;
-      border: none;
-      border-radius: 4px;
-      background-color: #444;
-      color: #fff;
-      cursor: pointer;
-    }
-
-    .timer-button:hover {
-      background-color: #666;
-    }
-
-    .timer-button.small {
-      padding: 6px 10px;
-      font-size: 14px;
-      min-width: 40px;
-      height: 36px;
-    }
-
     #time-display {
       font-size: 36px;
       margin-top: -180px;
       text-align: center;
       position: absolute;
+    }
+
+    .timer-controls {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 30px;
+      font-size: 16px;
+    }
+
+    .timer-controls span {
+      cursor: pointer;
+      color: white;
+      user-select: none;
+    }
+
+    .timer-controls span:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -105,10 +102,10 @@
             <circle id="timer-arc" cx="100" cy="100" r="90" stroke="${categoryColor}" stroke-width="10" fill="none" stroke-dasharray="565.48" stroke-dashoffset="0" />
           </svg>
           <div id="time-display">60:00</div>
-          <div style="display: flex; gap: 8px; justify-content: center; margin-top: 20px;">
-            <button class="timer-button small" id="start-timer">▶</button>
-            <button class="timer-button small" id="pause-timer">⏸</button>
-            <button class="timer-button small" id="reset-timer">⟳</button>
+          <div class="timer-controls">
+            <span id="start-timer">Play</span>
+            <span id="pause-timer">Pause</span>
+            <span id="reset-timer">Reset</span>
           </div>
         </div>
       `;
