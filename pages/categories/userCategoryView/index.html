@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="styles.css" />
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       margin: 0; padding: 0;
       background: #000; color: #fff;
       touch-action: none;
@@ -29,17 +29,17 @@
       text-decoration: underline;
     }
 
-      #tasks-editor {
-    min-height: 500px;
-    padding: 24px;
-    max-width: 90vw;
-    margin: 0 auto;
-    font-size: 14px;
-    line-height: 1.5;
-    color: #FFFFFF;
-    position: relative;
-    outline: none;
-  }
+    #tasks-editor {
+      min-height: 500px;
+      padding: 24px;
+      max-width: 90vw;
+      margin: 0 auto;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #FFFFFF;
+      position: relative;
+      outline: none;
+    }
 
     #tasks-editor.empty::before {
       content: attr(data-placeholder);
@@ -111,150 +111,153 @@
   <div id="category-content" style="padding: 20px; position: relative;"></div>
 
   <script type="module">
-    const name = localStorage.getItem('activeCategory');
-    const title = document.getElementById('category-title');
-    const prompt = document.getElementById('category-prompt-container');
-    const categoryColor = localStorage.getItem('categoryColor-' + name) || '#FF00FF';
+    document.addEventListener('DOMContentLoaded', () => {
+      const name = localStorage.getItem('activeCategory');
+      const title = document.getElementById('category-title');
+      const prompt = document.getElementById('category-prompt-container');
+      const categoryColor = localStorage.getItem('categoryColor-' + name) || '#FF00FF';
 
-    if (name) title.textContent = name;
-    prompt.textContent = localStorage.getItem('categoryPrompt-' + name) || '';
+      if (name) title.textContent = name;
+      prompt.textContent = localStorage.getItem('categoryPrompt-' + name) || '';
 
-    document.querySelectorAll('.category-tab').forEach(button => {
-      button.addEventListener('click', () => {
-        const tab = button.dataset.tab;
-        if (tab === 'tasks') loadTasksTab();
-        else if (tab === 'time') loadTimeTab();
-        else document.getElementById('category-content').innerHTML = `<div style="text-align: center;">${tab.toUpperCase()} content coming soon.</div>`;
+      document.querySelectorAll('.category-tab').forEach(button => {
+        button.addEventListener('click', () => {
+          const tab = button.dataset.tab;
+          if (tab === 'tasks') loadTasksTab();
+          else if (tab === 'time') loadTimeTab();
+          else document.getElementById('category-content').innerHTML = 
+            '<div style="text-align: center;">' + tab.toUpperCase() + ' content coming soon.</div>';
+        });
       });
-    });
 
-    function loadTasksTab() {
-      const container = document.getElementById('category-content');
-      const saved = localStorage.getItem('tasks-' + name) || '';
-      container.innerHTML = `
-        <div id="tasks-editor"
-             class="${saved.trim() ? '' : 'empty'}"
-             contenteditable="true"
-             data-placeholder="Your tasks here...">${saved}</div>
-      `;
-      const editor = document.getElementById('tasks-editor');
+      function loadTasksTab() {
+        const container = document.getElementById('category-content');
+        const saved = localStorage.getItem('tasks-' + name) || '';
+        container.innerHTML = `
+          <div id="tasks-editor"
+               class="${saved.trim() ? '' : 'empty'}"
+               contenteditable="true"
+               data-placeholder="Your tasks here...">${saved}</div>
+        `;
+        const editor = document.getElementById('tasks-editor');
 
-      function updatePlaceholderState() {
-        if (editor.innerText.trim()) {
-          editor.classList.remove('empty');
-        } else {
-          editor.classList.add('empty');
+        function updatePlaceholderState() {
+          if (editor.innerText.trim()) {
+            editor.classList.remove('empty');
+          } else {
+            editor.classList.add('empty');
+          }
         }
-      }
 
-      editor.addEventListener('input', () => {
-        localStorage.setItem('tasks-' + name, editor.innerHTML);
+        editor.addEventListener('input', () => {
+          localStorage.setItem('tasks-' + name, editor.innerHTML);
+          updatePlaceholderState();
+        });
+
         updatePlaceholderState();
-      });
-
-      updatePlaceholderState();
-    }
-
-    function loadTimeTab() {
-      const container = document.getElementById('category-content');
-      let targetSeconds = parseInt(localStorage.getItem('timerTarget-' + name)) || 0;
-      let currentSeconds = 0;
-      let timer = null;
-
-      container.innerHTML = `
-        <div id="timer-wrapper">
-          <svg class="timer-svg" width="200" height="200" viewBox="0 0 200 200">
-            <circle cx="100" cy="100" r="90" stroke="#333" stroke-width="10" fill="none"/>
-            <circle id="timer-arc" cx="100" cy="100" r="90" stroke="${categoryColor}" stroke-width="10" fill="none" stroke-dasharray="565.48" stroke-dashoffset="565.48" />
-          </svg>
-          <span id="time-display" contenteditable="true">${formatTime(targetSeconds)}</span>
-        </div>
-        <div class="timer-controls">
-          <span id="start-timer">Start</span>
-          <span id="pause-timer">Pause</span>
-          <span id="reset-timer">Complete</span>
-        </div>
-      `;
-
-      const arc = document.getElementById('timer-arc');
-      const display = document.getElementById('time-display');
-
-      function formatTime(s) {
-        const hrs = String(Math.floor(s / 3600)).padStart(2, '0');
-        const mins = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
-        const secs = String(s % 60).padStart(2, '0');
-        return `${hrs}:${mins}:${secs}`;
       }
 
-      function parseTime(text) {
-        const match = text.trim().match(/^(\d{1,2}):(\d{2}):(\d{2})$/);
-        if (!match) return null;
-        const [_, h, m, s] = match;
-        return parseInt(h) * 3600 + parseInt(m) * 60 + parseInt(s);
-      }
+      function loadTimeTab() {
+        const container = document.getElementById('category-content');
+        let targetSeconds = parseInt(localStorage.getItem('timerTarget-' + name)) || 0;
+        let currentSeconds = 0;
+        let timer = null;
 
-      function updateArc() {
-        let fillRatio = targetSeconds > 0 ? Math.min(currentSeconds / targetSeconds, 1) : 0;
-        const progress = 565.48 * fillRatio;
-        arc.setAttribute('stroke-dashoffset', 565.48 - progress);
-      }
-
-      display.addEventListener('blur', () => {
-        const parsed = parseTime(display.textContent);
-        if (parsed !== null) {
-          currentSeconds = 0;
-          targetSeconds = parsed;
-          localStorage.setItem('timerTarget-' + name, targetSeconds);
-          display.textContent = formatTime(targetSeconds);
-          updateArc();
-        } else {
-          display.textContent = formatTime(targetSeconds);
+        function formatTime(s) {
+          const hrs = String(Math.floor(s / 3600)).padStart(2, '0');
+          const mins = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+          const secs = String(s % 60).padStart(2, '0');
+          return `${hrs}:${mins}:${secs}`;
         }
-      });
 
-      display.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          display.blur();
+        container.innerHTML = `
+          <div id="timer-wrapper">
+            <svg class="timer-svg" width="200" height="200" viewBox="0 0 200 200">
+              <circle cx="100" cy="100" r="90" stroke="#333" stroke-width="10" fill="none"/>
+              <circle id="timer-arc" cx="100" cy="100" r="90" stroke="${categoryColor}" stroke-width="10" fill="none" stroke-dasharray="565.48" stroke-dashoffset="565.48" />
+            </svg>
+            <span id="time-display" contenteditable="true">${formatTime(targetSeconds)}</span>
+          </div>
+          <div class="timer-controls">
+            <span id="start-timer">Start</span>
+            <span id="pause-timer">Pause</span>
+            <span id="reset-timer">Complete</span>
+          </div>
+        `;
+
+        const arc = document.getElementById('timer-arc');
+        const display = document.getElementById('time-display');
+
+        function parseTime(text) {
+          const match = text.trim().match(/^(\d{1,2}):(\d{2}):(\d{2})$/);
+          if (!match) return null;
+          const [_, h, m, s] = match;
+          return parseInt(h) * 3600 + parseInt(m) * 60 + parseInt(s);
         }
-      });
 
-      document.getElementById('start-timer').onclick = () => {
-        if (!timer) {
-          display.contentEditable = false;
-          timer = setInterval(() => {
-            currentSeconds++;
+        function updateArc() {
+          let fillRatio = targetSeconds > 0 ? Math.min(currentSeconds / targetSeconds, 1) : 0;
+          const progress = 565.48 * fillRatio;
+          arc.setAttribute('stroke-dashoffset', 565.48 - progress);
+        }
+
+        display.addEventListener('blur', () => {
+          const parsed = parseTime(display.textContent);
+          if (parsed !== null) {
+            currentSeconds = 0;
+            targetSeconds = parsed;
+            localStorage.setItem('timerTarget-' + name, targetSeconds);
+            display.textContent = formatTime(targetSeconds);
             updateArc();
-            display.textContent = formatTime(currentSeconds);
-          }, 1000);
-        }
-      };
+          } else {
+            display.textContent = formatTime(targetSeconds);
+          }
+        });
 
-      document.getElementById('pause-timer').onclick = () => {
-        clearInterval(timer);
-        timer = null;
-        display.contentEditable = true;
-      };
+        display.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            display.blur();
+          }
+        });
 
-      document.getElementById('reset-timer').onclick = () => {
-        clearInterval(timer);
-        timer = null;
-        if (currentSeconds < targetSeconds) {
-          alert("🎉 You beat the clock! Reward triggered.");
-        }
-        currentSeconds = 0;
-        targetSeconds = 0;
-        localStorage.removeItem('timerTarget-' + name);
-        display.textContent = formatTime(0);
+        document.getElementById('start-timer').onclick = () => {
+          if (!timer) {
+            display.contentEditable = false;
+            timer = setInterval(() => {
+              currentSeconds++;
+              updateArc();
+              display.textContent = formatTime(currentSeconds);
+            }, 1000);
+          }
+        };
+
+        document.getElementById('pause-timer').onclick = () => {
+          clearInterval(timer);
+          timer = null;
+          display.contentEditable = true;
+        };
+
+        document.getElementById('reset-timer').onclick = () => {
+          clearInterval(timer);
+          timer = null;
+          if (currentSeconds < targetSeconds) {
+            alert("🎉 You beat the clock! Reward triggered.");
+          }
+          currentSeconds = 0;
+          targetSeconds = 0;
+          localStorage.removeItem('timerTarget-' + name);
+          display.textContent = formatTime(0);
+          updateArc();
+          display.contentEditable = true;
+        };
+
         updateArc();
-        display.contentEditable = true;
-      };
+      }
 
-      updateArc();
-    }
-
-    // Load Tasks tab by default
-    loadTasksTab();
+      // Default to Tasks tab
+      loadTasksTab();
+    });
   </script>
 </body>
 </html>
