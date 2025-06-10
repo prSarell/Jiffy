@@ -14,184 +14,244 @@
       background: #000; color: #fff;
       touch-action: none;
     }
+
     .category-tab, .timer-controls span {
-      background: none; border: none;
-      color: white; font-size: 16px; cursor: pointer;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 16px;
+      font-family: inherit;
+      cursor: pointer;
     }
-    .category-tab:hover, .timer-controls span:hover {
+
+    .category-tab:hover,
+    .timer-controls span:hover {
       text-decoration: underline;
     }
-    #timer-wrapper {
-      position: relative; width:200px; height:200px;
-      margin: 0 auto; display:flex;
-      align-items:center; justify-content:center;
-    }
-    .timer-svg { transform: rotate(-90deg); }
-    #time-display {
-      position: absolute; top: 85px; left:0; right:0;
-      text-align:center; font-size:24px;
-      pointer-events: auto; outline:none;
-    }
-    .timer-controls {
-      display:flex; justify-content:center;
-      gap:24px; margin-top:30px;
-    }
+
     #tasks-editor {
-      min-height:300px; padding:16px;
-      font-size:14px; line-height:1.5;
-      color:#fff; position:relative; outline:none;
+      min-height: 300px;
+      padding: 16px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #FFFFFF;
+      position: relative;
+      outline: none;
     }
+
     #tasks-editor.empty::before {
       content: attr(data-placeholder);
-      color: #666; position:absolute; left:16px; top:16px;
-      pointer-events:none;
+      color: #666666;
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      pointer-events: none;
+    }
+
+    #timer-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+    }
+
+    .timer-svg {
+      transform: rotate(-90deg);
+    }
+
+    #time-display {
+      font-size: 24px;
+      font-variant-numeric: tabular-nums;
+      position: absolute;
+      top: 85px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      z-index: 1;
+      pointer-events: auto;
+      outline: none;
+    }
+
+    .timer-controls {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 30px;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
 
   <!-- Header -->
-  <div id="category-header" style="display:flex;justify-content:center;align-items:center;
-       position:relative;padding:14px 20px;background:#000;border-bottom:1px solid #333;font-size:16px;font-weight:bold;">
-    <div onclick="window.history.back()" style="position:absolute;left:20px;cursor:pointer;">←</div>
+  <div id="category-header" style="display: flex; justify-content: center; align-items: center;
+       position: relative; padding: 14px 20px; background-color: #000000; font-size: 16px; font-weight: bold;">
+    <div onclick="window.history.back()" style="position: absolute; left: 20px; cursor: pointer;">←</div>
     <div id="category-title">Category</div>
   </div>
 
-  <!-- Prompt -->
-  <div id="category-prompt-container" style="text-align:center;font-size:16px;margin:20px;"></div>
+  <!-- Prompt Display -->
+  <div id="category-prompt-container" style="text-align: center; font-size: 16px; margin: 20px;"></div>
 
-  <!-- Tabs -->
-  <div id="category-tabs" style="display:flex;justify-content:space-around;
-       margin-top:20px;padding:10px 0;border-bottom:1px solid #444;">
+  <!-- Page Tabs -->
+  <div id="category-tabs" style="display: flex; justify-content: space-around;
+       margin-top: 20px; padding: 10px 0;">
     <button class="category-tab" data-tab="tasks">Tasks</button>
     <button class="category-tab" data-tab="time">Time</button>
     <button class="category-tab" data-tab="notes">Notes</button>
     <button class="category-tab" data-tab="summary">Summary</button>
   </div>
 
-  <!-- Content -->
-  <div id="category-content" style="padding:20px;position:relative;"></div>
+  <!-- Main Content Area -->
+  <div id="category-content" style="padding: 20px; position: relative;"></div>
 
   <script type="module">
     const name = localStorage.getItem('activeCategory');
     const title = document.getElementById('category-title');
-    if (name) title.textContent = name;
+    const prompt = document.getElementById('category-prompt-container');
     const categoryColor = localStorage.getItem('categoryColor-' + name) || '#FF00FF';
 
-    document.querySelectorAll('.category-tab').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const tab = btn.dataset.tab;
+    if (name) title.textContent = name;
+    prompt.textContent = localStorage.getItem('categoryPrompt-' + name) || '';
+
+    document.querySelectorAll('.category-tab').forEach(button => {
+      button.addEventListener('click', () => {
+        const tab = button.dataset.tab;
         if (tab === 'tasks') loadTasksTab();
         else if (tab === 'time') loadTimeTab();
-        else document.getElementById('category-content').innerHTML =
-             `<div style="text-align:center;">${tab.toUpperCase()} content coming soon.</div>`;
+        else document.getElementById('category-content').innerHTML = `<div style="text-align: center;">${tab.toUpperCase()} content coming soon.</div>`;
       });
     });
 
     function loadTasksTab() {
-      const c = document.getElementById('category-content');
+      const container = document.getElementById('category-content');
       const saved = localStorage.getItem('tasks-' + name) || '';
-      c.innerHTML = `
-        <div id="tasks-editor" class="${saved.trim()?'':'empty'}"
-             contenteditable="true" data-placeholder="Your tasks here...">
-          ${saved}
-        </div>`;
-      const ed = document.getElementById('tasks-editor');
-      const updatePlace = () => ed.classList.toggle('empty', !ed.innerText.trim());
-      ed.addEventListener('input', () => {
-        localStorage.setItem('tasks-' + name, ed.innerHTML);
-        updatePlace();
+      container.innerHTML = `
+        <div id="tasks-editor"
+             class="${saved.trim() ? '' : 'empty'}"
+             contenteditable="true"
+             data-placeholder="Your tasks here...">${saved}</div>
+      `;
+      const editor = document.getElementById('tasks-editor');
+
+      function updatePlaceholderState() {
+        if (editor.innerText.trim()) {
+          editor.classList.remove('empty');
+        } else {
+          editor.classList.add('empty');
+        }
+      }
+
+      editor.addEventListener('input', () => {
+        localStorage.setItem('tasks-' + name, editor.innerHTML);
+        updatePlaceholderState();
       });
-      updatePlace();
+
+      updatePlaceholderState();
     }
 
     function loadTimeTab() {
-      const c = document.getElementById('category-content');
-      // restore target
+      const container = document.getElementById('category-content');
       let targetSeconds = parseInt(localStorage.getItem('timerTarget-' + name)) || 0;
-      let currentSeconds = 0, timer = null;
+      let currentSeconds = 0;
+      let timer = null;
 
-      c.innerHTML = `
+      container.innerHTML = `
         <div id="timer-wrapper">
           <svg class="timer-svg" width="200" height="200" viewBox="0 0 200 200">
             <circle cx="100" cy="100" r="90" stroke="#333" stroke-width="10" fill="none"/>
-            <circle id="timer-arc" cx="100" cy="100" r="90"
-                    stroke="${categoryColor}" stroke-width="10"
-                    fill="none" stroke-dasharray="565.48" stroke-dashoffset="565.48"/>
+            <circle id="timer-arc" cx="100" cy="100" r="90" stroke="${categoryColor}" stroke-width="10" fill="none" stroke-dasharray="565.48" stroke-dashoffset="565.48" />
           </svg>
-          <span id="time-display" contenteditable="true">00:00:00</span>
+          <span id="time-display" contenteditable="true">${formatTime(targetSeconds)}</span>
         </div>
         <div class="timer-controls">
           <span id="start-timer">Start</span>
           <span id="pause-timer">Pause</span>
           <span id="reset-timer">Complete</span>
-        </div>`;
+        </div>
+      `;
 
       const arc = document.getElementById('timer-arc');
-      const disp = document.getElementById('time-display');
+      const display = document.getElementById('time-display');
 
       function formatTime(s) {
-        const h = String(Math.floor(s/3600)).padStart(2,'0'),
-              m = String(Math.floor((s%3600)/60)).padStart(2,'0'),
-              s2= String(s%60).padStart(2,'0');
-        return `${h}:${m}:${s2}`;
+        const hrs = String(Math.floor(s / 3600)).padStart(2, '0');
+        const mins = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+        const secs = String(s % 60).padStart(2, '0');
+        return `${hrs}:${mins}:${secs}`;
       }
 
-      // show the stored target initially
-      disp.textContent = formatTime(targetSeconds);
+      function parseTime(text) {
+        const match = text.trim().match(/^(\d{1,2}):(\d{2}):(\d{2})$/);
+        if (!match) return null;
+        const [_, h, m, s] = match;
+        return parseInt(h) * 3600 + parseInt(m) * 60 + parseInt(s);
+      }
 
       function updateArc() {
-        const ratio = targetSeconds>0
-          ? Math.min(currentSeconds/targetSeconds,1)
-          : 0;
-        arc.setAttribute('stroke-dashoffset', 565.48 - 565.48*ratio);
+        let fillRatio = targetSeconds > 0 ? Math.min(currentSeconds / targetSeconds, 1) : 0;
+        const progress = 565.48 * fillRatio;
+        arc.setAttribute('stroke-dashoffset', 565.48 - progress);
       }
 
-      disp.addEventListener('blur', () => {
-        const val = disp.textContent.trim().match(/^(\d{1,2}):(\d{2}):(\d{2})$/);
-        if (val) {
-          targetSeconds = +val[1]*3600 + +val[2]*60 + +val[3];
-          localStorage.setItem('timerTarget-'+name, targetSeconds);
+      display.addEventListener('blur', () => {
+        const parsed = parseTime(display.textContent);
+        if (parsed !== null) {
           currentSeconds = 0;
-          disp.textContent = formatTime(targetSeconds);
+          targetSeconds = parsed;
+          localStorage.setItem('timerTarget-' + name, targetSeconds);
+          display.textContent = formatTime(targetSeconds);
           updateArc();
         } else {
-          disp.textContent = formatTime(targetSeconds);
+          display.textContent = formatTime(targetSeconds);
         }
       });
 
-      disp.addEventListener('keydown', e => {
-        if (e.key==='Enter'){ e.preventDefault(); disp.blur(); }
+      display.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          display.blur();
+        }
       });
 
       document.getElementById('start-timer').onclick = () => {
         if (!timer) {
-          disp.contentEditable = false;
-          timer = setInterval(()=>{
+          display.contentEditable = false;
+          timer = setInterval(() => {
             currentSeconds++;
             updateArc();
-            disp.textContent = formatTime(currentSeconds);
-          },1000);
+            display.textContent = formatTime(currentSeconds);
+          }, 1000);
         }
       };
+
       document.getElementById('pause-timer').onclick = () => {
-        clearInterval(timer); timer=null;
-        disp.contentEditable = true;
+        clearInterval(timer);
+        timer = null;
+        display.contentEditable = true;
       };
+
       document.getElementById('reset-timer').onclick = () => {
-        clearInterval(timer); timer=null;
-        if (currentSeconds < targetSeconds)
+        clearInterval(timer);
+        timer = null;
+        if (currentSeconds < targetSeconds) {
           alert("🎉 You beat the clock! Reward triggered.");
-        currentSeconds=0; targetSeconds=0;
-        localStorage.removeItem('timerTarget-'+name);
-        disp.textContent = formatTime(0);
+        }
+        currentSeconds = 0;
+        targetSeconds = 0;
+        localStorage.removeItem('timerTarget-' + name);
+        display.textContent = formatTime(0);
         updateArc();
-        disp.contentEditable = true;
+        display.contentEditable = true;
       };
+
       updateArc();
     }
 
-    // default
+    // Load Tasks tab by default
     loadTasksTab();
   </script>
 </body>
