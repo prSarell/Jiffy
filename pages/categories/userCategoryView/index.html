@@ -17,7 +17,6 @@
       touch-action: none;
     }
 
-    /* Tabs and Timer Controls */
     .category-tab, .timer-controls span {
       background: none;
       border: none;
@@ -162,7 +161,7 @@
             <circle cx="100" cy="100" r="90" stroke="#333" stroke-width="10" fill="none"/>
             <circle id="timer-arc" cx="100" cy="100" r="90" stroke="${categoryColor}" stroke-width="10" fill="none" stroke-dasharray="565.48" stroke-dashoffset="565.48" />
           </svg>
-          <span id="time-display" contenteditable="true">00:00:00</span>
+          <span id="time-display" contenteditable="true">${formatTime(targetSeconds)}</span>
         </div>
         <div class="timer-controls">
           <span id="start-timer">Start</span>
@@ -200,8 +199,6 @@
         display.style.pointerEvents = enable ? "auto" : "none";
         display.style.opacity = enable ? "1" : "0.7";
       }
-
-      display.textContent = formatTime(currentSeconds);
 
       display.addEventListener('blur', () => {
         const parsed = parseTime(display.textContent);
