@@ -29,26 +29,28 @@
       text-decoration: underline;
     }
 
-    #tasks-editor {
-      min-height: 500px;
-      padding: 24px;
-      max-width: 90vw;
-      margin: 0 auto;
-      font-size: 14px;
-      line-height: 1.5;
-      color: #FFFFFF;
-      position: relative;
-      outline: none;
-    }
-
-    #tasks-editor.empty::before {
-      content: attr(data-placeholder);
-      color: #666666;
-      position: absolute;
-      left: 16px;
-      top: 16px;
-      pointer-events: none;
-    }
+      #tasks-editor {
+    min-height: 80vh;
+    padding: 24px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #FFFFFF;
+    position: relative;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  #tasks-editor.empty::before {
+    content: attr(data-placeholder);
+    color: #666666;
+    position: absolute;
+    left: 24px;
+    top: 24px;
+    pointer-events: none;
+    font-size: 16px;
+    line-height: 1.6;
+  }
 
     #timer-wrapper {
       display: flex;
