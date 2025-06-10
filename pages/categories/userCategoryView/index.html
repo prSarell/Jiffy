@@ -29,9 +29,9 @@
       text-decoration: underline;
     }
 
-      #tasks-editor {
-    min-height: 80vh;
-    padding: 24px;
+     #tasks-editor {
+    min-height: calc(100vh - 220px); /* Adjusts to screen height minus header + tabs */
+    padding: 0 24px;
     font-size: 16px;
     line-height: 1.6;
     color: #FFFFFF;
@@ -39,6 +39,7 @@
     outline: none;
     width: 100%;
     box-sizing: border-box;
+    margin-top: 20px;
   }
   
   #tasks-editor.empty::before {
@@ -46,7 +47,7 @@
     color: #666666;
     position: absolute;
     left: 24px;
-    top: 24px;
+    top: 0;
     pointer-events: none;
     font-size: 16px;
     line-height: 1.6;
