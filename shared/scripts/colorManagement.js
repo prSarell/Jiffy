@@ -15,7 +15,8 @@ const monochromeVariations = {
   '#15803D': ['#15803D', '#16A34A', '#22C55E', '#4ADE80', '#BBF7D0'],
   '#B91C1C': ['#B91C1C', '#DC2626', '#F87171', '#FCA5A5', '#FECACA'],
   '#6B21A8': ['#6B21A8', '#9333EA', '#C084FC', '#D8B4FE', '#E9D5FF'],
-  '#EA580C': ['#EA580C', '#F97316', '#FB923C', '#FDBA74', '#FED7AA']
+  '#EA580C': ['#EA580C', '#F97316', '#FB923C', '#FDBA74', '#FED7AA'],
+  '#6B7280': ['#6B7280', '#9CA3AF', '#D1D5DB', '#E5E7EB', '#F3F4F6'] // fallback grey gradient
 };
 
 let userColors = JSON.parse(localStorage.getItem('userColors')) || {};
@@ -61,7 +62,7 @@ function getColor(categoryName, position, masterCategory = 'Home') {
 
     const newBaseColor = availableColors.length > 0
       ? availableColors[Math.floor(Math.random() * availableColors.length)]
-      : '#6B7280'; // fallback gray
+      : '#6B7280'; // fallback to gray with defined gradient
 
     state.lineBaseColorAssignments[lineNumber] = newBaseColor;
     state.lastUsedBaseColor = newBaseColor;
