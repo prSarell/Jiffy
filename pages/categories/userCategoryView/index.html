@@ -42,7 +42,7 @@
       text-align: center;
     }
 
-    #tasks-editor {
+    .editor-shared {
       min-height: calc(100vh - 220px);
       max-width: 100%;
       width: 100%;
@@ -56,7 +56,7 @@
       box-sizing: border-box;
     }
 
-    #tasks-editor.empty::before {
+    .editor-shared.empty::before {
       content: attr(data-placeholder);
       color: #666666;
       position: absolute;
@@ -132,29 +132,30 @@
     document.querySelectorAll('.category-tab').forEach(button => {
       button.addEventListener('click', () => {
         const tab = button.dataset.tab;
-        if (tab === 'tasks') loadTasksTab();
+        if (tab === 'tasks') loadEditorTab('tasks');
+        else if (tab === 'notes') loadEditorTab('notes');
+        else if (tab === 'summary') loadEditorTab('summary');
         else if (tab === 'time') loadTimeTab();
-        else document.getElementById('category-content').innerHTML = '<div style="text-align: center;">' + tab.toUpperCase() + ' content coming soon.</div>';
       });
     });
 
-    function loadTasksTab() {
+    function loadEditorTab(type) {
       const container = document.getElementById('category-content');
-      const saved = localStorage.getItem('tasks-' + name) || '';
+      const saved = localStorage.getItem(type + '-' + name) || '';
       container.innerHTML = `
-        <div id="tasks-editor"
-             class="${saved.trim() ? '' : 'empty'}"
+        <div id="${type}-editor"
+             class="editor-shared ${saved.trim() ? '' : 'empty'}"
              contenteditable="true"
-             data-placeholder="Your tasks here...">${saved}</div>
+             data-placeholder="Your ${type} here...">${saved}</div>
       `;
-      const editor = document.getElementById('tasks-editor');
+      const editor = document.getElementById(`${type}-editor`);
 
       function updatePlaceholderState() {
         editor.classList.toggle('empty', !editor.innerText.trim());
       }
 
       editor.addEventListener('input', () => {
-        localStorage.setItem('tasks-' + name, editor.innerHTML);
+        localStorage.setItem(`${type}-${name}`, editor.innerHTML);
         updatePlaceholderState();
       });
 
@@ -260,7 +261,7 @@
     }
 
     // Load Tasks tab by default
-    loadTasksTab();
+    loadEditorTab('tasks');
   </script>
 </body>
 </html>
