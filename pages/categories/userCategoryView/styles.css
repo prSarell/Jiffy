@@ -1,6 +1,6 @@
 /* 
 Path: /jiffy/pages/userCategoryView/styles.css
-Purpose: Styles the user-created category view page, including the prompt list, layout, and mobile-friendly spacing.
+Purpose: Styles the user-created category view page, including prompt list, editor, and mobile-friendly spacing
 */
 
 /* Container wrapping all prompts */
@@ -24,17 +24,14 @@ Purpose: Styles the user-created category view page, including the prompt list, 
   white-space: pre-wrap;
 }
 
-/* Weighted prompts (if reused from Prompts page) */
 .prompt-item.weighted {
   font-weight: bold;
 }
 
-/* Highlight important prompts */
 .prompt-item.important {
   color: green;
 }
 
-/* Input for editing prompt duration or cycling */
 .cycle-duration-input {
   margin-left: 20px;
   width: 60px;
@@ -42,7 +39,36 @@ Purpose: Styles the user-created category view page, including the prompt list, 
   font-size: 13px;
 }
 
-/* Optional: spacing for mobile */
+/* Editor for tasks/notes/summary (Apple Notes style) */
+.editor-shared {
+  min-height: calc(100vh - 220px);
+  max-width: 600px;
+  width: 90vw;
+  margin: 0 auto;
+  padding: 16px;
+  font-size: 16px;
+  line-height: 1.7;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #FFFFFF;
+  background: transparent;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.editor-shared.empty::before {
+  content: attr(data-placeholder);
+  color: #666;
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  font-size: 16px;
+  line-height: 1.7;
+  pointer-events: none;
+}
+
 @media (max-width: 600px) {
   .prompt-list-wrapper {
     padding: 0 10px;
