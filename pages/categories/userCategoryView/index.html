@@ -42,69 +42,14 @@
       text-align: center;
     }
 
-    .editor-shared {
-      min-height: calc(100vh - 220px);
-      max-width: 100%;
-      width: 100%;
-      padding-left: 16px;
-      padding-right: 16px;
-      font-size: 16px;
-      line-height: 1.6;
-      color: #FFFFFF;
+    #category-content {
+      padding: 20px;
       position: relative;
-      outline: none;
-      box-sizing: border-box;
-    }
-
-    .editor-shared.empty::before {
-      content: attr(data-placeholder);
-      color: #666666;
-      position: absolute;
-      left: 16px;
-      top: 0;
-      pointer-events: none;
-      font-size: 16px;
-      line-height: 1.6;
-    }
-
-    #timer-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      width: 200px;
-      height: 200px;
-      margin: 0 auto;
-    }
-
-    .timer-svg {
-      transform: rotate(-90deg);
-    }
-
-    #time-display {
-      font-size: 24px;
-      font-variant-numeric: tabular-nums;
-      position: absolute;
-      top: 85px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      z-index: 1;
-      pointer-events: auto;
-      outline: none;
-    }
-
-    .timer-controls {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      margin-top: 30px;
-      font-size: 16px;
     }
   </style>
 </head>
 <body>
-  <div id="category-header" style="display: flex; justify-content: center; align-items: center; position: relative; padding: 14px 20px; background-color: #000000; font-size: 16px; font-weight: bold;">
+  <div id="category-header" style="display: flex; justify-content: center; align-items: center; position: relative; padding: 14px 20px; background-color: #000; font-size: 16px; font-weight: bold;">
     <div onclick="window.history.back()" style="position: absolute; left: 20px; cursor: pointer;">←</div>
     <div id="category-title">Category</div>
   </div>
@@ -118,7 +63,7 @@
     <button class="category-tab" data-tab="summary">Summary</button>
   </div>
 
-  <div id="category-content" style="padding: 20px; position: relative;"></div>
+  <div id="category-content"></div>
 
   <script type="module">
     const name = localStorage.getItem('activeCategory');
@@ -132,9 +77,7 @@
     document.querySelectorAll('.category-tab').forEach(button => {
       button.addEventListener('click', () => {
         const tab = button.dataset.tab;
-        if (tab === 'tasks') loadEditorTab('tasks');
-        else if (tab === 'notes') loadEditorTab('notes');
-        else if (tab === 'summary') loadEditorTab('summary');
+        if (tab === 'tasks' || tab === 'notes' || tab === 'summary') loadEditorTab(tab);
         else if (tab === 'time') loadTimeTab();
       });
     });
@@ -155,6 +98,8 @@
       }
 
       editor.addEventListener('input', () => {
+        editor.style.height = 'auto';
+        editor.style.height = (editor.scrollHeight) + 'px';
         localStorage.setItem(`${type}-${name}`, editor.innerHTML);
         updatePlaceholderState();
       });
@@ -260,7 +205,6 @@
       updateArc();
     }
 
-    // Load Tasks tab by default
     loadEditorTab('tasks');
   </script>
 </body>
