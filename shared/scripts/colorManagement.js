@@ -1,22 +1,37 @@
 // File: /jiffy/shared/scripts/colorManagement.js
 // Purpose: Assign random, unique row master colors across all master categories
-// Enforce 5-per-row, prevent repetition, and block blue as first row in any tab
+// Enforce 5-per-row, prevent repetition, no blue in user categories, and block blue as first row
 
 const lineBaseColors = [
-  '#1E3A8A', // Blue
-  '#15803D', // Green
-  '#B91C1C', // Red
-  '#6B21A8', // Purple
-  '#EA580C'  // Orange
+  '#FACC15', // Yellow
+  '#F472B6', // Pink
+  '#92400E', // Brown
+  '#0D9488', // Teal
+  '#7C3AED', // Violet
+  '#DC2626', // Red
+  '#16A34A', // Green
+  '#EA580C', // Orange
+  '#D97706', // Amber
+  '#6D28D9', // Indigo
+  '#A21CAF', // Fuchsia
+  '#065F46', // Emerald
+  '#6B7280'  // Fallback Grey
 ];
 
 const monochromeVariations = {
-  '#1E3A8A': ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE'],
-  '#15803D': ['#15803D', '#16A34A', '#22C55E', '#4ADE80', '#BBF7D0'],
-  '#B91C1C': ['#B91C1C', '#DC2626', '#F87171', '#FCA5A5', '#FECACA'],
-  '#6B21A8': ['#6B21A8', '#9333EA', '#C084FC', '#D8B4FE', '#E9D5FF'],
+  '#FACC15': ['#FACC15', '#FDE047', '#FEF08A', '#FEF9C3', '#FEFCE8'],
+  '#F472B6': ['#F472B6', '#FB7185', '#FDA4AF', '#FBCFE8', '#FFE4E6'],
+  '#92400E': ['#92400E', '#B45309', '#D97706', '#FBBF24', '#FCD34D'],
+  '#0D9488': ['#0D9488', '#14B8A6', '#2DD4BF', '#5EEAD4', '#99F6E4'],
+  '#7C3AED': ['#7C3AED', '#8B5CF6', '#A78BFA', '#C4B5FD', '#DDD6FE'],
+  '#DC2626': ['#DC2626', '#EF4444', '#F87171', '#FCA5A5', '#FECACA'],
+  '#16A34A': ['#16A34A', '#22C55E', '#4ADE80', '#86EFAC', '#BBF7D0'],
   '#EA580C': ['#EA580C', '#F97316', '#FB923C', '#FDBA74', '#FED7AA'],
-  '#6B7280': ['#6B7280', '#9CA3AF', '#D1D5DB', '#E5E7EB', '#F3F4F6'] // fallback grey gradient
+  '#D97706': ['#D97706', '#F59E0B', '#FBBF24', '#FCD34D', '#FEF08A'],
+  '#6D28D9': ['#6D28D9', '#7C3AED', '#8B5CF6', '#A78BFA', '#C4B5FD'],
+  '#A21CAF': ['#A21CAF', '#C026D3', '#E879F9', '#F0ABFC', '#F5D0FE'],
+  '#065F46': ['#065F46', '#047857', '#059669', '#10B981', '#34D399'],
+  '#6B7280': ['#6B7280', '#9CA3AF', '#D1D5DB', '#E5E7EB', '#F3F4F6']
 };
 
 let userColors = JSON.parse(localStorage.getItem('userColors')) || {};
@@ -46,23 +61,16 @@ function getColor(categoryName, position, masterCategory = 'Home') {
   if (!state.lineCategoryCounts[lineNumber]) state.lineCategoryCounts[lineNumber] = 0;
 
   if (positionInLine === 0 && !state.lineBaseColorAssignments[lineNumber]) {
-    let availableColors = lineBaseColors.filter(
-      base =>
-        !usedGlobalBaseColors.includes(base) &&
-        base !== state.lastUsedBaseColor
+    let availableColors = lineBaseColors.filter(base =>
+      !usedGlobalBaseColors.includes(base) &&
+      base !== state.lastUsedBaseColor &&
+      !(lineNumber === 2 && isBlue(base)) &&
+      !(masterCategory !== 'Home' && isBlue(base)) // no blue anywhere in user categories
     );
-
-    // ✅ Enforce "no blue on first line of any master category"
-    if (lineNumber === 2) {
-      const blueVariants = ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE'];
-      availableColors = availableColors.filter(base =>
-        !monochromeVariations[base]?.some(variant => blueVariants.includes(variant))
-      );
-    }
 
     const newBaseColor = availableColors.length > 0
       ? availableColors[Math.floor(Math.random() * availableColors.length)]
-      : '#6B7280'; // fallback to gray with defined gradient
+      : '#6B7280'; // fallback gray
 
     state.lineBaseColorAssignments[lineNumber] = newBaseColor;
     state.lastUsedBaseColor = newBaseColor;
@@ -110,6 +118,12 @@ function removeCategory(lineNumber, masterCategory = 'Home') {
       state.lastUsedBaseColor = null;
     }
   }
+}
+
+function isBlue(baseColor) {
+  const blueVariants = ['#1E3A8A', '#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE'];
+  return blueVariants.includes(baseColor) ||
+    (monochromeVariations[baseColor] || []).some(v => blueVariants.includes(v));
 }
 
 export { getColor, setColor, removeCategory };
