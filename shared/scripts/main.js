@@ -1,4 +1,6 @@
-// Path: /jiffy/shared/scripts/main.js
+// File: /jiffy/shared/scripts/main.js
+// Purpose: Handles rendering user categories, master tabs, prompt display, and category management logic on the Jiffy homepage.
+
 import { renderMasterCategories } from './masterCategoryManagement.js';
 import { getColor } from './colorManagement.js';
 import { getPrompts } from '../../pages/prompts/promptManagement.js';
@@ -27,7 +29,7 @@ function renderUserCategories() {
 
       const button = document.createElement('button');
       button.className = 'user-category';
-      button.style.backgroundColor = getColor(cat.name, i);
+      button.style.backgroundColor = getColor(cat.name, i, selectedMasterCategory); // <- FIXED: Pass master category
       button.addEventListener('click', () => {
         if (!isSelectMode) {
           localStorage.setItem('activeCategory', cat.name);
