@@ -3,7 +3,6 @@ Path: /jiffy/pages/userCategoryView/styles.css
 Purpose: Styles the user-created category view page, including prompt list, editor, and mobile-friendly spacing
 */
 
-/* Container wrapping all prompts */
 .prompt-list-wrapper {
   width: 100%;
   margin: 0;
@@ -16,7 +15,6 @@ Purpose: Styles the user-created category view page, including prompt list, edit
   font-weight: normal;
 }
 
-/* Individual prompt item */
 .prompt-item {
   margin-left: 20px;
   line-height: 1.4;
@@ -39,7 +37,6 @@ Purpose: Styles the user-created category view page, including prompt list, edit
   font-size: 13px;
 }
 
-/* Editor for tasks/notes/summary (Apple Notes style) */
 .editor-shared {
   min-height: calc(100vh - 220px);
   max-width: 600px;
