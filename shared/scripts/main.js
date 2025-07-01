@@ -9,12 +9,42 @@ let userCategories = JSON.parse(localStorage.getItem('userCategories')) || [];
 let selectedMasterCategory = 'Home';
 let selectedUserCategories = [];
 let isSelectMode = false;
+let currentPromptIndex = -1;
+let promptCycleInterval = null;
 
-function displayPrompt() {
+function getPromptCycleSeconds() {
+  const value = parseInt(localStorage.getItem('promptCycleSeconds'));
+  return isNaN(value) ? 15 : value;
+}
+
+function displayPrompt(initial = true) {
   const prompts = getPrompts();
   if (!prompts.length) return;
-  const randomIndex = Math.floor(Math.random() * prompts.length);
-  document.getElementById('prompt-container').textContent = prompts[randomIndex].text;
+  if (initial) {
+    currentPromptIndex = Math.floor(Math.random() * prompts.length);
+  } else {
+    let nextIndex;
+    do {
+      nextIndex = Math.floor(Math.random() * prompts.length);
+    } while (prompts.length > 1 && nextIndex === currentPromptIndex);
+    currentPromptIndex = nextIndex;
+  }
+  const container = document.getElementById('prompt-container');
+  if (container) {
+    container.textContent = prompts[currentPromptIndex].text;
+  }
+}
+
+function startPromptCycling() {
+  const prompts = getPrompts();
+  if (prompts.length <= 1) return;
+
+  const intervalSeconds = getPromptCycleSeconds();
+  if (promptCycleInterval) clearInterval(promptCycleInterval);
+
+  promptCycleInterval = setInterval(() => {
+    displayPrompt(false);
+  }, intervalSeconds * 1000);
 }
 
 function renderUserCategories() {
@@ -29,7 +59,7 @@ function renderUserCategories() {
 
       const button = document.createElement('button');
       button.className = 'user-category';
-      button.style.backgroundColor = getColor(cat.name, i, selectedMasterCategory); // <- FIXED: Pass master category
+      button.style.backgroundColor = getColor(cat.name, i, selectedMasterCategory);
       button.addEventListener('click', () => {
         if (!isSelectMode) {
           localStorage.setItem('activeCategory', cat.name);
@@ -148,7 +178,8 @@ function setupAddCategoryPopup() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  displayPrompt();
+  displayPrompt(true);
+  startPromptCycling();
   renderMasterCategories(document.getElementById('master-category-row'), (category) => {
     selectedMasterCategory = category;
     renderUserCategories();
